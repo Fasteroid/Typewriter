@@ -12,7 +12,7 @@ using Typewriter.Tests.Metadata.Support;
 namespace Typewriter.Tests.Metadata.Roslyn
 {
     [Trait("CodeModel", "PartialClasses"), Collection(nameof(RoslynFixture))]
-    public class RoslynClassMetadataTests : TestBase
+    public class RoslynClassMetadataTests : TestInfrastructure.TestBase
     {
         public RoslynClassMetadataTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {

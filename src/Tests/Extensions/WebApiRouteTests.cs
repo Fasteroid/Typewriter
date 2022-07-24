@@ -16,7 +16,7 @@ namespace Typewriter.Tests.Extensions
         }
     }
 
-    public abstract class WebApiRouteExtensionsTests : TestBase
+    public abstract class WebApiRouteExtensionsTests : TestInfrastructure.TestBase
     {
         private readonly File fileInfo;
         private readonly File routeLessControllerInfo;

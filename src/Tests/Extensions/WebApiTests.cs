@@ -16,7 +16,7 @@ namespace Typewriter.Tests.Extensions
         }
     }
 
-    public abstract class WebApiExtensionsTests : TestBase
+    public abstract class WebApiExtensionsTests : TestInfrastructure.TestBase
     {
         private readonly File fileInfo;
 

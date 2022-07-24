@@ -16,7 +16,7 @@ namespace Typewriter.Tests.CodeModel
         }
     }
 
-    public abstract class FileTests : TestBase
+    public abstract class FileTests : TestInfrastructure.TestBase
     {
         private readonly File fileInfo;
 

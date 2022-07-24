@@ -14,7 +14,7 @@ namespace Typewriter.Tests.Render
         }
     }
 
-    public abstract class RenderTests : TestBase
+    public abstract class RenderTests : TestInfrastructure.TestBase
     {
         protected RenderTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {

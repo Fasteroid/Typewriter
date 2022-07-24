@@ -17,7 +17,7 @@ namespace Typewriter.Tests.CodeModel
         }
     }
 
-    public abstract class AttributeTests : TestBase
+    public abstract class AttributeTests : TestInfrastructure.TestBase
     {
         private readonly Class classInfo;
 
