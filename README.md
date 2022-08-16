@@ -13,6 +13,12 @@ From the other side that extensions really helps fulstack developers and work on
 
 ## Main differences between original and this fork
 
+## Version 2.9.0
+
+- version compatible with Visual Studio 17.3.x
+- added special fork of Buildalyzer to be able to run tests - existing
+ version of Buildalyzer compatible with net 4.7.2 too old and causing problems with tests
+
 ## Version 2.8.1
 
 - fixed tool manifest dependency to require VS 17.2.x

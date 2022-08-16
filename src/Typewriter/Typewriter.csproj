@@ -226,10 +226,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Debugger.Contracts" Version="17.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.2.32505.173" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.2.2195">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.3.2093">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
