@@ -89,8 +89,7 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
             var document = CurrentSolution.GetDocument(documentId);
             return ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
-                var semanticModel = await document.GetSemanticModelAsync().ConfigureAwait(true);
-                var result = Recommender.GetRecommendedSymbolsAtPosition(semanticModel, position, this);
+                var result = await Recommender.GetRecommendedSymbolsAtPositionAsync(document, position);
                 return result.ToArray();
             }).Join();
         }

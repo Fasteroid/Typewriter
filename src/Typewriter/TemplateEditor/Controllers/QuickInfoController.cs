@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -9,62 +11,60 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(IQuickInfoSourceProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IAsyncQuickInfoSourceProvider)), ContentType(Constants.ContentType)]
     [Name("Tooltip Source Provider")]
-    internal class QuickInfoSourceProvider : IQuickInfoSourceProvider
+    internal class QuickInfoSourceProvider : IAsyncQuickInfoSourceProvider
     {
         [Import]
         internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }
 
-        public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer)
+        public IAsyncQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer)
         {
             return new QuickInfoSource(this, textBuffer);
         }
     }
 
-    internal class QuickInfoSource : IQuickInfoSource
+    internal class QuickInfoSource : IAsyncQuickInfoSource
     {
-        private readonly QuickInfoSourceProvider provider;
-        private readonly ITextBuffer buffer;
+        private readonly QuickInfoSourceProvider _provider;
+        private readonly ITextBuffer _buffer;
 
         public QuickInfoSource(QuickInfoSourceProvider provider, ITextBuffer buffer)
         {
-            this.provider = provider;
-            this.buffer = buffer;
+            _provider = provider;
+            _buffer = buffer;
         }
 
-        public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan)
+        public Task<QuickInfoItem> GetQuickInfoItemAsync(IAsyncQuickInfoSession session, CancellationToken cancellationToken)
         {
-            var snapshot = buffer.CurrentSnapshot;
+            var snapshot = _buffer.CurrentSnapshot;
             var triggerPoint = session.GetTriggerPoint(snapshot);
-
             if (triggerPoint.HasValue)
             {
                 var extent = GetExtentOfWord(triggerPoint.Value);
                 if (extent.HasValue)
                 {
-                    var info = Editor.Instance.GetQuickInfo(buffer, extent.Value);
+                    var info = Editor.Instance.GetQuickInfo(_buffer, extent.Value);
 
                     if (info != null)
                     {
-                        applicableToSpan = snapshot.CreateTrackingSpan(extent.Value, SpanTrackingMode.EdgeInclusive);
-                        quickInfoContent.Add(info);
-                        return;
+                        var span = snapshot.CreateTrackingSpan(extent.Value, SpanTrackingMode.EdgeInclusive);
+                        return Task.FromResult(new QuickInfoItem(span, info));
                     }
                 }
             }
 
-            applicableToSpan = null;
+            return Task.FromResult(default(QuickInfoItem));
         }
 
-        private bool disposed;
+        private bool _disposed;
 
         public void Dispose()
         {
-            if (disposed) return;
+            if (_disposed) return;
 
             GC.SuppressFinalize(this);
-            disposed = true;
+            _disposed = true;
         }
 
         private static SnapshotSpan? GetExtentOfWord(SnapshotPoint point)
@@ -129,7 +129,7 @@ namespace Typewriter.TemplateEditor.Controllers
     internal class QuickInfoControllerProvider : IIntellisenseControllerProvider
     {
         [Import]
-        internal IQuickInfoBroker QuickInfoBroker { get; set; }
+        internal IAsyncQuickInfoBroker QuickInfoBroker { get; set; }
 
         public IIntellisenseController TryCreateIntellisenseController(ITextView textView, IList<ITextBuffer> subjectBuffers)
         {
@@ -162,7 +162,7 @@ namespace Typewriter.TemplateEditor.Controllers
             if (!provider.QuickInfoBroker.IsQuickInfoActive(view))
             {
                 var triggerPoint = point.Value.Snapshot.CreateTrackingPoint(point.Value.Position, PointTrackingMode.Positive);
-                provider.QuickInfoBroker.TriggerQuickInfo(view, triggerPoint, true);
+                provider.QuickInfoBroker.TriggerQuickInfoAsync(view, triggerPoint, QuickInfoSessionOptions.TrackMouse);
             }
         }
 
