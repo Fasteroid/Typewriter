@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Typewriter.Tests.Extensions
 {
-    [Trait("Extensions", "WebApi"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
     public class RoslynWebApiExtensionsTests : WebApiExtensionsTests
     {
         public RoslynWebApiExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -18,20 +18,20 @@ namespace Typewriter.Tests.Extensions
 
     public abstract class WebApiExtensionsTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected WebApiExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\Extensions\Support\HttpMethodController.cs");
+            _fileInfo = GetFile(@"Tests\Extensions\Support\HttpMethodController.cs");
         }
 
         [Fact]
         public void Expect_httpmethod_to_match_convension_name()
         {
-            var classInfo = fileInfo.Classes.First();
-            var getInfo = classInfo.Methods.First(p => p.Name == "Get");
-            var getAllMethod = classInfo.Methods.First(p => p.Name == "GetAll");
-            var listAllMethod = classInfo.Methods.First(p => p.Name == "ListAll");
+            var classInfo = _fileInfo.Classes.First();
+            var getInfo = classInfo.Methods.First(p => string.Equals(p.Name, "Get", System.StringComparison.OrdinalIgnoreCase));
+            var getAllMethod = classInfo.Methods.First(p => string.Equals(p.Name, "GetAll", System.StringComparison.OrdinalIgnoreCase));
+            var listAllMethod = classInfo.Methods.First(p => string.Equals(p.Name, "ListAll", System.StringComparison.OrdinalIgnoreCase));
 
             getInfo.HttpMethod().ShouldEqual("get");
             getAllMethod.HttpMethod().ShouldEqual("get");
@@ -41,8 +41,8 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_httpmethod_to_match_http_attribute()
         {
-            var classInfo = fileInfo.Classes.First();
-            var getMethod = classInfo.Methods.First(p => p.Name == "GetHttpAttibute");
+            var classInfo = _fileInfo.Classes.First();
+            var getMethod = classInfo.Methods.First(p => string.Equals(p.Name, "GetHttpAttibute", System.StringComparison.OrdinalIgnoreCase));
 
             getMethod.HttpMethod().ShouldEqual("post");
         }
@@ -50,10 +50,10 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_httpmethod_to_match_acceptverbs_attribute()
         {
-            var classInfo = fileInfo.Classes.First();
-            var getMethod = classInfo.Methods.First(p => p.Name == "GetAcceptVerbsAttribute");
-            var getMultipleMethod1 = classInfo.Methods.First(p => p.Name == "GetMultipleAcceptVerbsAttribute1");
-            var getMultipleMethod2 = classInfo.Methods.First(p => p.Name == "GetMultipleAcceptVerbsAttribute2");
+            var classInfo = _fileInfo.Classes.First();
+            var getMethod = classInfo.Methods.First(p => string.Equals(p.Name, "GetAcceptVerbsAttribute", System.StringComparison.OrdinalIgnoreCase));
+            var getMultipleMethod1 = classInfo.Methods.First(p => string.Equals(p.Name, "GetMultipleAcceptVerbsAttribute1", System.StringComparison.OrdinalIgnoreCase));
+            var getMultipleMethod2 = classInfo.Methods.First(p => string.Equals(p.Name, "GetMultipleAcceptVerbsAttribute2", System.StringComparison.OrdinalIgnoreCase));
 
             getMethod.HttpMethod().ShouldEqual("head");
             getMultipleMethod1.HttpMethod().ShouldEqual("post");

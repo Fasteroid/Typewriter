@@ -11,7 +11,7 @@
     }
 }
 export class CombinedClass {
-$Classes(x => x.Namespace.StartsWith("Typewriter.Tests.Render.WebApiController.SingleFileModels"))[
+$Classes(x => x.Namespace.StartsWith("Typewriter.Tests.Render.WebApiControllerTests.SingleFileModels"))[
 public $name:string = '$NameAndProperties';
 ]
 }

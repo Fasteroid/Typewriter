@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using EnvDTE;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Typewriter.Configuration;
 
@@ -10,8 +9,9 @@ namespace Typewriter.CodeModel.Configuration
     {
         private readonly ProjectItem _projectItem;
 
-        private bool _isSingleFileMode = false;
-        private string _singleFileName = null;
+        private bool _isSingleFileMode;
+        private string _singleFileName;
+        private char _stringLiteralCharacter = '"';
 
         public SettingsImpl(ProjectItem projectItem)
         {
@@ -19,11 +19,13 @@ namespace Typewriter.CodeModel.Configuration
         }
 
         private List<string> _includedProjects;
-        
+
         public override Settings IncludeProject(string projectName)
         {
             if (_includedProjects == null)
+            {
                 _includedProjects = new List<string>();
+            }
 
             ProjectHelpers.AddProject(_projectItem, _includedProjects, projectName);
             return this;
@@ -31,8 +33,8 @@ namespace Typewriter.CodeModel.Configuration
 
         public override Settings SingleFileMode(string singleFilename)
         {
-            this._isSingleFileMode= true;
-            this._singleFileName= singleFilename;
+            _isSingleFileMode= true;
+            _singleFileName= singleFilename;
 
             return this;
         }
@@ -40,7 +42,9 @@ namespace Typewriter.CodeModel.Configuration
         public override Settings IncludeReferencedProjects()
         {
             if (_includedProjects == null)
+            {
                 _includedProjects = new List<string>();
+            }
 
             ProjectHelpers.AddReferencedProjects(_includedProjects, _projectItem);
             return this;
@@ -49,7 +53,9 @@ namespace Typewriter.CodeModel.Configuration
         public override Settings IncludeCurrentProject()
         {
             if (_includedProjects == null)
+            {
                 _includedProjects = new List<string>();
+            }
 
             ProjectHelpers.AddCurrentProject(_includedProjects, _projectItem);
             return this;
@@ -106,7 +112,7 @@ namespace Typewriter.CodeModel.Configuration
         /// <value>
         /// <c>true</c> if this instance is single file mode; otherwise, <c>false</c>.
         /// </value>
-        public override bool IsSingleFileMode => this._isSingleFileMode;
+        public override bool IsSingleFileMode => _isSingleFileMode;
 
         /// <summary>
         /// Gets the name of the single file.
@@ -114,6 +120,22 @@ namespace Typewriter.CodeModel.Configuration
         /// <value>
         /// The name of the single file.
         /// </value>
-        public override string SingleFileName => this._singleFileName;
+        public override string SingleFileName => _singleFileName;
+
+        /// <summary>
+        /// String literal character.
+        /// Default ".
+        /// </summary>
+        public override char StringLiteralCharacter => _stringLiteralCharacter;
+
+        /// <summary>
+        /// Use given string literal character in TypeScript;
+        /// </summary>
+        /// <param name="ch">Character used as string literal start finish mark</param>
+        public override Settings UseStringLiteralCharacter(char ch)
+        {
+            _stringLiteralCharacter = ch;
+            return this;
+        }
     }
 }

@@ -53,6 +53,5 @@ namespace Typewriter.Tests.Extensions.Support
         {
             return null; // just for testing
         }
-
     }
 }

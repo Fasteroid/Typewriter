@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Enums"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Enums"), Collection(nameof(RoslynFixture))]
     public class RoslynEnumTests : EnumTests
     {
         public RoslynEnumTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -17,35 +17,35 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class EnumTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected EnumTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\EnumInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\EnumInfo.cs");
         }
 
         [Fact]
         public void Expect_name_to_match_enum_name()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
 
             enumInfo.Name.ShouldEqual("EnumInfo");
             enumInfo.FullName.ShouldEqual("Typewriter.Tests.CodeModel.Support.EnumInfo");
             enumInfo.Namespace.ShouldEqual("Typewriter.Tests.CodeModel.Support");
-            enumInfo.Parent.ShouldEqual(fileInfo);
+            enumInfo.Parent.ShouldEqual(_fileInfo);
         }
 
         [Fact]
         public void Expect_to_find_doc_comment()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
             enumInfo.DocComment.Summary.ShouldEqual("summary");
         }
 
         [Fact]
         public void Expect_to_find_attributes()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
             var attributeInfo = enumInfo.Attributes.First();
 
             enumInfo.Attributes.Count.ShouldEqual(1);
@@ -56,7 +56,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_value_attributes()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
             var valueInfo = enumInfo.Values.First();
             var attributeInfo = valueInfo.Attributes.First();
 
@@ -68,9 +68,9 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_unspecified_values_to_count_from_zero()
         {
-            var enumInfo = fileInfo.Enums.First();
-            var firstValue = enumInfo.Values.First(v => v.Name == "ValueA");
-            var secondValue = enumInfo.Values.First(v => v.Name == "ValueB");
+            var enumInfo = _fileInfo.Enums.First();
+            var firstValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueA", System.StringComparison.OrdinalIgnoreCase));
+            var secondValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueB", System.StringComparison.OrdinalIgnoreCase));
 
             firstValue.Value.ShouldEqual(0);
             secondValue.Value.ShouldEqual(1);
@@ -79,9 +79,9 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_values_after_a_specified_values_to_count_from_the_prevoius_value()
         {
-            var enumInfo = fileInfo.Enums.First();
-            var thirdValue = enumInfo.Values.First(v => v.Name == "ValueC");
-            var fourthValue = enumInfo.Values.First(v => v.Name == "ValueD");
+            var enumInfo = _fileInfo.Enums.First();
+            var thirdValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueC", System.StringComparison.OrdinalIgnoreCase));
+            var fourthValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueD", System.StringComparison.OrdinalIgnoreCase));
 
             thirdValue.Value.ShouldEqual(5);
             fourthValue.Value.ShouldEqual(6);
@@ -90,9 +90,9 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_values_specified_with_a_char_to_be_converted_to_their_integer_value()
         {
-            var enumInfo = fileInfo.Enums.First();
-            var fifthValue = enumInfo.Values.First(v => v.Name == "ValueE");
-            var sixthValue = enumInfo.Values.First(v => v.Name == "ValueF");
+            var enumInfo = _fileInfo.Enums.First();
+            var fifthValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueE", System.StringComparison.OrdinalIgnoreCase));
+            var sixthValue = enumInfo.Values.First(v => string.Equals(v.Name, "ValueF", System.StringComparison.OrdinalIgnoreCase));
 
             fifthValue.Value.ShouldEqual('A'); // A = 65
             fifthValue.Value.ShouldEqual(65);
@@ -102,23 +102,23 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_enums_marked_with_flags_attribute_to_be_flags()
         {
-            var flagsEnumInfo = fileInfo.Enums.First(e => e.Name == "FlagsEnumInfo");
+            var flagsEnumInfo = _fileInfo.Enums.First(e => string.Equals(e.Name, "FlagsEnumInfo", System.StringComparison.OrdinalIgnoreCase));
             flagsEnumInfo.IsFlags.ShouldBeTrue();
         }
 
         [Fact]
         public void Expect_enums_not_marked_with_flags_attribute_to_be_flags()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
             enumInfo.IsFlags.ShouldBeFalse();
         }
 
         [Fact]
         public void Expect_hexadecimal_values_converted_to_their_integer_value()
         {
-            var hexEnumInfo = fileInfo.Enums.First(e => e.Name == "HexEnumInfo");
-            var firstValue = hexEnumInfo.Values.First(v => v.Name == "ValueA");
-            var thirdValue = hexEnumInfo.Values.First(v => v.Name == "ValueC");
+            var hexEnumInfo = _fileInfo.Enums.First(e => string.Equals(e.Name, "HexEnumInfo", System.StringComparison.OrdinalIgnoreCase));
+            var firstValue = hexEnumInfo.Values.First(v => string.Equals(v.Name, "ValueA", System.StringComparison.OrdinalIgnoreCase));
+            var thirdValue = hexEnumInfo.Values.First(v => string.Equals(v.Name, "ValueC", System.StringComparison.OrdinalIgnoreCase));
 
             firstValue.Value.ShouldEqual(1);
             firstValue.Value.ShouldEqual(0x01);
@@ -130,7 +130,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_containing_class_on_nested_enum()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var nestedEnumInfo = classInfo.NestedEnums.First();
             var containingClassInfo = nestedEnumInfo.ContainingClass;
 
@@ -140,7 +140,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_not_to_find_containing_class_on_top_level_enum()
         {
-            var enumInfo = fileInfo.Enums.First();
+            var enumInfo = _fileInfo.Enums.First();
             var containingClassInfo = enumInfo.ContainingClass;
 
             containingClassInfo.ShouldBeNull();

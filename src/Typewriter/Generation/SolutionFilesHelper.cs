@@ -20,14 +20,14 @@ namespace Typewriter.Generation
             {
                 foreach (ProjectItem j in i)
                 {
-                    foreach (ProjectItem k in Recurse(j))
+                    foreach (var k in Recurse(j))
                     {
                         yield return k;
                     }
                 }
-
             }
         }
+
         public IEnumerable<ProjectItem> Recurse(ProjectItem i)
         {
             yield return i;
@@ -36,7 +36,7 @@ namespace Typewriter.Generation
                 yield break;
             }
 
-            foreach (ProjectItem j in Recurse(i.ProjectItems))
+            foreach (var j in Recurse(i.ProjectItems))
             {
                 yield return j;
             }
@@ -46,7 +46,7 @@ namespace Typewriter.Generation
         {
             foreach (var project in dte.Solution.AllProjects())
             {
-                foreach (ProjectItem item in Recurse(project.ProjectItems))
+                foreach (var item in Recurse(project.ProjectItems))
                 {
                     yield return item;
                 }

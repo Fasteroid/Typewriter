@@ -1,37 +1,5 @@
-﻿using System;
-
-namespace Typewriter.Tests.CodeModel.Support
+﻿namespace Typewriter.Tests.CodeModel.Support
 {
-    public class AttributeInfoAttribute : Attribute
-    {
-        public string Parameter { get; set; }
-
-        public AttributeInfoAttribute()
-        {
-        }
-
-        public AttributeInfoAttribute(string parameter)
-        {
-            Parameter = parameter;
-        }
-
-        public AttributeInfoAttribute(int parameter)
-        {
-        }
-
-        public AttributeInfoAttribute(params string[] parameters)
-        {
-        }
-
-        public AttributeInfoAttribute(int parameter, params string[] parameters)
-        {
-        }
-
-        public AttributeInfoAttribute(Type parameter)
-        {
-        }
-    }
-
     public class AttributeTestClass
     {
         [AttributeInfo]

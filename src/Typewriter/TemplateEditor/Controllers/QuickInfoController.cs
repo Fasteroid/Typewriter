@@ -61,7 +61,10 @@ namespace Typewriter.TemplateEditor.Controllers
 
         public void Dispose()
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
 
             GC.SuppressFinalize(this);
             _disposed = true;
@@ -71,7 +74,10 @@ namespace Typewriter.TemplateEditor.Controllers
         {
             var line = point.GetContainingLine();
 
-            if (line == null) return null;
+            if (line == null)
+            {
+                return null;
+            }
 
             var text = line.GetText();
             var index = point - line.Start;
@@ -91,7 +97,10 @@ namespace Typewriter.TemplateEditor.Controllers
                         break;
                     }
 
-                    if (current != '_' && char.IsLetterOrDigit(current) == false) break;
+                    if (current != '_' && !char.IsLetterOrDigit(current))
+                    {
+                        break;
+                    }
 
                     start = i;
                     length++;
@@ -107,7 +116,10 @@ namespace Typewriter.TemplateEditor.Controllers
                     for (var i = index; i < line.Length; i++)
                     {
                         var current = text[i];
-                        if (current != '_' && char.IsLetterOrDigit(current) == false) break;
+                        if (current != '_' && !char.IsLetterOrDigit(current))
+                        {
+                            break;
+                        }
 
                         length++;
                     }
@@ -116,7 +128,6 @@ namespace Typewriter.TemplateEditor.Controllers
                 var span = new SnapshotSpan(point.Snapshot, start + line.Start, length);
 
                 //Log.Debug("[" + span.GetText() + "]");
-
                 return span;
             }
 
@@ -157,7 +168,10 @@ namespace Typewriter.TemplateEditor.Controllers
             var point = view.BufferGraph.MapDownToFirstMatch(new SnapshotPoint(view.TextSnapshot, e.Position), PointTrackingMode.Positive,
                 snapshot => buffers.Contains(snapshot.TextBuffer), PositionAffinity.Predecessor);
 
-            if (point == null) return;
+            if (point == null)
+            {
+                return;
+            }
 
             if (!provider.QuickInfoBroker.IsQuickInfoActive(view))
             {
@@ -168,7 +182,10 @@ namespace Typewriter.TemplateEditor.Controllers
 
         public void Detach(ITextView textView)
         {
-            if (view != textView) return;
+            if (view != textView)
+            {
+                return;
+            }
 
             textView.MouseHover -= OnTextViewMouseHover;
             view = null;

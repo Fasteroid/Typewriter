@@ -1,13 +1,8 @@
-﻿using EnvDTE;
-using Microsoft.Build.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.Design;
+using EnvDTE;
 using Typewriter.CodeModel;
 using Typewriter.TemplateEditor.Lexing;
 using Typewriter.VisualStudio;
@@ -21,7 +16,7 @@ namespace Typewriter.Generation
         {
             var instance = new SingleFileParser(extensions);
             var output = instance.ParseTemplate(projectItem, template, files);
-            success = instance.hasError == false;
+            success = !instance.hasError;
 
             return instance.matchFound ? output : null;
         }
@@ -37,14 +32,21 @@ namespace Typewriter.Generation
 
         private string ParseTemplate(ProjectItem projectItem, string template, File[] files, object context = null)
         {
-            if (string.IsNullOrEmpty(template)) return null;
+            if (string.IsNullOrEmpty(template))
+            {
+                return null;
+            }
 
             var output = string.Empty;
             var stream = new Stream(template);
 
             while (stream.Advance())
             {
-                if (ParseDollar(projectItem, template, files, stream, context, ref output)) continue;
+                if (ParseDollar(projectItem, template, files, stream, context, ref output))
+                {
+                    continue;
+                }
+
                 output += stream.Current;
             }
 
@@ -57,26 +59,21 @@ namespace Typewriter.Generation
             {
                 var identifier = stream.PeekWord(1);
 
-                var blockStream  = 
-
-                stream.Advance(identifier.Length);
-                int advance = 0;
-                int offset = stream.Position + 1;
-                int index = 0;
+                _ = stream.Advance(identifier.Length);
+                var advance = 0;
+                var offset = stream.Position + 1;
+                var index = 0;
                 foreach (var f in files)
                 {
-
                     // Create new stream for each file
                     var innerStream = new Stream(template);
                     innerStream.Advance(offset);
-                   
 
-                    string sourcePath = f.FullName;
+                    var sourcePath = f.FullName;
                     context = f;
 
                     if (TryGetIdentifier(projectItem, sourcePath, identifier, context, out var value))
                     {
-                         
                         if (value is IEnumerable<Item> collection)
                         {
                             var filter = ParseBlock(innerStream, '(', ')');
@@ -87,44 +84,41 @@ namespace Typewriter.Generation
                             {
                                 var stringValue = value.ToString();
 
-                                if (stringValue != value.GetType().FullName)
+                                if (!string.Equals(stringValue, value.GetType().FullName, StringComparison.OrdinalIgnoreCase))
+                                {
                                     output += stringValue;
+                                }
                                 else
+                                {
                                     output += "$" + identifier;
+                                }
                             }
                             else
                             {
-                                IEnumerable<Item> items = ApplyFilter(collection, filter, projectItem, identifier, sourcePath);
-                                
+                                var items = ApplyFilter(collection, filter, projectItem, identifier, sourcePath);
+
                                 output += string.Join(ParseTemplate(projectItem, sourcePath, separator, context), items.Select(item => ParseTemplate(projectItem, sourcePath, block, item)));
                                 // In this case we mus check if  we get items of the next element too
-                                for (int i= index+1; i<files.Length; i++)
+                                for (var i= index+1; i<files.Length; i++)
                                 {
-
                                     var next = files[i];
 
-                                   
                                     if (next != null)
                                     {
                                         if (TryGetIdentifier(projectItem, next.FullName, identifier, next, out var vnext))
                                         {
                                             if (vnext is IEnumerable<Item> colnext)
                                             {
-                                                
-
                                                 colnext = ApplyFilter(colnext, filter, projectItem, identifier, next.FullName);
 
                                                 if (colnext.Any())
                                                 {
-                                                    
-
                                                     output += ParseTemplate(projectItem, sourcePath, separator, context);
 
                                                     break;
                                                 }
                                             }
                                         }
-
                                     }
                                 }
                             }
@@ -150,14 +144,14 @@ namespace Typewriter.Generation
                                     output += value.ToString();
                                 }
                             }
-                        } 
+                        }
                     }
 
                     advance = innerStream.Position+1;
                     index++;
                 }
 
-                bool canAdvance = stream.Advance(advance - offset);
+                var canAdvance = stream.Advance(advance - offset);
 
                 return true;
             }
@@ -206,7 +200,6 @@ namespace Typewriter.Generation
                 items = ItemFilter.Apply(collection, filter, ref matchFound);
             }
 
-
             return items;
         }
 
@@ -232,7 +225,10 @@ namespace Typewriter.Generation
         {
             value = null;
 
-            if (identifier == null) return false;
+            if (identifier == null)
+            {
+                return false;
+            }
 
             var type = context.GetType();
 
@@ -279,17 +275,23 @@ namespace Typewriter.Generation
             ErrorList.Show();
         }
 
-
         private string ParseTemplate(ProjectItem projectItem, string sourcePath, string template, object context)
         {
-            if (string.IsNullOrEmpty(template)) return null;
+            if (string.IsNullOrEmpty(template))
+            {
+                return null;
+            }
 
             var output = string.Empty;
             var stream = new Stream(template);
 
             while (stream.Advance())
             {
-                if (ParseDollar(projectItem, sourcePath, stream, context, ref output)) continue;
+                if (ParseDollar(projectItem, sourcePath, stream, context, ref output))
+                {
+                    continue;
+                }
+
                 output += stream.Current;
             }
 
@@ -316,10 +318,14 @@ namespace Typewriter.Generation
                         {
                             var stringValue = value.ToString();
 
-                            if (stringValue != value.GetType().FullName)
+                            if (!string.Equals(stringValue, value.GetType().FullName, StringComparison.OrdinalIgnoreCase))
+                            {
                                 output += stringValue;
+                            }
                             else
+                            {
                                 output += "$" + identifier;
+                            }
                         }
                         else
                         {
@@ -361,6 +367,7 @@ namespace Typewriter.Generation
                             {
                                 items = ItemFilter.Apply(collection, filter, ref matchFound);
                             }
+
                             output += string.Join(ParseTemplate(projectItem, sourcePath, separator, context), items.Select(item => ParseTemplate(projectItem, sourcePath, block, item)));
                         }
                     }
@@ -393,6 +400,5 @@ namespace Typewriter.Generation
 
             return false;
         }
-
     }
 }

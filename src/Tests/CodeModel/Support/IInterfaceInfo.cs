@@ -7,7 +7,9 @@
     public interface IInterfaceInfo : IBaseInterfaceInfo
     {
         event Delegate PublicEvent;
+
         void PublicMethod();
+
         string PublicProperty { get; set; }
     }
 

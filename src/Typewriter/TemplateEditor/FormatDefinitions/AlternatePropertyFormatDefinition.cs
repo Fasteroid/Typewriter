@@ -6,7 +6,7 @@ using Typewriter.VisualStudio;
 
 namespace Typewriter.TemplateEditor.FormatDefinitions
 {
-    [Export(typeof (EditorFormatDefinition)), Name("TypeScript Template Alternate Property")]
+    [Export(typeof(EditorFormatDefinition)), Name("TypeScript Template Alternate Property")]
     [ClassificationType(ClassificationTypeNames = Classifications.AlternateProperty)]
     internal sealed class AlternatePropertyFormatDefinition : ClassificationFormatDefinition
     {
@@ -15,7 +15,7 @@ namespace Typewriter.TemplateEditor.FormatDefinitions
 
         public AlternatePropertyFormatDefinition()
         {
-            this.ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
+            ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
         }
     }
 }

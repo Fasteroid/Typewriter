@@ -1,34 +1,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynDelegateMetadata : IDelegateMetadata
     {
-        private readonly INamedTypeSymbol symbol;
-        private readonly IMethodSymbol methodSymbol;
+        private readonly INamedTypeSymbol _symbol;
+        private readonly IMethodSymbol _methodSymbol;
 
-        public RoslynDelegateMetadata(INamedTypeSymbol symbol)
+        public RoslynDelegateMetadata(INamedTypeSymbol symbol, Settings settings)
         {
-            this.symbol = symbol;
-            this.methodSymbol = symbol.DelegateInvokeMethod;
+            _symbol = symbol;
+            _methodSymbol = symbol.DelegateInvokeMethod;
+            Settings = settings;
         }
 
-        public string DocComment => symbol.GetDocumentationCommentXml();
-        public string Name => symbol.Name;
-        public string FullName => symbol.GetFullName();
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
-        public ITypeMetadata Type => methodSymbol == null ? null : RoslynTypeMetadata.FromTypeSymbol(methodSymbol.ReturnType);
-        public bool IsAbstract => false;
-        public bool IsGeneric => symbol.TypeParameters.Any();
-        public IEnumerable<ITypeParameterMetadata> TypeParameters => RoslynTypeParameterMetadata.FromTypeParameterSymbols(symbol.TypeParameters);
-        public IEnumerable<IParameterMetadata> Parameters => methodSymbol == null ? new IParameterMetadata[0] : RoslynParameterMetadata.FromParameterSymbols(methodSymbol.Parameters);
+        public Settings Settings { get; }
 
-        public static IEnumerable<IDelegateMetadata> FromNamedTypeSymbols(IEnumerable<INamedTypeSymbol> symbols)
+        public string DocComment => _symbol.GetDocumentationCommentXml();
+
+        public string Name => _symbol.Name;
+
+        public string FullName => _symbol.GetFullName();
+
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public ITypeMetadata Type => _methodSymbol == null ? null : RoslynTypeMetadata.FromTypeSymbol(_methodSymbol.ReturnType, Settings);
+
+        public bool IsAbstract => false;
+
+        public bool IsGeneric => _symbol.TypeParameters.Any();
+
+        public IEnumerable<ITypeParameterMetadata> TypeParameters => RoslynTypeParameterMetadata.FromTypeParameterSymbols(_symbol.TypeParameters);
+
+        public IEnumerable<IParameterMetadata> Parameters => _methodSymbol == null ? System.Array.Empty<IParameterMetadata>() : RoslynParameterMetadata.FromParameterSymbols(_methodSymbol.Parameters, Settings);
+
+        public static IEnumerable<IDelegateMetadata> FromNamedTypeSymbols(IEnumerable<INamedTypeSymbol> symbols, Settings settings)
         {
-            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public).Select(s => new RoslynDelegateMetadata(s));
+            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public).Select(s => new RoslynDelegateMetadata(s, settings));
         }
     }
 }

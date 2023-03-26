@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Typewriter.Tests.Helpers
 {
-    [Trait("Helpers", "CamelCase")]
+    [Trait(nameof(Helpers), "CamelCase")]
     public class CamelCaseTests
     {
         [Fact]

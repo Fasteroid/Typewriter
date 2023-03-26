@@ -12,20 +12,21 @@ namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynMetadataProvider : IMetadataProvider
     {
-        private readonly Workspace workspace;
+        private readonly Workspace _workspace;
 
         public RoslynMetadataProvider()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
-            this.workspace = componentModel?.GetService<VisualStudioWorkspace>();
+            _workspace = componentModel?.GetService<VisualStudioWorkspace>();
         }
 
         public IFileMetadata GetFile(string path, Settings settings, Action<string[]> requestRender)
         {
-            var document = workspace.CurrentSolution.GetDocumentIdsWithFilePath(path).FirstOrDefault();
+            var document = _workspace.CurrentSolution.GetDocumentIdsWithFilePath(path).FirstOrDefault();
             if (document != null)
             {
-                return new RoslynFileMetadata(workspace.CurrentSolution.GetDocument(document), settings, requestRender);
+                return new RoslynFileMetadata(_workspace.CurrentSolution.GetDocument(document), settings, requestRender);
             }
 
             return null;

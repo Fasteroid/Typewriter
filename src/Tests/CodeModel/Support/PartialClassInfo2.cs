@@ -8,10 +8,15 @@ namespace Typewriter.Tests.CodeModel.Support
         }
 
         public const string Constant2 = "";
+
         public delegate void Delegate2<T>(string param1, T param2);
+
         public event Delegate Event2;
+
         public string Field2 = "";
+
         public void Method2() { }
+
         public string Property2 { get; set; }
 
         public class NestedClassInfo2

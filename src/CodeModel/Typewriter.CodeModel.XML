@@ -44,14 +44,14 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.AttributeCollection">
-            <summary>
-            Represents a collection of attributes.
-            </summary>
-        </member>
         <member name="T:Typewriter.CodeModel.Attributes.ContextAttribute">
             <summary>
             Marks context metadata classes.
+            </summary>
+        </member>
+        <member name="M:Typewriter.CodeModel.Attributes.ContextAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the ContextAttribute.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Attributes.ContextAttribute.Name">
@@ -62,11 +62,6 @@
         <member name="P:Typewriter.CodeModel.Attributes.ContextAttribute.CollectionName">
             <summary>
             The name of collections of the context.
-            </summary>
-        </member>
-        <member name="M:Typewriter.CodeModel.Attributes.ContextAttribute.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the ContextAttribute.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.AttributeArgument">
@@ -89,7 +84,47 @@
             The value of the argument.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.AttributeArgumentCollection">
+        <member name="T:Typewriter.CodeModel.IEventCollection">
+            <summary>
+            Represents a collection of classes.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IEnumValueCollection">
+            <summary>
+            Represents a collection of enum values.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IFieldCollection">
+            <summary>
+            Represents a collection of fields.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IEnumCollection">
+            <summary>
+            Represents a collection of enums.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IDelegateCollection">
+            <summary>
+            Represents a collection of classes.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IConstantCollection">
+            <summary>
+            Represents a collection of constants.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IClassCollection">
+            <summary>
+            Represents a collection of classes.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IAttributeCollection">
+            <summary>
+            Represents a collection of attributes.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IAttributeArgumentCollection">
             <summary>
             Represents a collection of attribute arguments.
             </summary>
@@ -207,20 +242,15 @@
         <member name="P:Typewriter.CodeModel.Class.TypeArguments">
             <summary>
             All generic type arguments of the class.
-            TypeArguments are the specified arguments for the TypeParametes on a generic class e.g. &lt;string&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+            TypeArguments are the specified arguments for the TypeParameters on a generic class e.g. &lt;string&gt;.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Class.TypeParameters">
             <summary>
             All generic type parameters of the class.
             TypeParameters are the type placeholders of a generic class e.g. &lt;T&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
-            </summary>
-        </member>
-        <member name="M:Typewriter.CodeModel.Class.op_Implicit(Typewriter.CodeModel.Class)~System.String">
-            <summary>
-            Converts the current instance to string.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Class.Type">
@@ -228,14 +258,14 @@
             Represents a <see cref="T:Typewriter.CodeModel.Type"/>.
             </summary>
         </member>
+        <member name="M:Typewriter.CodeModel.Class.op_Implicit(Typewriter.CodeModel.Class)~System.String">
+            <summary>
+            Converts the current instance to string.
+            </summary>
+        </member>
         <member name="M:Typewriter.CodeModel.Class.op_Implicit(Typewriter.CodeModel.Class)~Typewriter.CodeModel.Type">
             <summary>
             Converts the current instance to a Type.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.ClassCollection">
-            <summary>
-            Represents a collection of classes.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Constant">
@@ -286,11 +316,6 @@
         <member name="M:Typewriter.CodeModel.Constant.op_Implicit(Typewriter.CodeModel.Constant)~System.String">
             <summary>
             Converts the current instance to string.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.ConstantCollection">
-            <summary>
-            Represents a collection of constants.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Delegate">
@@ -354,11 +379,6 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.DelegateCollection">
-            <summary>
-            Represents a collection of classes.
-            </summary>
-        </member>
         <member name="T:Typewriter.CodeModel.DocComment">
             <summary>
             Represents an XML documentation comment.
@@ -387,36 +407,6 @@
         <member name="M:Typewriter.CodeModel.DocComment.op_Implicit(Typewriter.CodeModel.DocComment)~System.String">
             <summary>
             Converts the current instance to string.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.ParameterComment">
-            <summary>
-            Represents an XML documentation comment parameter tag.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.ParameterComment.Name">
-            <summary>
-            The name of the parameter.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.ParameterComment.Description">
-            <summary>
-            The parameter description.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.ParameterComment.Parent">
-            <summary>
-            The parent context of the documentation comment parameter.
-            </summary>
-        </member>
-        <member name="M:Typewriter.CodeModel.ParameterComment.op_Implicit(Typewriter.CodeModel.ParameterComment)~System.String">
-            <summary>
-            Converts the current instance to string.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.ParameterCommentCollection">
-            <summary>
-            Represents a collection of parameter comments.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Enum">
@@ -474,24 +464,19 @@
             All values defined in the enum.
             </summary>
         </member>
-        <member name="M:Typewriter.CodeModel.Enum.op_Implicit(Typewriter.CodeModel.Enum)~System.String">
-            <summary>
-            Converts the current instance to string.
-            </summary>
-        </member>
         <member name="P:Typewriter.CodeModel.Enum.Type">
             <summary>
             Represents a <see cref="T:Typewriter.CodeModel.Type"/>.
             </summary>
         </member>
+        <member name="M:Typewriter.CodeModel.Enum.op_Implicit(Typewriter.CodeModel.Enum)~System.String">
+            <summary>
+            Converts the current instance to string.
+            </summary>
+        </member>
         <member name="M:Typewriter.CodeModel.Enum.op_Implicit(Typewriter.CodeModel.Enum)~Typewriter.CodeModel.Type">
             <summary>
             Converts the current instance to a Type.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.EnumCollection">
-            <summary>
-            Represents a collection of enums.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.EnumValue">
@@ -539,11 +524,6 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.EnumValueCollection">
-            <summary>
-            Represents a collection of enum values.
-            </summary>
-        </member>
         <member name="T:Typewriter.CodeModel.Event">
             <summary>
             Represents an event.
@@ -589,14 +569,34 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.EventCollection">
+        <member name="T:Typewriter.CodeModel.IFilterable">
             <summary>
-            Represents a collection of classes.
+            Provides access to filter selectors for item collections.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.IStringConvertable">
+        <member name="P:Typewriter.CodeModel.IFilterable.AttributeFilterSelector">
             <summary>
-            Marker interface for collections that can render themselves as string
+            Returns a selector to filter items by attributes.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.IFilterable.InheritanceFilterSelector">
+            <summary>
+            Returns a selector to filter items by inheritance.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.IFilterable.ItemFilterSelector">
+            <summary>
+            Returns a selector to filter items by name.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IInterfaceCollection">
+            <summary>
+            Represents a collection of interfaces.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IStringConvertible">
+            <summary>
+            Marker interface for collections that can render themselves as string.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Field">
@@ -642,11 +642,6 @@
         <member name="M:Typewriter.CodeModel.Field.op_Implicit(Typewriter.CodeModel.Field)~System.String">
             <summary>
             Converts the current instance to string.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.FieldCollection">
-            <summary>
-            Represents a collection of fields.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.File">
@@ -762,20 +757,15 @@
         <member name="P:Typewriter.CodeModel.Interface.TypeArguments">
             <summary>
             All generic type arguments of the interface.
-            TypeArguments are the specified arguments for the TypeParametes on a generic interface e.g. &lt;string&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+            TypeArguments are the specified arguments for the TypeParameters on a generic interface e.g. &lt;string&gt;.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Interface.TypeParameters">
             <summary>
             All generic type parameters of the interface.
             TypeParameters are the type placeholders of a generic interface e.g. &lt;T&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
-            </summary>
-        </member>
-        <member name="M:Typewriter.CodeModel.Interface.op_Implicit(Typewriter.CodeModel.Interface)~System.String">
-            <summary>
-            Converts the current instance to string.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Interface.Type">
@@ -783,14 +773,14 @@
             Represents a <see cref="T:Typewriter.CodeModel.Type"/>.
             </summary>
         </member>
+        <member name="M:Typewriter.CodeModel.Interface.op_Implicit(Typewriter.CodeModel.Interface)~System.String">
+            <summary>
+            Converts the current instance to string.
+            </summary>
+        </member>
         <member name="M:Typewriter.CodeModel.Interface.op_Implicit(Typewriter.CodeModel.Interface)~Typewriter.CodeModel.Type">
             <summary>
             Converts the current instance to a Type.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.InterfaceCollection">
-            <summary>
-            Represents a collection of interfaces.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Item">
@@ -798,29 +788,9 @@
             Represents an code model item.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.ItemCollection`1">
+        <member name="T:Typewriter.CodeModel.IItemCollection`1">
             <summary>
             Represents a collection of items.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.IFilterable">
-            <summary>
-            Provides access to filter selectors for item collections.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.IFilterable.AttributeFilterSelector">
-            <summary>
-            Returns a selector to filter items by attributes.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.IFilterable.InheritanceFilterSelector">
-            <summary>
-            Returns a selector to filter items by inheritance.
-            </summary>
-        </member>
-        <member name="P:Typewriter.CodeModel.IFilterable.ItemFilterSelector">
-            <summary>
-            Returns a selector to filter items by name.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Method">
@@ -889,7 +859,7 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.MethodCollection">
+        <member name="T:Typewriter.CodeModel.IMethodCollection">
             <summary>
             Represents a collection of methods.
             </summary>
@@ -944,9 +914,44 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.ParameterCollection">
+        <member name="T:Typewriter.CodeModel.IParameterCommentCollection">
+            <summary>
+            Represents a collection of parameter comments.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IParameterCollection">
             <summary>
             Represents a collection of parameters.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.ParameterComment">
+            <summary>
+            Represents an XML documentation comment parameter tag.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.ParameterComment.Name">
+            <summary>
+            The name of the parameter.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.ParameterComment.Description">
+            <summary>
+            The parameter description.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.ParameterComment.Parent">
+            <summary>
+            The parent context of the documentation comment parameter.
+            </summary>
+        </member>
+        <member name="M:Typewriter.CodeModel.ParameterComment.op_Implicit(Typewriter.CodeModel.ParameterComment)~System.String">
+            <summary>
+            Converts the current instance to string.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IPropertyCollection">
+            <summary>
+            Represents a collection of properties.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Record">
@@ -1048,19 +1053,14 @@
             <summary>
             All generic type arguments of the record.
             TypeArguments are the specified arguments for the TypeParameters on a generic record e.g. &lt;string&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Record.TypeParameters">
             <summary>
             All generic type parameters of the record.
             TypeParameters are the type placeholders of a generic class e.g. &lt;T&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
-            </summary>
-        </member>
-        <member name="M:Typewriter.CodeModel.Record.op_Implicit(Typewriter.CodeModel.Record)~System.String">
-            <summary>
-            Converts the current instance to string.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Record.Type">
@@ -1068,12 +1068,27 @@
             Represents a <see cref="T:Typewriter.CodeModel.Type"/>.
             </summary>
         </member>
+        <member name="M:Typewriter.CodeModel.Record.op_Implicit(Typewriter.CodeModel.Record)~System.String">
+            <summary>
+            Converts the current instance to string.
+            </summary>
+        </member>
         <member name="M:Typewriter.CodeModel.Record.op_Implicit(Typewriter.CodeModel.Record)~Typewriter.CodeModel.Type">
             <summary>
             Converts the current instance to a Type.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.RecordCollection">
+        <member name="T:Typewriter.CodeModel.ITypeParameterCollection">
+            <summary>
+            Represents a collection of generic type parameters.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.ITypeCollection">
+            <summary>
+            Represents a collection of types.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IRecordCollection">
             <summary>
             Represents a collection of records.
             </summary>
@@ -1143,11 +1158,6 @@
             Converts the current instance to string.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.PropertyCollection">
-            <summary>
-            Represents a collection of properties.
-            </summary>
-        </member>
         <member name="T:Typewriter.CodeModel.Type">
             <summary>
             Represents a type.
@@ -1196,7 +1206,7 @@
         <member name="P:Typewriter.CodeModel.Type.Interfaces">
             <summary>
             All interfaces implemented by the type.
-            (In Visual Studio 2013 Interfaces are not available on Types)
+            (In Visual Studio 2013 Interfaces are not available on Types).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.IsDate">
@@ -1207,7 +1217,7 @@
         <member name="P:Typewriter.CodeModel.Type.IsDefined">
             <summary>
             Determines if the type is defined in the current solution.
-            (In Visual Studio 2013 IsDefined returns false for generic types)
+            (In Visual Studio 2013 IsDefined returns false for generic types).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.IsEnum">
@@ -1308,15 +1318,15 @@
         <member name="P:Typewriter.CodeModel.Type.TypeArguments">
             <summary>
             All generic type parameters of the type.
-            TypeArguments are the specified arguments for the TypeParametes on a generic type e.g. &lt;string&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+            TypeArguments are the specified arguments for the TypeParameters on a generic type e.g. &lt;string&gt;.
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.TypeParameters">
             <summary>
             All generic type parameters of the type.
             TypeParameters are the type placeholders of a generic type e.g. &lt;T&gt;.
-            (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+            (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.TupleElements">
@@ -1329,14 +1339,14 @@
             Default value for the type.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Type.Settings">
+            <summary>
+            Settings for the type.
+            </summary>
+        </member>
         <member name="M:Typewriter.CodeModel.Type.op_Implicit(Typewriter.CodeModel.Type)~System.String">
             <summary>
             Converts the current instance to string.
-            </summary>
-        </member>
-        <member name="T:Typewriter.CodeModel.TypeCollection">
-            <summary>
-            Represents a collection of types.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.TypeParameter">
@@ -1359,11 +1369,6 @@
             The parent context of the type parameter.
             </summary>
         </member>
-        <member name="T:Typewriter.CodeModel.TypeParameterCollection">
-            <summary>
-            Represents a collection of generic type parameters.
-            </summary>
-        </member>
         <member name="T:Typewriter.Configuration.PartialRenderingMode">
             <summary>
             Determines how partial classes and interfaces are rendered.
@@ -1372,54 +1377,19 @@
         <member name="F:Typewriter.Configuration.PartialRenderingMode.Partial">
             <summary>
             Partial types are rendered as defined in the c# source containing only the parts defined in each file.
-            (This is the default rendering mode)
+            (This is the default rendering mode).
             </summary>
         </member>
         <member name="F:Typewriter.Configuration.PartialRenderingMode.Combined">
             <summary>
-            Partial type definitions are combined to a single type acting as if the full type was 
+            Partial type definitions are combined to a single type acting as if the full type was
             defined only once in the c# source (using the filename of the first file containing a part of the type).
-            (Unsupported in Visual Studio 2013)
-            </summary>
-        </member>
-        <member name="F:Typewriter.Configuration.PartialRenderingMode.Legacy">
-            <summary>
-            [depricated] A combined type definition are rendered for each file containing a partial definition.
-            (Unsupported in Visual Studio 2013)
+            (Unsupported in Visual Studio 2013).
             </summary>
         </member>
         <member name="T:Typewriter.Configuration.Settings">
             <summary>
-            Provides settings for Typewriter Templates
-            </summary>
-        </member>
-        <member name="M:Typewriter.Configuration.Settings.IncludeProject(System.String)">
-            <summary>
-            Includes files in the specified project when rendering the template.
-            </summary>
-        </member>
-        <member name="M:Typewriter.Configuration.Settings.SingleFileMode(System.String)">
-            <summary>
-            Single File Mode - Template will be parsed in one file. Ignor
-            Note: SingleFileMode ignores the filename factory(!)
-            </summary>
-            <param name="singleFilename">The single filename.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Typewriter.Configuration.Settings.IncludeCurrentProject">
-            <summary>
-            Includes files in the current project when rendering the template.
-            </summary>
-        </member>
-        <member name="M:Typewriter.Configuration.Settings.IncludeReferencedProjects">
-            <summary>
-            Includes files in all referenced projects when rendering the template.
-            </summary>
-        </member>
-        <member name="M:Typewriter.Configuration.Settings.IncludeAllProjects">
-            <summary>
-            Includes files in all projects in the solution when rendering the template.
-            Note: Including all projects can have a large impact on performance in large solutions.
+            Provides settings for Typewriter Templates.
             </summary>
         </member>
         <member name="P:Typewriter.Configuration.Settings.OutputExtension">
@@ -1431,12 +1401,12 @@
             <summary>
             Gets or sets a filename factory for the template.
             The factory is called for each rendered file to determine the output filename (including extension).
-            Example: file => file.Classes.First().FullName + ".ts";
+            Example: file => file.Classes.First().FullName + ".ts".
             </summary>
         </member>
         <member name="P:Typewriter.Configuration.Settings.PartialRenderingMode">
             <summary>
-            
+            Gets or sets a value indicating how partial classes and interfaces are rendered.
             </summary>
         </member>
         <member name="P:Typewriter.Configuration.Settings.SolutionFullName">
@@ -1470,6 +1440,48 @@
             The name of the single file.
             </value>
         </member>
+        <member name="P:Typewriter.Configuration.Settings.StringLiteralCharacter">
+            <summary>
+            String literal character.
+            Default ".
+            </summary>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.IncludeProject(System.String)">
+            <summary>
+            Includes files in the specified project when rendering the template.
+            </summary>
+            <param name="projectName">Project name.</param>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.SingleFileMode(System.String)">
+            <summary>
+            Single File Mode - Template will be parsed in one file.
+            Note: SingleFileMode ignores the filename factory(!).
+            </summary>
+            <param name="singleFilename">The single filename.</param>
+            <returns><see cref="T:Typewriter.Configuration.Settings"/>.</returns>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.IncludeCurrentProject">
+            <summary>
+            Includes files in the current project when rendering the template.
+            </summary>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.IncludeReferencedProjects">
+            <summary>
+            Includes files in all referenced projects when rendering the template.
+            </summary>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.IncludeAllProjects">
+            <summary>
+            Includes files in all projects in the solution when rendering the template.
+            Note: Including all projects can have a large impact on performance in large solutions.
+            </summary>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.UseStringLiteralCharacter(System.Char)">
+            <summary>
+            Use given string literal character in TypeScript.
+            </summary>
+            <param name="ch">Character used as string literal start finish mark.</param>
+        </member>
         <member name="T:Typewriter.Extensions.Types.TypeExtensions">
             <summary>
             Extension methods for working with types.
@@ -1477,8 +1489,9 @@
         </member>
         <member name="M:Typewriter.Extensions.Types.TypeExtensions.ClassName(Typewriter.CodeModel.Type)">
             <summary>
-            Returns the name of the type without []
+            Returns the name of the type without [].
             </summary>
+            <param name="type"><see cref="T:Typewriter.CodeModel.Type"/>.</param>
         </member>
         <member name="M:Typewriter.Extensions.Types.TypeExtensions.Default(Typewriter.CodeModel.Type)">
             <summary>
@@ -1486,13 +1499,15 @@
             (Dictionary types returns {}, enumerable types returns [],
             boolean types returns false, numeric types returns 0, void returns void(0),
             Guid types return empty guid string, Date types return new Date(0),
-            all other types return null)
+            all other types return null).
             </summary>
+            <param name="type"><see cref="T:Typewriter.CodeModel.Type"/>.</param>
         </member>
         <member name="M:Typewriter.Extensions.Types.TypeExtensions.Unwrap(Typewriter.CodeModel.Type)">
             <summary>
             Returns the first TypeArgument of a generic type or the type itself if it's not generic.
             </summary>
+            <param name="type"><see cref="T:Typewriter.CodeModel.Type"/>.</param>
         </member>
         <member name="T:Typewriter.Extensions.WebApi.HttpMethodExtensions">
             <summary>
@@ -1502,8 +1517,9 @@
         <member name="M:Typewriter.Extensions.WebApi.HttpMethodExtensions.HttpMethod(Typewriter.CodeModel.Method)">
             <summary>
             Returns the http method from a Web API action.
-            The http method is extracted from Http* or AcceptVerbs attribute or by naming convension if no attributes are specified.
+            The http method is extracted from Http* or AcceptVerbs attribute or by naming convention if no attributes are specified.
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
         </member>
         <member name="T:Typewriter.Extensions.WebApi.RequestDataExtensions">
             <summary>
@@ -1515,12 +1531,15 @@
             Creates an object literal containing the parameters that should be sent in the request body of a Web API request.
             If no parameters are required the literal "null" is returned.
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
         </member>
         <member name="M:Typewriter.Extensions.WebApi.RequestDataExtensions.RequestData(Typewriter.CodeModel.Method,System.String)">
             <summary>
             Creates an object literal containing the parameters that should be sent in the request body of a Web API request.
             If no parameters are required the literal "null" is returned.
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
+            <param name="route">Route.</param>
         </member>
         <member name="T:Typewriter.Extensions.WebApi.UrlExtensions">
             <summary>
@@ -1533,23 +1552,29 @@
             Route parameters are converted to TypeScript string interpolation syntax by prefixing all parameters with $ e.g. ${id}.
             Optional parameters are added as QueryString parameters for GET and HEAD requests.
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
         </member>
         <member name="M:Typewriter.Extensions.WebApi.UrlExtensions.Url(Typewriter.CodeModel.Method,System.String)">
             <summary>
-            Returns the url for the Web API action based on route attributes (or the supplied convension route if no attributes are present).
+            Returns the url for the Web API action based on route attributes (or the supplied convention route if no attributes are present).
             Route parameters are converted to TypeScript string interpolation syntax by prefixing all parameters with $ e.g. ${id}.
             Optional parameters are added as QueryString parameters for GET and HEAD requests.
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
+            <param name="route">Route.</param>
         </member>
         <member name="M:Typewriter.Extensions.WebApi.UrlExtensions.Route(Typewriter.CodeModel.Method)">
             <summary>
             Returns the route for the Web API action based on route attributes (or "api/{controller}/{id?}" if no attributes are present).
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
         </member>
         <member name="M:Typewriter.Extensions.WebApi.UrlExtensions.Route(Typewriter.CodeModel.Method,System.String)">
             <summary>
             Returns the route for the Web API action based on route attributes (or the supplied convension route if no attributes are present).
             </summary>
+            <param name="method"><see cref="T:Typewriter.CodeModel.Method"/>.</param>
+            <param name="route">Route.</param>
         </member>
     </members>
 </doc>

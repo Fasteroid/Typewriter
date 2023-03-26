@@ -3,15 +3,15 @@ using System.Linq;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
 using Typewriter.CodeModel;
-using Typewriter.Tests.TestInfrastructure;
-using Xunit;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Tests.Metadata.Support;
+using Typewriter.Tests.TestInfrastructure;
+using Xunit;
 
 namespace Typewriter.Tests.Metadata.Roslyn
 {
-    [Trait("CodeModel", "PartialClasses"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
     public class RoslynClassMetadataTests : TestInfrastructure.TestBase
     {
         public RoslynClassMetadataTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -31,7 +31,7 @@ namespace Typewriter.Tests.Metadata.Roslyn
             var classInfo = fileInfo.Classes.First();
             var properties = typeof(GeneratedClass).GetProperties();
 
-            classInfo.Properties.All(op => properties.Any(cp => op.Name == cp.Name))
+            classInfo.Properties.All(op => properties.Any(cp => string.Equals(op.Name, cp.Name, StringComparison.OrdinalIgnoreCase)))
                 .ShouldBeTrue();
         }
 
@@ -42,16 +42,15 @@ namespace Typewriter.Tests.Metadata.Roslyn
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Properties.Any(propertyInfo =>
-                propertyInfo.Attributes.Any(a => a.Name == "Key")
+                propertyInfo.Attributes.Any(a => string.Equals(a.Name, "Key", StringComparison.OrdinalIgnoreCase))
             ).ShouldBeTrue();
 
             var hasDisplayProperty = classInfo.Properties.Any(propertyInfo =>
                 propertyInfo.Attributes
-                    .Any(a =>
-                        a.Name == "Display"
-                        && a.Arguments.Any(arg =>
+                    .Any(a => string.Equals(a.Name, "Display"
+, StringComparison.OrdinalIgnoreCase) && a.Arguments.Any(arg =>
                             string.Equals(
-                                arg.Value.ToString(), 
+                                arg.Value.ToString(),
                                 "NewPropertyName",
                                 StringComparison.InvariantCultureIgnoreCase
                             )

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class Context 
+    public class Context
     {
         private readonly Dictionary<string, Identifier> identifiers = new Dictionary<string, Identifier>();
         private readonly Dictionary<string, Identifier> extensionIdentifiers = new Dictionary<string, Identifier>();
@@ -15,8 +15,10 @@ namespace Typewriter.TemplateEditor.Lexing
             Type = type;
         }
 
-        public string Name { get; private set; }
-        public Type Type { get; private set; }
+        public string Name { get; }
+
+        public Type Type { get; }
+
         public ICollection<Identifier> Identifiers => identifiers.Values;
 
         public void AddIdentifier(Identifier identifier)
@@ -31,14 +33,20 @@ namespace Typewriter.TemplateEditor.Lexing
 
         public Identifier GetIdentifier(string name)
         {
-            if (name == null) return null;
+            if (name == null)
+            {
+                return null;
+            }
 
             return identifiers.TryGetValue(name, out var i) ? i : null;
         }
 
         public Identifier GetExtensionIdentifier(string extensionNamespace, string name)
         {
-            if (name == null) return null;
+            if (name == null)
+            {
+                return null;
+            }
 
             return extensionIdentifiers.TryGetValue(extensionNamespace + "." + name, out var i) ? i : null;
         }

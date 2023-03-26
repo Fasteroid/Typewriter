@@ -58,8 +58,8 @@ namespace Typewriter.TemplateEditor.Controllers
 
         private void FormatSelection()
         {
-            int start = textView.Selection.Start.Position.Position;
-            int length = textView.Selection.End.Position.Position - start;
+            var start = textView.Selection.Start.Position.Position;
+            var length = textView.Selection.End.Position.Position - start;
 
             FormatSpan(start, length);
         }
@@ -84,7 +84,6 @@ namespace Typewriter.TemplateEditor.Controllers
 
         //[Import]
         //internal SVsServiceProvider ServiceProvider { get; set; }
-
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);

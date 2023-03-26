@@ -25,7 +25,7 @@ namespace Typewriter.TemplateEditor.Controllers
         public OutliningController(ITextBuffer buffer)
         {
             this.buffer = buffer;
-            
+
             // ReSharper disable once UnusedVariable (used to suppress build warning)
             var temp = TagsChanged;
         }

@@ -9,9 +9,7 @@ namespace Typewriter.TemplateEditor.Lexing
 {
     public class SemanticModel
     {
-        #region Keywords
-
-        private static readonly Identifier[] keywords = new[]
+        private static readonly Identifier[] _keywords = new[]
         {
             new Identifier { Name = "bool", QuickInfo = "bool Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "byte", QuickInfo = "byte Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
@@ -33,12 +31,14 @@ namespace Typewriter.TemplateEditor.Lexing
             new Identifier { Name = "as", QuickInfo = "as Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "break", QuickInfo = "break Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "case", QuickInfo = "case Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
-            //new Identifier { Name = "class", QuickInfo = "class Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
+
+            // new Identifier { Name = "class", QuickInfo = "class Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "const", QuickInfo = "const Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "continue", QuickInfo = "continue Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "do", QuickInfo = "do Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "else", QuickInfo = "else Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
-            //new Identifier { Name = "enum", QuickInfo = "enum Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
+
+            // new Identifier { Name = "enum", QuickInfo = "enum Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "false", QuickInfo = "false Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "finally", QuickInfo = "finally Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
             new Identifier { Name = "for", QuickInfo = "for Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
@@ -62,88 +62,78 @@ namespace Typewriter.TemplateEditor.Lexing
             new Identifier { Name = "while", QuickInfo = "while Keyword", Glyph = StandardGlyphGroup.GlyphKeyword },
         };
 
-        #endregion
-
-        private readonly ShadowClass shadowClass;
-        private readonly Tokens tokens = new Tokens();
-        private readonly Tokens errorTokens = new Tokens();
-        private readonly ContextSpans contextSpans = new ContextSpans();      
-        private readonly Identifiers tempIdentifiers = new Identifiers();
-
-        public Tokens Tokens => tokens;
-        public Tokens ErrorTokens => errorTokens;
-        public ContextSpans ContextSpans => contextSpans;
-        public Identifiers TempIdentifiers => tempIdentifiers;
-        public ShadowClass ShadowClass => shadowClass;
+        private readonly ShadowClass _shadowClass;
+        private readonly Tokens _tokens = new Tokens();
+        private readonly Tokens _errorTokens = new Tokens();
+        private readonly ContextSpans _contextSpans = new ContextSpans();
+        private readonly Identifiers _tempIdentifiers = new Identifiers();
 
         public SemanticModel(ShadowClass shadowClass)
         {
-            this.shadowClass = shadowClass;
+            _shadowClass = shadowClass;
         }
-        
+
+        public Tokens Tokens => _tokens;
+
+        public Tokens ErrorTokens => _errorTokens;
+
+        public ContextSpans ContextSpans => _contextSpans;
+
+        public Identifiers TempIdentifiers => _tempIdentifiers;
+
+        public ShadowClass ShadowClass => _shadowClass;
+
         // Completion
         public IEnumerable<Identifier> GetIdentifiers(int position)
         {
-            var contextSpan = contextSpans.GetContextSpan(position);
+            var contextSpan = _contextSpans.GetContextSpan(position);
             if (contextSpan != null)
             {
                 if (contextSpan.Type == ContextType.Template)
                 {
                     var contextIdentifiers = contextSpan.Context.Identifiers;
-                    var customIdentifiers = this.tempIdentifiers.GetTempIdentifiers(contextSpan.Context);
-                    // Todo: Optimize performance
-                    var extensionIdentifiers = shadowClass.Snippets.Where(s => s.Type == SnippetType.Using && s.Code.StartsWith("using", StringComparison.OrdinalIgnoreCase))
+                    var customIdentifiers = _tempIdentifiers.GetTempIdentifiers(contextSpan.Context);
+
+#pragma warning disable MA0026
+
+                    // TODO: Optimize performance
+#pragma warning restore MA0026
+                    var extensionIdentifiers = _shadowClass.Snippets.Where(s => s.Type == SnippetType.Using && s.Code.StartsWith("using", StringComparison.OrdinalIgnoreCase))
                         .SelectMany(s => contextSpan.Context.GetExtensionIdentifiers(s.Code.Remove(0, 5).Trim().TrimEnd(';')));
 
-                    return contextIdentifiers.Concat(customIdentifiers).Concat(extensionIdentifiers).OrderBy(i => i.Name);
+                    return contextIdentifiers.Concat(customIdentifiers).Concat(extensionIdentifiers).OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase);
                 }
 
-                var identifiers = shadowClass.GetRecommendedSymbols(position).GroupBy(s => s.Name).Select(g => Identifier.FromSymbol(g.First())).ToList();
+                var identifiers = _shadowClass.GetRecommendedSymbols(position)
+                    .GroupBy(s => s.Name, StringComparer.OrdinalIgnoreCase)
+                    .Select(g => Identifier.FromSymbol(g.First())).ToList();
 
-                // Add common keywords to the statement completion list. (Roslyn 1.1 might provide this funtionality)
-                if (identifiers.Any(i => i.Name == "Boolean") && identifiers.Any(i => i.Name == "Class"))
+                // Add common keywords to the statement completion list. (Roslyn 1.1 might provide this functionality)
+                if (identifiers.Any(i => i.Name.Equals("Boolean", StringComparison.OrdinalIgnoreCase)) &&
+                    identifiers.Any(i => i.Name.Equals("Class", StringComparison.OrdinalIgnoreCase)))
                 {
-                    identifiers.AddRange(keywords);
+                    identifiers.AddRange(_keywords);
                 }
 
-                return identifiers.OrderBy(i => i.Name);
+                return identifiers.OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase);
             }
 
             return Array.Empty<Identifier>();
         }
 
-        // Lexers
-        internal Identifier GetIdentifier(Context context, string name)
-        {
-            var identifier = context.GetIdentifier(name);
-            if (identifier != null) return identifier;
-
-            identifier = tempIdentifiers.GetTempIdentifiers(context).FirstOrDefault(i => i.Name == name);
-            if (identifier != null) return identifier;
-
-            // Todo: Optimize performance
-            foreach (var snippet in shadowClass.Snippets.Where(s => s.Type == SnippetType.Using && s.Code.StartsWith("using", StringComparison.OrdinalIgnoreCase)))
-            {
-                identifier = context.GetExtensionIdentifier(snippet.Code.Remove(0, 5).Trim().TrimEnd(';'), name);
-                if (identifier != null) return identifier;
-            }
-
-            return null;
-        }
-
         // BraceMatching
         public Token GetToken(int position)
         {
-            return tokens.GetToken(position);
+            return _tokens.GetToken(position);
         }
 
         // QuickInfo
         public string GetQuickInfo(int position)
         {
-            var contextSpan = contextSpans.GetContextSpan(position);
+            var contextSpan = _contextSpans.GetContextSpan(position);
             if (contextSpan?.Type == ContextType.Template)
             {
-                var quickInfo = tokens.GetToken(position)?.QuickInfo;
+                var quickInfo = _tokens.GetToken(position)?.QuickInfo;
                 if (quickInfo != null && quickInfo.StartsWith("Item Parent", StringComparison.OrdinalIgnoreCase))
                 {
                     var parent = contextSpan.ParentContext?.Name;
@@ -156,13 +146,13 @@ namespace Typewriter.TemplateEditor.Lexing
                 return quickInfo;
             }
 
-            var error = errorTokens.FindTokens(position).FirstOrDefault();
+            var error = _errorTokens.FindTokens(position).FirstOrDefault();
             if (error != null)
             {
                 return error.QuickInfo;
             }
 
-            var symbol = shadowClass.GetSymbol(position);
+            var symbol = _shadowClass.GetSymbol(position);
             if (symbol != null)
             {
                 return Identifier.FromSymbol(symbol).QuickInfo;
@@ -174,25 +164,56 @@ namespace Typewriter.TemplateEditor.Lexing
         // Classification
         public IEnumerable<Token> GetTokens(Span span)
         {
-            return tokens.GetTokens(span);
+            return _tokens.GetTokens(span);
         }
 
         // Snytax errors
         public IEnumerable<Token> GetErrorTokens(Span span)
         {
-            return errorTokens.GetTokens(span);
+            return _errorTokens.GetTokens(span);
         }
 
         // Statement completion
         public ContextSpan GetContextSpan(int position)
         {
-            return contextSpans.GetContextSpan(position);
+            return _contextSpans.GetContextSpan(position);
         }
 
         // Outlining
         public IEnumerable<ContextSpan> GetContextSpans(ContextType type)
         {
-            return contextSpans.GetContextSpans(type);
+            return _contextSpans.GetContextSpans(type);
+        }
+
+        // Lexers
+        internal Identifier GetIdentifier(Context context, string name)
+        {
+            var identifier = context.GetIdentifier(name);
+            if (identifier != null)
+            {
+                return identifier;
+            }
+
+            identifier = _tempIdentifiers.GetTempIdentifiers(context).FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (identifier != null)
+            {
+                return identifier;
+            }
+
+#pragma warning disable MA0026
+
+            // TODO: Optimize performance
+#pragma warning restore MA0026
+            foreach (var snippet in _shadowClass.Snippets.Where(s => s.Type == SnippetType.Using && s.Code.StartsWith("using", StringComparison.OrdinalIgnoreCase)))
+            {
+                identifier = context.GetExtensionIdentifier(snippet.Code.Remove(0, 5).Trim().TrimEnd(';'), name);
+                if (identifier != null)
+                {
+                    return identifier;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a record.
     /// </summary>
-    [Context("Record", "Records")]
+    [Context(nameof(Record), "Records")]
     public abstract class Record : Item
     {
         /// <summary>
         /// All attributes defined on the record.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The base record of the record.
@@ -21,7 +21,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All constants defined in the record.
         /// </summary>
-        public abstract ConstantCollection Constants { get; }
+        public abstract IConstantCollection Constants { get; }
 
         /// <summary>
         /// The containing record of the record if it's nested.
@@ -31,7 +31,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All delegates defined in the record.
         /// </summary>
-        public abstract DelegateCollection Delegates { get; }
+        public abstract IDelegateCollection Delegates { get; }
 
         /// <summary>
         /// The XML documentation comment of the record.
@@ -41,12 +41,12 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All events defined in the record.
         /// </summary>
-        public abstract EventCollection Events { get; }
+        public abstract IEventCollection Events { get; }
 
         /// <summary>
         /// All fields defined in the record.
         /// </summary>
-        public abstract FieldCollection Fields { get; }
+        public abstract IFieldCollection Fields { get; }
 
         /// <summary>
         /// The full original name of the record including namespace and containing record names.
@@ -56,7 +56,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All interfaces implemented by the record.
         /// </summary>
-        public abstract InterfaceCollection Interfaces { get; }
+        public abstract IInterfaceCollection Interfaces { get; }
 
         /// <summary>
         /// Determines if the record is abstract.
@@ -71,18 +71,24 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All methods defined in the class.
         /// </summary>
-        public abstract MethodCollection Methods { get; }
+        public abstract IMethodCollection Methods { get; }
 
         /// <summary>
         /// The name of the record (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the record.
         /// </summary>
         public abstract string Name { get; }
-        
+
         /// <summary>
         /// The namespace of the record.
         /// </summary>
@@ -96,22 +102,26 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All properties defined in the record.
         /// </summary>
-        public abstract PropertyCollection Properties { get; }
+        public abstract IPropertyCollection Properties { get; }
 
         /// <summary>
         /// All generic type arguments of the record.
         /// TypeArguments are the specified arguments for the TypeParameters on a generic record e.g. &lt;string&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeCollection TypeArguments { get; }
+        public abstract ITypeCollection TypeArguments { get; }
 
         /// <summary>
         /// All generic type parameters of the record.
         /// TypeParameters are the type placeholders of a generic class e.g. &lt;T&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeParameterCollection TypeParameters { get; }
+        public abstract ITypeParameterCollection TypeParameters { get; }
 
+        /// <summary>
+        /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
+        /// </summary>
+        protected abstract Type Type { get; }
 
         /// <summary>
         /// Converts the current instance to string.
@@ -122,23 +132,11 @@ namespace Typewriter.CodeModel
         }
 
         /// <summary>
-        /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
-        /// </summary>
-        protected abstract Type Type { get; }
-
-        /// <summary>
         /// Converts the current instance to a Type.
         /// </summary>
         public static implicit operator Type(Record instance)
         {
             return instance?.Type;
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of records.
-    /// </summary>
-    public interface RecordCollection : ItemCollection<Record>
-    {
     }
 }

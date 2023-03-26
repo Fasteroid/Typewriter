@@ -11,10 +11,14 @@ namespace Typewriter.TemplateEditor.Lexing
             Type = type;
         }
 
-        public int Start { get; private set; }
-        public int End { get; private set; }
-        public Context Context { get; private set; }
-        public Context ParentContext { get; private set; }
+        public int Start { get; }
+
+        public int End { get; }
+
+        public Context Context { get; }
+
+        public Context ParentContext { get; }
+
         public ContextType Type { get; }
     }
 }

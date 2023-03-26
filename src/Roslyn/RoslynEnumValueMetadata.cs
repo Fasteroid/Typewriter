@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
@@ -10,22 +11,29 @@ namespace Typewriter.Metadata.Roslyn
     {
         private static readonly Int64Converter _converter = new Int64Converter();
 
-        private readonly IFieldSymbol symbol;
+        private readonly IFieldSymbol _symbol;
 
-        private RoslynEnumValueMetadata(IFieldSymbol symbol)
+        private RoslynEnumValueMetadata(IFieldSymbol symbol, Settings settings)
         {
-            this.symbol = symbol;
+            _symbol = symbol;
+            Settings = settings;
         }
 
-        public string DocComment => symbol.GetDocumentationCommentXml();
-        public string Name => symbol.Name;
-        public string FullName => symbol.ToDisplayString();
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
-        public long Value => (long?)_converter.ConvertFromString(symbol.ConstantValue.ToString().Trim('\'')) ?? -1;
+        public Settings Settings { get; }
 
-        internal static IEnumerable<IEnumValueMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols)
+        public string DocComment => _symbol.GetDocumentationCommentXml();
+
+        public string Name => _symbol.Name;
+
+        public string FullName => _symbol.ToDisplayString();
+
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public long Value => (long?)_converter.ConvertFromString(_symbol.ConstantValue.ToString().Trim('\'')) ?? -1;
+
+        internal static IEnumerable<IEnumValueMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols, Settings settings)
         {
-            return symbols.Select(s => new RoslynEnumValueMetadata(s));
+            return symbols.Select(s => new RoslynEnumValueMetadata(s, settings));
         }
     }
 }

@@ -13,9 +13,14 @@ namespace Typewriter.VisualStudio
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (path == null)
+                {
                     throw new ArgumentNullException(nameof(path));
+                }
 
-                if (Path.IsPathRooted(path) || projectItem == null) return path;
+                if (Path.IsPathRooted(path) || projectItem == null)
+                {
+                    return path;
+                }
 
                 if (path.StartsWith("~\\", StringComparison.OrdinalIgnoreCase))
                 {

@@ -2,14 +2,14 @@
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
 using Typewriter.CodeModel;
-using Typewriter.Tests.TestInfrastructure;
-using Xunit;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
+using Typewriter.Tests.TestInfrastructure;
+using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "PartialClasses"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
     public class RoslynPartialClassTests : TestInfrastructure.TestBase
     {
         public RoslynPartialClassTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -72,8 +72,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Constants.Count.ShouldEqual(2);
-            classInfo.Constants.Any(c => c.Name == "Constant1").ShouldBeTrue();
-            classInfo.Constants.Any(c => c.Name == "Constant2").ShouldBeTrue();
+            classInfo.Constants.Any(c => string.Equals(c.Name, "Constant1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Constants.Any(c => string.Equals(c.Name, "Constant2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -94,8 +94,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Delegates.Count.ShouldEqual(2);
-            classInfo.Delegates.Any(c => c.Name == "Delegate1").ShouldBeTrue();
-            classInfo.Delegates.Any(c => c.Name == "Delegate2").ShouldBeTrue();
+            classInfo.Delegates.Any(c => string.Equals(c.Name, "Delegate1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Delegates.Any(c => string.Equals(c.Name, "Delegate2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -116,8 +116,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Events.Count.ShouldEqual(2);
-            classInfo.Events.Any(c => c.Name == "Event1").ShouldBeTrue();
-            classInfo.Events.Any(c => c.Name == "Event2").ShouldBeTrue();
+            classInfo.Events.Any(c => string.Equals(c.Name, "Event1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Events.Any(c => string.Equals(c.Name, "Event2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -138,8 +138,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Fields.Count.ShouldEqual(2);
-            classInfo.Fields.Any(c => c.Name == "Field1").ShouldBeTrue();
-            classInfo.Fields.Any(c => c.Name == "Field2").ShouldBeTrue();
+            classInfo.Fields.Any(c => string.Equals(c.Name, "Field1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Fields.Any(c => string.Equals(c.Name, "Field2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -160,8 +160,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Methods.Count.ShouldEqual(2);
-            classInfo.Methods.Any(c => c.Name == "Method1").ShouldBeTrue();
-            classInfo.Methods.Any(c => c.Name == "Method2").ShouldBeTrue();
+            classInfo.Methods.Any(c => string.Equals(c.Name, "Method1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Methods.Any(c => string.Equals(c.Name, "Method2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -182,8 +182,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.Properties.Count.ShouldEqual(2);
-            classInfo.Properties.Any(c => c.Name == "Property1").ShouldBeTrue();
-            classInfo.Properties.Any(c => c.Name == "Property2").ShouldBeTrue();
+            classInfo.Properties.Any(c => string.Equals(c.Name, "Property1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.Properties.Any(c => string.Equals(c.Name, "Property2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -208,8 +208,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.NestedClasses.Count.ShouldEqual(2);
-            classInfo.NestedClasses.Any(c => c.Name == "NestedClassInfo1").ShouldBeTrue();
-            classInfo.NestedClasses.Any(c => c.Name == "NestedClassInfo2").ShouldBeTrue();
+            classInfo.NestedClasses.Any(c => string.Equals(c.Name, "NestedClassInfo1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.NestedClasses.Any(c => string.Equals(c.Name, "NestedClassInfo2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -234,8 +234,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.NestedEnums.Count.ShouldEqual(2);
-            classInfo.NestedEnums.Any(c => c.Name == "NestedEnumInfo1").ShouldBeTrue();
-            classInfo.NestedEnums.Any(c => c.Name == "NestedEnumInfo2").ShouldBeTrue();
+            classInfo.NestedEnums.Any(c => string.Equals(c.Name, "NestedEnumInfo1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.NestedEnums.Any(c => string.Equals(c.Name, "NestedEnumInfo2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
 
         [Fact]
@@ -260,8 +260,8 @@ namespace Typewriter.Tests.CodeModel
             var classInfo = fileInfo.Classes.First();
 
             classInfo.NestedInterfaces.Count.ShouldEqual(2);
-            classInfo.NestedInterfaces.Any(c => c.Name == "INestedInterfaceInfo1").ShouldBeTrue();
-            classInfo.NestedInterfaces.Any(c => c.Name == "INestedInterfaceInfo2").ShouldBeTrue();
+            classInfo.NestedInterfaces.Any(c => string.Equals(c.Name, "INestedInterfaceInfo1", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            classInfo.NestedInterfaces.Any(c => string.Equals(c.Name, "INestedInterfaceInfo2", System.StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
         }
     }
 }

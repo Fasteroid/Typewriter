@@ -7,7 +7,6 @@ namespace Typewriter.Tests.Extensions.Support
         [HttpGet]
         public void Test(int id)
         {
-            
         }
 
         public void Test2(int id)
@@ -17,7 +16,5 @@ namespace Typewriter.Tests.Extensions.Support
         public void Test3()
         {
         }
-
-
     }
 }

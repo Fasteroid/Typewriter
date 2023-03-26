@@ -44,7 +44,9 @@ namespace Typewriter.Generation.Controllers
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (project.ProjectItems == null)
+                {
                     return Enumerable.Empty<ProjectItem>();
+                }
 
                 return GetProjectItems(project.ProjectItems, extension);
             });
@@ -139,13 +141,10 @@ namespace Typewriter.Generation.Controllers
                     }
                 }
             }
-            
         }
-
 
         public static IEnumerable<ProjectItem> GetReferencedProjectItems(this VSProject vsproject, string extension)
         {
-            
             foreach (Reference reference in vsproject.References)
             {
                 var sp = reference.SourceProject;
@@ -162,7 +161,6 @@ namespace Typewriter.Generation.Controllers
             {
                 yield return item;
             }
-            
         }
 
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
@@ -182,6 +180,5 @@ namespace Typewriter.Generation.Controllers
                 ctr++;
             }
         }
-
     }
 }

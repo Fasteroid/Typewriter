@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Typewriter.Tests.Extensions
 {
-    [Trait("Extensions", "WebApi"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
     public class RoslynWebApiRouteClassRouteExtensionsTests : WebApiRouteClassRouteExtensionsTests
     {
         public RoslynWebApiRouteClassRouteExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -18,21 +18,20 @@ namespace Typewriter.Tests.Extensions
 
     public abstract class WebApiRouteClassRouteExtensionsTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
-        private readonly File inheritedFileInfo;
-
+        private readonly File _fileInfo;
+        private readonly File _inheritedFileInfo;
 
         protected WebApiRouteClassRouteExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\Extensions\Support\RouteControllerWithDefaultRoute.cs");
-            inheritedFileInfo = GetFile(@"Tests\Extensions\Support\InheritedController.cs");
+            _fileInfo = GetFile(@"Tests\Extensions\Support\RouteControllerWithDefaultRoute.cs");
+            _inheritedFileInfo = GetFile(@"Tests\Extensions\Support\InheritedController.cs");
         }
 
         [Fact]
         public void Expect_to_find_parameters_on_wildcard_route_url()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "WildcardRoute");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "WildcardRoute", System.StringComparison.OrdinalIgnoreCase));
             var result = methodInfo.Url();
             result.ShouldEqual("api/RouteControllerWithDefaultRoute/${encodeURIComponent(key)}");
         }
@@ -40,8 +39,8 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_to_find_url_on_named_route()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "NamedRoute");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "NamedRoute", System.StringComparison.OrdinalIgnoreCase));
             var result = methodInfo.Url();
             result.ShouldEqual("api/RouteControllerWithDefaultRoute/${id}");
         }
@@ -49,8 +48,8 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_to_find_url_on_route_in_http_attribute()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "RouteInHttpAttribute");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "RouteInHttpAttribute", System.StringComparison.OrdinalIgnoreCase));
 
             methodInfo.Url().ShouldEqual("api/RouteControllerWithDefaultRoute/${id}");
         }
@@ -58,8 +57,8 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_to_find_url_on_subroute_in_http_attribute()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "SubRouteInHttpAttribute");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "SubRouteInHttpAttribute", System.StringComparison.OrdinalIgnoreCase));
 
             methodInfo.Url().ShouldEqual("api/RouteControllerWithDefaultRoute/sub/${id}");
         }
@@ -67,28 +66,29 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_to_find_url_on_in_httpget_action_attribute()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "ActionTestInheritedClassController");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "ActionTestInheritedClassController", System.StringComparison.OrdinalIgnoreCase));
 
             var result = methodInfo.Url();
             result.ShouldEqual("api/RouteControllerWithDefaultRoute/actionTestInheritedClassController");
         }
+
         [Fact]
         public void Expect_to_find_url_on_BaseController_HttpGet_Parameter()
         {
-            var classInfo = inheritedFileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "RoutePrefixFromBaseHttpGetWithParameter");
+            var classInfo = _inheritedFileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "RoutePrefixFromBaseHttpGetWithParameter", System.StringComparison.OrdinalIgnoreCase));
 
             var result = methodInfo.Url();
             result.ShouldEqual("api/Inherited/inherited/${id}");
         }
-        
+
 
         [Fact]
         public void Expect_to_find_url_on_in_httpget_action_withparameter()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "ActionTestInheritedClassControllerPostWithParameter");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "ActionTestInheritedClassControllerPostWithParameter", System.StringComparison.OrdinalIgnoreCase));
 
             var result = methodInfo.Url();
             result.ShouldEqual("api/RouteControllerWithDefaultRoute/actionTestInheritedClassControllerPostWithParameter/${id}");
@@ -97,14 +97,11 @@ namespace Typewriter.Tests.Extensions
         [Fact]
         public void Expect_to_find_url_on_in_httppost_action_withparameter()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == "ActionTestInheritedClassControllerPostWithParameter");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "ActionTestInheritedClassControllerPostWithParameter", System.StringComparison.OrdinalIgnoreCase));
 
             var result = methodInfo.Url();
             result.ShouldEqual("api/RouteControllerWithDefaultRoute/actionTestInheritedClassControllerPostWithParameter/${id}");
         }
-
-        
-
     }
 }

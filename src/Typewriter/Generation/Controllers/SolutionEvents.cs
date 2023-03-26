@@ -3,11 +3,17 @@
 namespace Typewriter.Generation.Controllers
 {
     public delegate void SolutionOpenedEventHandler(object sender, SolutionOpenedEventArgs e);
+
     public delegate void SolutionClosedEventHandler(object sender, SolutionClosedEventArgs e);
+
     public delegate void ProjectAddedEventHandler(object sender, ProjectAddedEventArgs e);
+
     public delegate void ProjectRemovedEventHandler(object sender, ProjectRemovedEventArgs e);
+
     public delegate void FileChangedEventHandler(object sender, FileChangedEventArgs e);
+
     public delegate void SingleFileChangedEventHandler(object sender, SingleFileChangedEventArgs e);
+
     public delegate void FileRenamedEventHandler(object sender, FileRenamedEventArgs e);
 
     public class SolutionOpenedEventArgs : EventArgs
@@ -31,13 +37,14 @@ namespace Typewriter.Generation.Controllers
         Added,
         Changed,
         Deleted,
-        Renamed
+        Renamed,
     }
 
     public class FileChangedEventArgs : EventArgs
     {
-        public FileChangeType ChangeType { get; private set; }
-        public string[] Paths { get; private set; }
+        public FileChangeType ChangeType { get; }
+
+        public string[] Paths { get; }
 
         public FileChangedEventArgs(FileChangeType changeType, params string[] paths)
         {
@@ -45,24 +52,26 @@ namespace Typewriter.Generation.Controllers
             Paths = paths;
         }
     }
-    
+
     public class FileRenamedEventArgs : FileChangedEventArgs
     {
-        public string[] OldPaths { get; private set; }
-        
-        public FileRenamedEventArgs(string[] oldPaths, string[] newPaths) : base(FileChangeType.Renamed, newPaths)
+        public string[] OldPaths { get; }
+
+        public FileRenamedEventArgs(string[] oldPaths, string[] newPaths)
+            : base(FileChangeType.Renamed, newPaths)
         {
             OldPaths = oldPaths;
         }
     }
+
     public class SingleFileChangedEventArgs : FileChangedEventArgs
     {
-        public string Path { get; private set; }
+        public string Path { get; }
 
-        public SingleFileChangedEventArgs(FileChangeType changeType, string path) : base(changeType,path)
+        public SingleFileChangedEventArgs(FileChangeType changeType, string path)
+            : base(changeType,path)
         {
             Path = path;
         }
     }
-
 }

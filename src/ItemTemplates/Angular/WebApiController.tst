@@ -2,7 +2,7 @@
     using System.Text.RegularExpressions;
     using Typewriter.Extensions.WebApi;
      
-    //TODO: Manage AcceptVerbAttribute
+    // TODO: Manage AcceptVerbAttribute
     string Verb(Method m) {
         var v = m.Attributes.Where(a=>a.Name.StartsWith("Http")).FirstOrDefault()?.name.Remove(0, 4) ;
         if (v != null)

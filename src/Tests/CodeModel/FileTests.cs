@@ -8,7 +8,7 @@ using File = Typewriter.CodeModel.File;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Files"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Files"), Collection(nameof(RoslynFixture))]
     public class RoslynFileTests : FileTests
     {
         public RoslynFileTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -18,66 +18,66 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class FileTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected FileTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\FileInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\FileInfo.cs");
         }
 
         [Fact]
         public void Expect_name_to_match_filename()
         {
-            fileInfo.Name.ShouldEqual("FileInfo.cs");
-            fileInfo.FullName.ShouldEqual(Path.Combine(SolutionDirectory, @"Tests\CodeModel\Support\FileInfo.cs"));
+            _fileInfo.Name.ShouldEqual("FileInfo.cs");
+            _fileInfo.FullName.ShouldEqual(Path.Combine(SolutionDirectory, @"Tests\CodeModel\Support\FileInfo.cs"));
         }
 
         [Fact]
         public void Expect_to_find_public_classes()
         {
-            fileInfo.Classes.Count.ShouldEqual(2);
+            _fileInfo.Classes.Count.ShouldEqual(2);
 
-            var classInfo1 = fileInfo.Classes.First();
-            classInfo1.Name.ShouldEqual("PublicClassNoNamespace");
+            var classInfo1 = _fileInfo.Classes.First();
+            classInfo1.Name.ShouldEqual(nameof(PublicClassNoNamespace));
 
-            var classInfo2 = fileInfo.Classes.Last();
+            var classInfo2 = _fileInfo.Classes.Last();
             classInfo2.Name.ShouldEqual("PublicClass");
         }
 
         [Fact]
         public void Expect_to_find_public_delegates()
         {
-            fileInfo.Delegates.Count.ShouldEqual(2);
+            _fileInfo.Delegates.Count.ShouldEqual(2);
 
-            var delegateInfo1 = fileInfo.Delegates.First();
-            delegateInfo1.Name.ShouldEqual("PublicDelegateNoNamespace");
+            var delegateInfo1 = _fileInfo.Delegates.First();
+            delegateInfo1.Name.ShouldEqual(nameof(PublicDelegateNoNamespace));
 
-            var delegateInfo2 = fileInfo.Delegates.Last();
+            var delegateInfo2 = _fileInfo.Delegates.Last();
             delegateInfo2.Name.ShouldEqual("PublicDelegate");
         }
 
         [Fact]
         public void Expect_to_find_public_enums()
         {
-            fileInfo.Enums.Count.ShouldEqual(2);
+            _fileInfo.Enums.Count.ShouldEqual(2);
 
-            var enumInfo1 = fileInfo.Enums.First();
-            enumInfo1.Name.ShouldEqual("PublicEnumNoNamespace");
+            var enumInfo1 = _fileInfo.Enums.First();
+            enumInfo1.Name.ShouldEqual(nameof(PublicEnumNoNamespace));
 
-            var enumInfo2 = fileInfo.Enums.Last();
+            var enumInfo2 = _fileInfo.Enums.Last();
             enumInfo2.Name.ShouldEqual("PublicEnum");
         }
 
         [Fact]
         public void Expect_to_find_public_interfaces()
         {
-            fileInfo.Interfaces.Count.ShouldEqual(2);
+            _fileInfo.Interfaces.Count.ShouldEqual(2);
 
-            var interfaceInfo1 = fileInfo.Interfaces.First();
-            interfaceInfo1.Name.ShouldEqual("PublicInterfaceNoNamespace");
+            var interfaceInfo1 = _fileInfo.Interfaces.First();
+            interfaceInfo1.Name.ShouldEqual(nameof(IPublicInterfaceNoNamespace));
 
-            var interfaceInfo2 = fileInfo.Interfaces.Last();
-            interfaceInfo2.Name.ShouldEqual("PublicInterface");
+            var interfaceInfo2 = _fileInfo.Interfaces.Last();
+            interfaceInfo2.Name.ShouldEqual("IPublicInterface");
         }
     }
 }

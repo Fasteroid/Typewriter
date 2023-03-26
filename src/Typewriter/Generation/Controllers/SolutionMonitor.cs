@@ -19,17 +19,27 @@ namespace Typewriter.Generation.Controllers
         private IVsTrackProjectDocuments2 trackProjectDocuments;
 
         public event SolutionOpenedEventHandler SolutionOpened;
+
         public event SolutionClosedEventHandler SolutionClosed;
+
         public event ProjectAddedEventHandler ProjectAdded;
+
         public event ProjectRemovedEventHandler ProjectRemoved;
+
         public event FileChangedEventHandler CsFileAdded;
+
         public event SingleFileChangedEventHandler CsFileChanged;
+
         public event FileChangedEventHandler CsFileDeleted;
+
         public event FileRenamedEventHandler CsFileRenamed;
 
         public event FileChangedEventHandler TemplateAdded;
+
         public event SingleFileChangedEventHandler TemplateChanged;
+
         public event FileChangedEventHandler TemplateDeleted;
+
         public event FileRenamedEventHandler TemplateRenamed;
 
         public SolutionMonitor()
@@ -49,8 +59,6 @@ namespace Typewriter.Generation.Controllers
                 var templateChanged = TemplateChanged;
                 templateChanged?.Invoke(this, new SingleFileChangedEventArgs(FileChangeType.Changed, path));
             }
-
-
         }
 
         #region Event registration
@@ -223,7 +231,6 @@ namespace Typewriter.Generation.Controllers
             return VSConstants.S_OK;
         }
 
-
         public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
         {
             return VSConstants.S_OK;
@@ -266,7 +273,6 @@ namespace Typewriter.Generation.Controllers
             return VSConstants.S_OK;
         }
 
-
         public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
         {
             return VSConstants.S_OK;
@@ -290,7 +296,6 @@ namespace Typewriter.Generation.Controllers
 
             return VSConstants.S_OK;
         }
-
 
         public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
         {
@@ -335,7 +340,6 @@ namespace Typewriter.Generation.Controllers
             UnadviceSolutionEvents();
         }
 
-
         private void HandleAddRemoveFiles(FileChangeType changeType, int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, FileChangedEventHandler csFileEvent, FileChangedEventHandler templateEvent)
         {
             if (csFileEvent == null && templateEvent == null)
@@ -362,13 +366,12 @@ namespace Typewriter.Generation.Controllers
             {
                 csFileEvent(this, new FileChangedEventArgs(changeType, csFiles.ToArray()));
             }
+
             if (templateEvent != null && templates.Count > 0)
             {
                 templateEvent(this, new FileChangedEventArgs(changeType, templates.ToArray()));
             }
         }
-
-
 
         private void HandleRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, FileRenamedEventHandler csFileEvent, FileRenamedEventHandler templateEvent)
         {
@@ -382,7 +385,6 @@ namespace Typewriter.Generation.Controllers
 
             var templates = ImmutableArray.CreateBuilder<int>();
             var csFiles = ImmutableArray.CreateBuilder<int>(cFiles);
-
 
             for (var i = 0; i < oldPaths.Length; i++)
             {
@@ -402,11 +404,11 @@ namespace Typewriter.Generation.Controllers
             {
                 csFileEvent(this, new FileRenamedEventArgs(csFiles.Select(i => oldPaths[i]).ToArray(), csFiles.Select(i => newPaths[i]).ToArray()));
             }
+
             if (templateEvent != null && templates.Count > 0)
             {
                 templateEvent(this, new FileRenamedEventArgs(templates.Select(i => oldPaths[i]).ToArray(), templates.Select(i => newPaths[i]).ToArray()));
             }
         }
-
     }
 }

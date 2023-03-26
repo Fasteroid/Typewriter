@@ -2,7 +2,7 @@
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class ParameterCollectionImpl : ItemCollectionImpl<Parameter>, ParameterCollection
+    public class ParameterCollectionImpl : ItemCollectionImpl<Parameter>, IParameterCollection
     {
         public ParameterCollectionImpl(IEnumerable<Parameter> values) : base(values)
         {

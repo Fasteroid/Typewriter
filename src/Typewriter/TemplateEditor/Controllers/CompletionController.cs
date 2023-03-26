@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
@@ -9,106 +8,12 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 using VSCommand = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(ICompletionSourceProvider))]
-    [ContentType("tst")]
-    [Name("token completion1")]
-    [Order(Before = "High")]
-    internal class CompletionSourceProvider : ICompletionSourceProvider
-    {
-        [Import]
-        internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }
-
-        [Import]
-        internal IGlyphService GlyphService { get; set; }
-
-        public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer)
-        {
-            return new CompletionSource(this, textBuffer, GlyphService);
-        }
-    }
-
-    internal class CompletionSource : ICompletionSource
-    {
-        private readonly CompletionSourceProvider sourceProvider;
-        private readonly ITextBuffer buffer;
-        private readonly IGlyphService glyphService;
-
-        public CompletionSource(CompletionSourceProvider sourceProvider, ITextBuffer buffer, IGlyphService glyphService)
-        {
-            this.sourceProvider = sourceProvider;
-            this.buffer = buffer;
-            this.glyphService = glyphService;
-        }
-
-        public void AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
-        {
-            var point = session.TextView.Caret.Position.BufferPosition;
-            var line = point.GetContainingLine();
-
-            if (line == null) return;
-
-            var text = line.GetText();
-            var index = point - line.Start;
-
-            var start = index;
-
-            if (index > 0)
-            {
-                for (var i = index; i > 0; i--)
-                {
-                    var current = text[i - 1];
-                    if (current == '$' || current == '#')
-                    {
-                        start = i - 1;
-                        break;
-                    }
-
-                    if (current != '_' && char.IsLetterOrDigit(current) == false) break;
-
-                    start = i - 1;
-                }
-            }
-
-            var span = new SnapshotSpan(point.Snapshot, start + line.Start, point - (start + line.Start));
-            //Log.Debug("[" + span.GetText() + "]");
-
-            var trackingSpan = buffer.CurrentSnapshot.CreateTrackingSpan(span.Start, span.Length, SpanTrackingMode.EdgeInclusive);
-            var completions = Editor.Instance.GetCompletions(buffer, span, glyphService);
-
-            completionSets.Add(new StringCompletionSet("Identifiers", trackingSpan, completions));
-        }
-
-        class StringCompletionSet : CompletionSet
-        {
-            public StringCompletionSet(string moniker, ITrackingSpan span, IEnumerable<Completion> completions) : base(moniker, "Typewriter", span, completions, null) { }
-
-            public override void SelectBestMatch()
-            {
-                base.SelectBestMatch(CompletionMatchType.MatchInsertionText, true);
-                if (SelectionStatus.IsSelected) return;
-                base.SelectBestMatch(CompletionMatchType.MatchInsertionText, false);
-            }
-        }
-
-        private bool disposed;
-
-        public void Dispose()
-        {
-            if (!disposed)
-            {
-                GC.SuppressFinalize(this);
-                disposed = true;
-            }
-        }
-    }
-
     [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("tst")]
     [Name("token completion handler")]
@@ -126,12 +31,13 @@ namespace Typewriter.TemplateEditor.Controllers
 
         //[Import]
         //internal ISignatureHelpBroker SignatureHelpBroker { get; set; }
-
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);
             if (textView == null)
+            {
                 return;
+            }
 
             textView.Properties.GetOrCreateSingletonProperty(() => new CompletionController(textViewAdapter, textView, this));//, SignatureHelpBroker));
         }
@@ -150,7 +56,6 @@ namespace Typewriter.TemplateEditor.Controllers
             this.textView = textView;
             this.provider = provider;
             //this.broker = broker;
-
             textViewAdapter.AddCommandFilter(this, out nextCommandHandler);
         }
 
@@ -202,11 +107,11 @@ namespace Typewriter.TemplateEditor.Controllers
         //        }
         //    }
 
-        //    //pass along the command so the char is added to the buffer 
+        //    //pass along the command so the char is added to the buffer
         //    var retVal = nextCommandHandler.Exec(ref pguidCmdGroup, commandId, nCmdexecopt, pvaIn, pvaOut); // Error här
         //    var handled = false;
 
-        //    if (command == VSCommand.AUTOCOMPLETE || command == VSCommand.COMPLETEWORD || char.IsLetterOrDigit(typedChar) || typedChar == '$' || typedChar == '.') // !typedChar.Equals(char.MinValue) && 
+        //    if (command == VSCommand.AUTOCOMPLETE || command == VSCommand.COMPLETEWORD || char.IsLetterOrDigit(typedChar) || typedChar == '$' || typedChar == '.') // !typedChar.Equals(char.MinValue) &&
         //    {
         //        if (session == null || session.IsDismissed) // If there is no active session, bring up completion
         //        {
@@ -266,8 +171,8 @@ namespace Typewriter.TemplateEditor.Controllers
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            bool handled = false;
-            int hresult = VSConstants.S_OK;
+            var handled = false;
+            var hresult = VSConstants.S_OK;
 
             // 1. Pre-process
             if (pguidCmdGroup == VSConstants.VSStd2K)
@@ -289,17 +194,24 @@ namespace Typewriter.TemplateEditor.Controllers
                         handled = Cancel();
                         break;
                     case VSCommand.TYPECHAR:
-                        char ch = GetTypeChar(pvaIn);
+                        var ch = GetTypeChar(pvaIn);
                         if (ch == '.' || ch == '[' || ch == '(' || ch == '$' || ch == '#' || ch == ' ' || ch == ';' || ch == '<')
+                        {
                             Complete(false);
+                        }
                         else if (ch == '"')
+                        {
                             Cancel();
-                            break;
+                        }
+
+                        break;
                 }
             }
 
             if (!handled)
+            {
                 hresult = nextCommandHandler.Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+            }
 
             if (ErrorHandler.Succeeded(hresult))
             {
@@ -316,9 +228,13 @@ namespace Typewriter.TemplateEditor.Controllers
                         if (Editor.Instance.EnableFullIntelliSense(textView.TextBuffer, textView.Caret.Position.BufferPosition))
                         {
                             if (ch == '.')
+                            {
                                 StartSession();
-                            else if (char.IsPunctuation(ch) == false && char.IsControl(ch) == false)
+                            }
+                            else if (!char.IsPunctuation(ch) && !char.IsControl(ch))
+                            {
                                 StartSession();
+                            }
                         }
                         else if (ch == '$' || ch == '#')
                         {
@@ -334,7 +250,9 @@ namespace Typewriter.TemplateEditor.Controllers
         private void Filter()
         {
             if (_currentSession?.SelectedCompletionSet == null)
+            {
                 return;
+            }
 
             _currentSession.SelectedCompletionSet.SelectBestMatch();
             _currentSession.SelectedCompletionSet.Recalculate();
@@ -343,7 +261,9 @@ namespace Typewriter.TemplateEditor.Controllers
         bool Cancel()
         {
             if (_currentSession == null)
+            {
                 return false;
+            }
 
             _currentSession.Dismiss();
 
@@ -353,7 +273,9 @@ namespace Typewriter.TemplateEditor.Controllers
         bool Complete(bool force)
         {
             if (_currentSession == null)
+            {
                 return false;
+            }
 
             if (!_currentSession.SelectedCompletionSet.SelectionStatus.IsSelected && !force)
             {
@@ -368,13 +290,14 @@ namespace Typewriter.TemplateEditor.Controllers
         bool StartSession()
         {
             if (_currentSession != null)
+            {
                 return false;
+            }
 
             var caret = textView.Caret.Position.BufferPosition;
 
             //if (caret.Position == 0)
             //    return false;
-
             var snapshot = caret.Snapshot;
 
             _currentSession = provider.CompletionBroker.IsCompletionActive(textView) ?
@@ -384,7 +307,9 @@ namespace Typewriter.TemplateEditor.Controllers
             _currentSession.Dismissed += (sender, args) => _currentSession = null;
 
             if (!_currentSession.IsStarted)
+            {
                 _currentSession.Start();
+            }
 
             return true;
         }

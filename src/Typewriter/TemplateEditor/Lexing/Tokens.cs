@@ -23,7 +23,7 @@ namespace Typewriter.TemplateEditor.Lexing
                 Add(token);
             }
         }
-        
+
         public void Add(string classification, int start, int length = 1, string quickInfo = null)
         {
             Add(new Token { Start = start, Length = length, Classification = classification, QuickInfo = quickInfo });

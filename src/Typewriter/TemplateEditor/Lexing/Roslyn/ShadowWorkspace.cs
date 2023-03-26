@@ -25,13 +25,13 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
         private static int counter;
         private static readonly Assembly[] defaultReferences =
         {
-            typeof (int).Assembly, // mscorelib
-            typeof (Uri).Assembly, // System
-            typeof (Enumerable).Assembly, // System.Core
+            typeof(int).Assembly, // mscorelib
+            typeof(Uri).Assembly, // System
+            typeof(Enumerable).Assembly, // System.Core
             //typeof (XmlReader).Assembly, // System.Xml
             //typeof (XDocument).Assembly, // System.Xml.Linq
-            typeof (RuntimeBinderException).Assembly, // Microsoft.CSharp
-            typeof (Class).Assembly // Typewriter.CodeModel
+            typeof(RuntimeBinderException).Assembly, // Microsoft.CSharp
+            typeof(Class).Assembly // Typewriter.CodeModel
         };
 
         private List<MetadataReference> defaultMetadataReferences;
@@ -226,7 +226,7 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
                     {
                         if (x.GetType() == y.GetType())
                         {
-                            return x.Display == y.Display;
+                            return string.Equals(x.Display, y.Display, StringComparison.OrdinalIgnoreCase);
                         }
 
                         return false;
@@ -236,7 +236,9 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
                 }
 
                 if (y != null)
+                {
                     return false;
+                }
 
                 return true;
             }

@@ -13,14 +13,17 @@ namespace Typewriter.Generation
     {
         public static Type Compile(ProjectItem projectItem, ShadowClass shadowClass)
         {
-            if (Directory.Exists(Constants.TempDirectory) == false)
+            if (!Directory.Exists(Constants.TempDirectory))
             {
                 Directory.CreateDirectory(Constants.TempDirectory);
             }
 
-            foreach (Assembly assembly in shadowClass.ReferencedAssemblies)
+            foreach (var assembly in shadowClass.ReferencedAssemblies)
             {
-                if (assembly.GlobalAssemblyCache) continue;
+                if (assembly.GlobalAssemblyCache)
+                {
+                    continue;
+                }
 
                 var asmSourcePath = assembly.Location;
                 var asmDestPath = Path.Combine(Constants.TempDirectory, Path.GetFileName(asmSourcePath));
@@ -82,7 +85,9 @@ namespace Typewriter.Generation
             }
 
             if (hasErrors)
+            {
                 ErrorList.Show();
+            }
 
             if (result.Success)
             {

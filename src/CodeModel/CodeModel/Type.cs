@@ -1,17 +1,18 @@
 ﻿using Typewriter.CodeModel.Attributes;
+using Typewriter.Configuration;
 
 namespace Typewriter.CodeModel
 {
     /// <summary>
     /// Represents a type.
     /// </summary>
-    [Context("Type", "Types")]
+    [Context(nameof(Type), "Types")]
     public abstract class Type : Item
     {
         /// <summary>
         /// All attributes defined on the type.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The base class of the type.
@@ -21,7 +22,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All constants defined in the type.
         /// </summary>
-        public abstract ConstantCollection Constants { get; }
+        public abstract IConstantCollection Constants { get; }
 
         /// <summary>
         /// The containing class of the type if it's nested.
@@ -31,7 +32,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All delegates defined in the type.
         /// </summary>
-        public abstract DelegateCollection Delegates { get; }
+        public abstract IDelegateCollection Delegates { get; }
 
         /// <summary>
         /// The XML documentation comment of the type.
@@ -41,7 +42,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All fields defined in the type.
         /// </summary>
-        public abstract FieldCollection Fields { get; }
+        public abstract IFieldCollection Fields { get; }
 
         /// <summary>
         /// The full original name of the type including namespace and containing class names.
@@ -50,9 +51,9 @@ namespace Typewriter.CodeModel
 
         /// <summary>
         /// All interfaces implemented by the type.
-        /// (In Visual Studio 2013 Interfaces are not available on Types)
+        /// (In Visual Studio 2013 Interfaces are not available on Types).
         /// </summary>
-        public abstract InterfaceCollection Interfaces { get; }
+        public abstract IInterfaceCollection Interfaces { get; }
 
         /// <summary>
         /// Determines if the type is a DateTime.
@@ -61,7 +62,7 @@ namespace Typewriter.CodeModel
 
         /// <summary>
         /// Determines if the type is defined in the current solution.
-        /// (In Visual Studio 2013 IsDefined returns false for generic types)
+        /// (In Visual Studio 2013 IsDefined returns false for generic types).
         /// </summary>
         public abstract bool IsDefined { get; }
 
@@ -113,12 +114,18 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All methods defined in the type.
         /// </summary>
-        public abstract MethodCollection Methods { get; }
+        public abstract IMethodCollection Methods { get; }
 
         /// <summary>
         /// The name of the type (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the type.
@@ -133,17 +140,17 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All classes defined in the type.
         /// </summary>
-        public abstract ClassCollection NestedClasses { get; }
+        public abstract IClassCollection NestedClasses { get; }
 
         /// <summary>
         /// All enums defined in the type.
         /// </summary>
-        public abstract EnumCollection NestedEnums { get; }
+        public abstract IEnumCollection NestedEnums { get; }
 
         /// <summary>
         /// All interfaces defined in the type.
         /// </summary>
-        public abstract InterfaceCollection NestedInterfaces { get; }
+        public abstract IInterfaceCollection NestedInterfaces { get; }
 
         /// <summary>
         /// The original C# name of the type.
@@ -158,26 +165,26 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All properties defined in the type.
         /// </summary>
-        public abstract PropertyCollection Properties { get; }
+        public abstract IPropertyCollection Properties { get; }
 
         /// <summary>
         /// All generic type parameters of the type.
-        /// TypeArguments are the specified arguments for the TypeParametes on a generic type e.g. &lt;string&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// TypeArguments are the specified arguments for the TypeParameters on a generic type e.g. &lt;string&gt;.
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeCollection TypeArguments { get; }
+        public abstract ITypeCollection TypeArguments { get; }
 
         /// <summary>
         /// All generic type parameters of the type.
         /// TypeParameters are the type placeholders of a generic type e.g. &lt;T&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeParameterCollection TypeParameters { get; }
+        public abstract ITypeParameterCollection TypeParameters { get; }
 
         /// <summary>
         /// The named ValueTuple fields of the type.
         /// </summary>
-        public abstract FieldCollection TupleElements { get; }
+        public abstract IFieldCollection TupleElements { get; }
 
         /// <summary>
         /// Default value for the type.
@@ -185,18 +192,16 @@ namespace Typewriter.CodeModel
         public abstract string DefaultValue { get; }
 
         /// <summary>
+        /// Settings for the type.
+        /// </summary>
+        public abstract Settings Settings { get; }
+
+        /// <summary>
         /// Converts the current instance to string.
         /// </summary>
-        public static implicit operator string (Type instance)
+        public static implicit operator string(Type instance)
         {
             return instance.ToString();
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of types.
-    /// </summary>
-    public interface TypeCollection : ItemCollection<Type>, IStringConvertable
-    {
     }
 }

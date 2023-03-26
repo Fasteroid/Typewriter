@@ -24,10 +24,12 @@ namespace Typewriter.TemplateEditor.Lexing
 
         public Context Find(string name)
         {
-            if (items.ContainsKey(name) == false)
+            if (!items.ContainsKey(name))
             {
-                if (names.ContainsKey(name) == false)
+                if (!names.ContainsKey(name))
+                {
                     return null;
+                }
 
                 name = names[name];
             }
@@ -37,7 +39,7 @@ namespace Typewriter.TemplateEditor.Lexing
 
         private void ParseCodeModel(Assembly assembly)
         {
-            var contexts = assembly.GetTypes().Where(t => t.IsDefined(typeof (ContextAttribute), false));
+            var contexts = assembly.GetTypes().Where(t => t.IsDefined(typeof(ContextAttribute), false));
 
             foreach (var c in contexts)
             {
@@ -64,13 +66,16 @@ namespace Typewriter.TemplateEditor.Lexing
             foreach (var assembly in shadowClass.ReferencedAssemblies)
             {
                 var methods = assembly.GetExportedTypes().SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public)
-                    .Where(m => m.IsDefined(typeof (ExtensionAttribute), false) &&
-                        m.GetParameters().First().ParameterType.Namespace == "Typewriter.CodeModel"));
+                    .Where(m => m.IsDefined(typeof(ExtensionAttribute), false) &&
+string.Equals(m.GetParameters().First().ParameterType.Namespace, "Typewriter.CodeModel", System.StringComparison.OrdinalIgnoreCase)));
 
                 foreach (var method in methods)
                 {
                     var parameters = method.GetParameters();
-                    if (parameters.Length != 1) continue;
+                    if (parameters.Length != 1)
+                    {
+                        continue;
+                    }
 
                     var context = items.Values.FirstOrDefault(c => c.Type == parameters.First().ParameterType);
 
@@ -94,14 +99,14 @@ namespace Typewriter.TemplateEditor.Lexing
                 var contextName = context.GetCustomAttribute<ContextAttribute>().Name;
                 identifier.Context = contextName;
                 identifier.IsCollection = true;
-                identifier.RequireTemplate = type.GetInterface(nameof(IStringConvertable)) == null;
+                identifier.RequireTemplate = type.GetInterface(nameof(IStringConvertible)) == null;
             }
 
             if (type == typeof(bool))
             {
                 identifier.IsBoolean = true;
             }
-            else if (memberInfo.Name == "Parent")
+            else if (string.Equals(memberInfo.Name, "Parent", System.StringComparison.OrdinalIgnoreCase))
             {
                 identifier.IsParent = true;
             }
@@ -118,10 +123,16 @@ namespace Typewriter.TemplateEditor.Lexing
         private static Type GetType(MemberInfo memberInfo)
         {
             var propertyInfo = memberInfo as PropertyInfo;
-            if (propertyInfo != null) return propertyInfo.PropertyType;
+            if (propertyInfo != null)
+            {
+                return propertyInfo.PropertyType;
+            }
 
             var methodInfo = memberInfo as MethodInfo;
-            if (methodInfo != null) return methodInfo.ReturnType;
+            if (methodInfo != null)
+            {
+                return methodInfo.ReturnType;
+            }
 
             return null;
         }

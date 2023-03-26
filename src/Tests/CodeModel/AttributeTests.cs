@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Attributes"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Attributes"), Collection(nameof(RoslynFixture))]
     public class RoslynAttributeTests : AttributeTests
     {
         public RoslynAttributeTests(RoslynFixture fixture, GlobalServiceProvider sp)
@@ -19,19 +19,19 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class AttributeTests : TestInfrastructure.TestBase
     {
-        private readonly Class classInfo;
+        private readonly Class _classInfo;
 
         protected AttributeTests(ITestFixture fixture, GlobalServiceProvider sp)
             : base(fixture, sp)
         {
-            var fileInfo = GetFile(@"Tests\CodeModel\Support\AttributeInfo.cs");
-            classInfo = fileInfo.Classes.First(c => c.Name == nameof(AttributeTestClass));
+            var fileInfo = GetFile(@"Tests\CodeModel\Support\AttributeTestClass.cs");
+            _classInfo = fileInfo.Classes.First(c => string.Equals(c.Name, nameof(AttributeTestClass), System.StringComparison.OrdinalIgnoreCase));
         }
 
         [Fact]
         public void Expect_name_to_match_attribute_name()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "NoParameters");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "NoParameters", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
 
             propertyInfo.Attributes.Count.ShouldEqual(1);
@@ -42,43 +42,43 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_attributes_with_no_parameters_to_have_an_empty_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "NoParameters");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "NoParameters", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
-            
+
             attributeInfo.Value.ShouldBeNull();
         }
 
         [Fact]
         public void Expect_attributes_with_string_parameter_to_have_a_string_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "StringParameter");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "StringParameter", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
-            
+
             attributeInfo.Value.ShouldEqual("parameter");
         }
 
         [Fact]
         public void Expect_attributes_with_int_parameter_to_have_an_integer_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "IntParameter");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "IntParameter", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
-            
+
             attributeInfo.Value.ShouldEqual("1");
         }
 
         [Fact]
         public void Expect_attributes_with_int_and_named_parameter_to_have_a_proper_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "IntAndNamedParameter");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "IntAndNamedParameter", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
-            
+
             attributeInfo.Value.ShouldEqual("2, Parameter = \"parameter\"");
         }
 
         [Fact]
         public void Expect_attributes_with_params_parameter_to_have_a_proper_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "ParamsParameter");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "ParamsParameter", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
 
             attributeInfo.Value.ShouldEqual("\"parameter1\", \"parameter2\"");
@@ -87,7 +87,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_attributes_with_string_and_params_parameter_to_have_a_proper_value()
         {
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "IntAndParamsParameter");
+            var propertyInfo = _classInfo.Properties.First(p => string.Equals(p.Name, "IntAndParamsParameter", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = propertyInfo.Attributes.First();
 
             attributeInfo.Value.ShouldEqual("1, \"parameter\"");

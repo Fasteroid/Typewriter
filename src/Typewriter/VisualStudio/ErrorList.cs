@@ -16,8 +16,8 @@ namespace Typewriter.VisualStudio
         {
             try
             {
-                _ivsSolution = (IVsSolution)Package.GetGlobalService(typeof (IVsSolution));
-                _ivsErrorList = (IVsErrorList)Package.GetGlobalService(typeof (SVsErrorList));
+                _ivsSolution = (IVsSolution)Package.GetGlobalService(typeof(IVsSolution));
+                _ivsErrorList = (IVsErrorList)Package.GetGlobalService(typeof(SVsErrorList));
                 _errorListProvider = new ErrorListProvider(serviceProvider);
                 _initialized = true;
             }
@@ -29,7 +29,10 @@ namespace Typewriter.VisualStudio
 
         public static void Clear()
         {
-            if (_initialized == false) return;
+            if (!_initialized)
+            {
+                return;
+            }
 
             try
             {
@@ -43,7 +46,10 @@ namespace Typewriter.VisualStudio
 
         public static void Show()
         {
-            if (_initialized == false) return;
+            if (!_initialized)
+            {
+                return;
+            }
 
             try
             {
@@ -74,7 +80,10 @@ namespace Typewriter.VisualStudio
 
         private static void AddTask(ProjectItem projectItem, string message, TaskErrorCategory category, int line)
         {
-            if (_initialized == false) return;
+            if (!_initialized)
+            {
+                return;
+            }
 
             try
             {

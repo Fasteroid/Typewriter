@@ -6,6 +6,6 @@
 
         ITypeMetadata TypeValue { get; }
 
-        object Value { get; }
+        object GetValue();
     }
 }

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Typewriter.Tests.TestInfrastructure
 {
-    public class RoslynFixture : ITestFixture
+    public sealed class RoslynFixture : ITestFixture
     {
         public RoslynFixture()
         {
@@ -17,6 +17,7 @@ namespace Typewriter.Tests.TestInfrastructure
         }
 
         public DTE Dte { get; }
+
         public IMetadataProvider Provider { get; }
 
         public void Dispose()

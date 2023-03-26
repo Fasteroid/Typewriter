@@ -5,34 +5,34 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a file.
     /// </summary>
-    [Context("File", "Files")]
+    [Context(nameof(File), "Files")]
     public abstract class File : Item
     {
         /// <summary>
         /// All public classes defined in the file.
         /// </summary>
-        public abstract ClassCollection Classes { get; }
+        public abstract IClassCollection Classes { get; }
 
         /// <summary>
         /// All public records defined in the file.
         /// </summary>
-        public abstract RecordCollection Records { get; }
+        public abstract IRecordCollection Records { get; }
 
         /// <summary>
         /// All public delegates defined in the file.
         /// </summary>
-        public abstract DelegateCollection Delegates { get; }
+        public abstract IDelegateCollection Delegates { get; }
 
         /// <summary>
         /// All public enums defined in the file.
         /// </summary>
-        public abstract EnumCollection Enums { get; }
+        public abstract IEnumCollection Enums { get; }
 
         /// <summary>
         /// All public interfaces defined in the file.
         /// </summary>
-        public abstract InterfaceCollection Interfaces { get; }
-        
+        public abstract IInterfaceCollection Interfaces { get; }
+
         /// <summary>
         /// The full path of the file.
         /// </summary>

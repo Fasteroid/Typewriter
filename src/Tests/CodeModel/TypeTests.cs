@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Types"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Types"), Collection(nameof(RoslynFixture))]
     public class RoslynTypeTests : TypeTests
     {
         public RoslynTypeTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -18,18 +18,18 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class TypeTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected TypeTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\TypeInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\TypeInfo.cs");
         }
 
         [Fact]
         public void Expect_type_name_to_match_class_name()
         {
-            var classInfo = fileInfo.Classes.First();
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "Class");
+            var classInfo = _fileInfo.Classes.First();
+            var propertyInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase));
             var typeInfo = propertyInfo.Type;
 
             typeInfo.Name.ShouldEqual("ClassInfo");
@@ -41,8 +41,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_doc_comment()
         {
-            var classInfo = fileInfo.Classes.First();
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "Class");
+            var classInfo = _fileInfo.Classes.First();
+            var propertyInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase));
             var typeInfo = propertyInfo.Type;
             typeInfo.DocComment.Summary.ShouldEqual("summary");
         }
@@ -50,8 +50,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_type_attributes()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var attributeInfo = typeInfo.Attributes.First();
 
             typeInfo.Attributes.Count.ShouldEqual(1);
@@ -62,8 +62,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_type_base_class()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var baseClassInfo = typeInfo.BaseClass;
             var propertyInfo = baseClassInfo.Properties.First();
 
@@ -76,8 +76,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_not_to_find_object_base_class()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "BaseClass").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "BaseClass", System.StringComparison.OrdinalIgnoreCase)).Type;
 
             typeInfo.BaseClass.ShouldBeNull();
         }
@@ -85,10 +85,10 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_type_interfaces()
         {
-            if (isRoslyn)
+            if (IsRoslyn)
             {
-                var classInfo = fileInfo.Classes.First();
-                var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+                var classInfo = _fileInfo.Classes.First();
+                var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
                 var interfaceInfo = typeInfo.Interfaces.First();
                 var propertyInfo = interfaceInfo.Properties.First();
 
@@ -103,8 +103,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_non_generic_type_not_to_be_generic()
         {
-            var classInfo = fileInfo.Classes.First();
-            var propertyInfo = classInfo.Properties.First(p => p.Name == "Class");
+            var classInfo = _fileInfo.Classes.First();
+            var propertyInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase));
 
             propertyInfo.Type.IsGeneric.ShouldBeFalse();
             propertyInfo.Type.TypeArguments.Count.ShouldEqual(0);
@@ -113,27 +113,27 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_generic_type_to_be_generic()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "GenericClass").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "GenericClass", System.StringComparison.OrdinalIgnoreCase)).Type;
             var genericTypeArgument = typeInfo.TypeArguments.First();
 
             typeInfo.IsGeneric.ShouldBeTrue();
             typeInfo.TypeArguments.Count.ShouldEqual(1);
             genericTypeArgument.Name.ShouldEqual("string");
 
-            if (isRoslyn)
+            if (IsRoslyn)
             {
                 var genericTypeParameter = typeInfo.TypeParameters.First();
                 typeInfo.TypeParameters.Count.ShouldEqual(1);
                 genericTypeParameter.Name.ShouldEqual("T");
             }
         }
-        
+
         [Fact]
         public void Expect_to_find_public_constants()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var constantInfo = typeInfo.Constants.First();
 
             typeInfo.Constants.Count.ShouldEqual(1);
@@ -143,8 +143,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_public_delegates()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var delegateInfo = typeInfo.Delegates.First();
 
             typeInfo.Delegates.Count.ShouldEqual(1);
@@ -154,8 +154,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_public_fields()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var fieldInfo = typeInfo.Fields.First();
 
             typeInfo.Fields.Count.ShouldEqual(1);
@@ -165,8 +165,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_public_methods()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var methodInfo = typeInfo.Methods.First();
 
             typeInfo.Methods.Count.ShouldEqual(1);
@@ -176,8 +176,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_public_properties()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var propertyInfo = typeInfo.Properties.First();
 
             typeInfo.Properties.Count.ShouldEqual(1);
@@ -187,8 +187,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_nested_public_classes()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var nestedClassInfo = typeInfo.NestedClasses.First();
             var propertyInfo = nestedClassInfo.Properties.First();
 
@@ -202,8 +202,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_nested_public_enums()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var nestedEnumInfo = typeInfo.NestedEnums.First();
             var valueInfo = nestedEnumInfo.Values.First();
 
@@ -217,8 +217,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_nested_public_interfaces()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var nestedInterfaceInfo = typeInfo.NestedInterfaces.First();
             var propertyInfo = nestedInterfaceInfo.Properties.First();
 
@@ -232,8 +232,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_containing_class_on_nested_class()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var nestedClassInfo = typeInfo.NestedClasses.First();
             var containingClassInfo = nestedClassInfo.ContainingClass;
 
@@ -243,8 +243,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_not_to_find_containing_class_on_top_level_class()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
             var containingClassInfo = typeInfo.ContainingClass;
 
             containingClassInfo.ShouldBeNull();
@@ -253,8 +253,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_generic_baseclass_to_have_type_arguments()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "InheritGenericClass").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "InheritGenericClass", System.StringComparison.OrdinalIgnoreCase)).Type;
             var genericTypeArgument = typeInfo.BaseClass.TypeArguments.First();
 
             typeInfo.BaseClass.IsGeneric.ShouldBeTrue();
@@ -262,7 +262,7 @@ namespace Typewriter.Tests.CodeModel
 
             genericTypeArgument.Name.ShouldEqual("string");
 
-            if (isRoslyn)
+            if (IsRoslyn)
             {
                 var genericTypeParameter = typeInfo.BaseClass.TypeParameters.First();
                 typeInfo.BaseClass.TypeParameters.Count.ShouldEqual(1);
@@ -273,23 +273,27 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_types_defined_in_solution_to_return_isdefined()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "Class").Type;
-            var genericTypeInfo = classInfo.Properties.First(p => p.Name == "GenericClass").Type;
-            var classCollection = classInfo.Properties.First(p => p.Name == "ClassCollection").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, nameof(Class), System.StringComparison.OrdinalIgnoreCase)).Type;
+            var genericTypeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "GenericClass", System.StringComparison.OrdinalIgnoreCase)).Type;
+            var classCollection = classInfo.Properties.First(p => string.Equals(p.Name, "ClassCollection", System.StringComparison.OrdinalIgnoreCase)).Type;
 
             typeInfo.IsDefined.ShouldBeTrue("Class.IsDefined");
-            if (isRoslyn) genericTypeInfo.IsDefined.ShouldBeTrue("GenericClass.IsDefined");
+            if (IsRoslyn)
+            {
+                genericTypeInfo.IsDefined.ShouldBeTrue("GenericClass.IsDefined");
+            }
+
             classCollection.Unwrap().IsDefined.ShouldBeTrue("ClassCollection.IsDefined");
         }
 
         [Fact]
         public void Expect_external_types_not_to_return_isdefined()
         {
-            var classInfo = fileInfo.Classes.First();
-            var typeInfo = classInfo.Properties.First(p => p.Name == "String").Type;
-            var genericTypeInfo = classInfo.Properties.First(p => p.Name == "GenericClass").Type;
-            var classCollection = classInfo.Properties.First(p => p.Name == "ClassCollection").Type;
+            var classInfo = _fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "String", System.StringComparison.OrdinalIgnoreCase)).Type;
+            var genericTypeInfo = classInfo.Properties.First(p => string.Equals(p.Name, "GenericClass", System.StringComparison.OrdinalIgnoreCase)).Type;
+            var classCollection = classInfo.Properties.First(p => string.Equals(p.Name, "ClassCollection", System.StringComparison.OrdinalIgnoreCase)).Type;
 
             typeInfo.IsDefined.ShouldBeFalse("String.IsDefined");
             genericTypeInfo.Unwrap().IsDefined.ShouldBeFalse("GenericClass.IsDefined");

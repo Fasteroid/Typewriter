@@ -23,6 +23,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildalyzer.Logger", "Build
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildalyzer.Workspaces", "Buildalyzer\src\Buildalyzer.Workspaces\Buildalyzer.Workspaces.csproj", "{8425C5E0-31A3-4FC5-B7DC-FAA6FCF5434F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".props", ".props", "{D0FD1264-DAA0-4B80-9180-DE44C0C46D18}"
+	ProjectSection(SolutionItems) = preProject
+		AdaskoTheBeAsT.ruleset = AdaskoTheBeAsT.ruleset
+		Directory.Build.props = Directory.Build.props
+		SecurityCodeScan.config.yml = SecurityCodeScan.config.yml
+		Settings.StyleCop = Settings.StyleCop
+		stylecop.json = stylecop.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{877DD8C5-6710-460E-8296-94616570A5E0}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +87,7 @@ Global
 		{47D9EE24-BC5F-49E9-B3D5-5E36D93D0715} = {0469F12A-13D7-439A-9F02-29B0F05FD3DA}
 		{38654945-2FAF-47BC-B0D6-2DA2DB102370} = {0469F12A-13D7-439A-9F02-29B0F05FD3DA}
 		{8425C5E0-31A3-4FC5-B7DC-FAA6FCF5434F} = {0469F12A-13D7-439A-9F02-29B0F05FD3DA}
+		{877DD8C5-6710-460E-8296-94616570A5E0} = {D0FD1264-DAA0-4B80-9180-DE44C0C46D18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79E19463-98B9-4919-94DB-523F11EF9596}

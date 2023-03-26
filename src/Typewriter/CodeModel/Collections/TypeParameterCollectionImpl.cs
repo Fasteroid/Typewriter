@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class TypeParameterCollectionImpl : ItemCollectionImpl<TypeParameter>, TypeParameterCollection
+    public class TypeParameterCollectionImpl : ItemCollectionImpl<TypeParameter>, ITypeParameterCollection
     {
         public TypeParameterCollectionImpl(IEnumerable<TypeParameter> values) : base(values)
         {
@@ -21,8 +21,10 @@ namespace Typewriter.CodeModel.Collections
 
         public override string ToString()
         {
-            if(Count == 0)
+            if (Count == 0)
+            {
                 return string.Empty;
+            }
 
             return string.Concat("<", string.Join(", ", this.Select(t => t.Name)), ">");
         }

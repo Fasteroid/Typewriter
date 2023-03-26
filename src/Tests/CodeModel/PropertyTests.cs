@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-	 [Trait("CodeModel", "Properties"), Collection(nameof(RoslynFixture))]
+	 [Trait(nameof(CodeModel), "Properties"), Collection(nameof(RoslynFixture))]
 	 public class RoslynPropertyTests : PropertyTests
 	 {
 		  public RoslynPropertyTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -17,16 +17,16 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class PropertyTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
-        private readonly Class classInfo;
+        private readonly File _fileInfo;
+        private readonly Class _classInfo;
 
         protected PropertyTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\PropertyInfo.cs");
-            classInfo = fileInfo.Classes.First();
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\PropertyInfo.cs");
+            _classInfo = _fileInfo.Classes.First();
         }
 
-        protected Property GetFirstProperty(string name) => classInfo.Properties.First(p => p.Name == name);
+        protected Property GetFirstProperty(string name) => _classInfo.Properties.First(p => string.Equals(p.Name, name, System.StringComparison.OrdinalIgnoreCase));
 
         [Fact]
         public void Expect_name_to_match_property_name()
@@ -35,7 +35,7 @@ namespace Typewriter.Tests.CodeModel
 
             propertyInfo.Name.ShouldEqual("Bool");
             propertyInfo.FullName.ShouldEqual("Typewriter.Tests.CodeModel.Support.PropertyInfo.Bool");
-            propertyInfo.Parent.ShouldEqual(classInfo);
+            propertyInfo.Parent.ShouldEqual(_classInfo);
         }
 
         [Fact]
@@ -189,7 +189,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_enum_properties_to_be_enums()
         {
-            var enumInfo = GetFirstProperty("Enum");
+            var enumInfo = GetFirstProperty(nameof(Enum));
 
             enumInfo.Type.IsEnum.ShouldBeTrue("IsEnum");
             enumInfo.Type.IsEnumerable.ShouldBeFalse("IsEnumerable");
@@ -250,11 +250,11 @@ namespace Typewriter.Tests.CodeModel
             intInfo.Type.OriginalName.ShouldEqual("int");
             intInfo.Type.FullName.ShouldEqual("System.Int32");
 
-            nullableIntInfo1.Type.Name.ShouldEqual("number");
+            nullableIntInfo1.Type.Name.ShouldEqual("number | null");
             nullableIntInfo1.Type.OriginalName.ShouldEqual("int?");
             nullableIntInfo1.Type.FullName.ShouldEqual("System.Int32?");
 
-            nullableIntInfo2.Type.Name.ShouldEqual("number");
+            nullableIntInfo2.Type.Name.ShouldEqual("number | null");
             nullableIntInfo2.Type.OriginalName.ShouldEqual("int?");
             nullableIntInfo2.Type.FullName.ShouldEqual("System.Int32?");
 
@@ -262,7 +262,7 @@ namespace Typewriter.Tests.CodeModel
             enumerableIntInfo.Type.OriginalName.ShouldEqual("IEnumerable");
             enumerableIntInfo.Type.FullName.ShouldEqual("System.Collections.Generic.IEnumerable<System.Int32>");
 
-            enumerableNullableIntInfo.Type.Name.ShouldEqual("number[]");
+            enumerableNullableIntInfo.Type.Name.ShouldEqual("(number | null)[]");
             enumerableNullableIntInfo.Type.OriginalName.ShouldEqual("IEnumerable");
             enumerableNullableIntInfo.Type.FullName.ShouldEqual("System.Collections.Generic.IEnumerable<System.Int32?>");
         }
@@ -345,7 +345,6 @@ namespace Typewriter.Tests.CodeModel
             listStringInfo.Type.Name.ShouldEqual("string[]");
 
             stringArrayInfo.Type.ToString().ShouldEqual("string[]");
-
         }
 
         [Fact]
@@ -359,9 +358,9 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_generic_property_type_to_match_generic_argument()
         {
-            var genericInfo = fileInfo.Classes
-                .First(c => c.Name == "GenericPropertyInfo").Properties
-                .First(p => p.Name == "Generic");
+            var genericInfo = _fileInfo.Classes
+                .First(c => string.Equals(c.Name, "GenericPropertyInfo", System.StringComparison.OrdinalIgnoreCase)).Properties
+                .First(p => string.Equals(p.Name, "Generic", System.StringComparison.OrdinalIgnoreCase));
 
             genericInfo.Type.Name.ShouldEqual("T");
             genericInfo.Type.FullName.ShouldEqual("T");
@@ -370,9 +369,9 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_enumerable_generic_property_inner_type_to_match_generic_argument()
         {
-            var genericInfo = fileInfo.Classes
-                .First(c => c.Name == "GenericPropertyInfo").Properties
-                .First(p => p.Name == "EnumerableGeneric");
+            var genericInfo = _fileInfo.Classes
+                .First(c => string.Equals(c.Name, "GenericPropertyInfo", System.StringComparison.OrdinalIgnoreCase)).Properties
+                .First(p => string.Equals(p.Name, "EnumerableGeneric", System.StringComparison.OrdinalIgnoreCase));
             var innerType = genericInfo.Type.TypeArguments.First();
 
             genericInfo.Type.IsEnumerable.ShouldBeTrue();

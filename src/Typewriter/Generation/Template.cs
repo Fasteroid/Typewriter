@@ -24,7 +24,7 @@ namespace Typewriter.Generation
         private Lazy<SettingsImpl> _configuration;
         private bool _templateCompileException;
         private bool _templateCompiled;
-        
+
         public Settings Settings => _configuration.Value;
 
         public Template(ProjectItem projectItem)
@@ -36,11 +36,9 @@ namespace Typewriter.Generation
             _projectFullName = projectItem.ContainingProject.FullName;
             _projectPath = Path.GetDirectoryName(_projectFullName);
 
-
             _template = LazyTemplate();
 
             _configuration = LazyConfiguration();
-
 
             stopwatch.Stop();
             Log.Debug("Template ctor {0} ms", stopwatch.ElapsedMilliseconds);
@@ -48,7 +46,6 @@ namespace Typewriter.Generation
 
         private Lazy<SettingsImpl> LazyConfiguration()
         {
-
             return new Lazy<SettingsImpl>(() =>
            {
                var settings = new SettingsImpl(_projectItem);
@@ -64,7 +61,6 @@ namespace Typewriter.Generation
                {
                    Activator.CreateInstance(templateClass, settings);
                }
-
 
                return settings;
            });
@@ -109,7 +105,6 @@ namespace Typewriter.Generation
             try
             {
                 return Parser.Parse(_projectItem, file.FullName, _template.Value, _customExtensions, file, out success);
-
             }
             catch (Exception ex)
             {
@@ -124,7 +119,6 @@ namespace Typewriter.Generation
             try
             {
                 return SingleFileParser.Parse(_projectItem, files, _template.Value, _customExtensions, out success);
-
             }
             catch (Exception ex)
             {
@@ -153,16 +147,15 @@ namespace Typewriter.Generation
             return success;
         }
 
-
         public bool RenderFile(File[] files)
         {
             var output = Render(files, out var success);
 
             if (success)
             {
-                string outputdir = GetOutputDirectory();
+                var outputdir = GetOutputDirectory();
 
-                string singleFileName = this.Settings.SingleFileName;
+                var singleFileName = Settings.SingleFileName;
 
                 WriteFile(Path.Combine(outputdir, singleFileName), output);
             }
@@ -189,14 +182,14 @@ namespace Typewriter.Generation
 
             var hasChanged = HasChanged(outputPath, output);
 
-            if (ExtensionPackage.Instance.AddGeneratedFilesToProject == false
-                || _configuration.Value.SkipAddingGeneratedFilesToProject)
+            if (!ExtensionPackage.Instance.AddGeneratedFilesToProject || _configuration.Value.SkipAddingGeneratedFilesToProject)
             {
                 if (hasChanged)
                 {
                     WriteFile(outputPath, output);
                     Log.Debug($"Output file '{outputPath}' saved.");
                 }
+
                 return;
             }
 
@@ -253,7 +246,10 @@ namespace Typewriter.Generation
 
         private string GetMappedSourceFile(ProjectItem item)
         {
-            if (item == null) return null;
+            if (item == null)
+            {
+                return null;
+            }
 
             try
             {
@@ -268,8 +264,16 @@ namespace Typewriter.Generation
 
         private void SetMappedSourceFile(ProjectItem item, string path)
         {
-            if (_projectItem == null) throw new ArgumentNullException(nameof(item));
-            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (_projectItem == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
             if (item == null)
             {
                 return;
@@ -279,13 +283,15 @@ namespace Typewriter.Generation
             var folderUri = new Uri(_projectPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
             var relativeSourcePath = Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
 
-            if (relativeSourcePath.Equals(GetMappedSourceFile(item), StringComparison.InvariantCultureIgnoreCase) == false)
+            if (!relativeSourcePath.Equals(GetMappedSourceFile(item), StringComparison.InvariantCultureIgnoreCase))
             {
-
                 try
                 {
                     var property = item.Properties.Item("CustomToolNamespace");
-                    if (property == null) throw new InvalidOperationException("Cannot find CustomToolNamespace property");
+                    if (property == null)
+                    {
+                        throw new InvalidOperationException("Cannot find CustomToolNamespace property");
+                    }
 
                     property.Value = relativeSourcePath;
                 }
@@ -326,10 +332,16 @@ namespace Typewriter.Generation
             for (var i = 1; i < 1000; i++)
             {
                 var item = FindProjectItem(outputPath);
-                if (item == null) return outputPath;
+                if (item == null)
+                {
+                    return outputPath;
+                }
 
                 var mappedSourceFile = GetMappedSourceFile(item);
-                if (mappedSourceFile == null || path.Equals(mappedSourceFile, StringComparison.InvariantCultureIgnoreCase)) return outputPath;
+                if (mappedSourceFile == null || path.Equals(mappedSourceFile, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return outputPath;
+                }
 
                 var name = filename.EndsWith(".d.ts", StringComparison.OrdinalIgnoreCase) ?
                     filename.Substring(0, filename.Length - 5) :
@@ -342,7 +354,7 @@ namespace Typewriter.Generation
                 outputPath = Path.Combine(directory, $"{name} ({i}){extension}");
             }
 
-            throw new Exception("GetOutputPath");
+            throw new Exception(nameof(GetOutputPath));
         }
 
         private string GetOutputDirectory()
@@ -390,8 +402,10 @@ namespace Typewriter.Generation
                         .Replace("?", "-")
                         .Replace("*", "-");
 
-                    if (filename.Contains(".") == false)
+                    if (!filename.Contains("."))
+                    {
                         filename += extension;
+                    }
 
                     return filename;
                 }
@@ -409,7 +423,9 @@ namespace Typewriter.Generation
             var extension = _configuration.Value.OutputExtension;
 
             if (string.IsNullOrWhiteSpace(extension))
+            {
                 return ".ts";
+            }
 
             return "." + extension.Trim('.');
         }
@@ -419,7 +435,7 @@ namespace Typewriter.Generation
             if (System.IO.File.Exists(path))
             {
                 var current = System.IO.File.ReadAllText(path);
-                if (current == output)
+                if (string.Equals(current, output, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -458,7 +474,7 @@ namespace Typewriter.Generation
                 var isUnderScc = dte.SourceControl.IsItemUnderSCC(path);
                 var isCheckedOut = dte.SourceControl.IsItemCheckedOut(path);
 
-                if (fileExists && isUnderScc && isCheckedOut == false)
+                if (fileExists && isUnderScc && !isCheckedOut)
                 {
                     dte.SourceControl.CheckOutItem(path);
                 }

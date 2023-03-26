@@ -74,7 +74,9 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
                 ? Assembly.LoadFile(pathOrName)
                 : Assembly.Load(pathOrName);
             if (referencedAssemblies.Add(asm))
+            {
                 workspace.SetMetadataReferences(documentId, referencedAssemblies);
+            }
         }
 
         public void AddUsing(string code, int startIndex)
@@ -85,7 +87,7 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         public void AddBlock(string code, int startIndex)
         {
-            if (classAdded == false)
+            if (!classAdded)
             {
                 snippets.Add(Snippet.Create(SnippetType.Class, classTemplate));
                 offset += classTemplate.Length;
@@ -98,7 +100,7 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         public void AddLambda(string code, string type, string name, int startIndex)
         {
-            if (classAdded == false)
+            if (!classAdded)
             {
                 snippets.Add(Snippet.Create(SnippetType.Class, classTemplate));
                 offset += classTemplate.Length;
@@ -131,7 +133,7 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         public void Parse()
         {
-            if (classAdded == false)
+            if (!classAdded)
             {
                 snippets.Add(Snippet.Create(SnippetType.Class, classTemplate));
                 offset += classTemplate.Length;
@@ -175,7 +177,6 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
                     quickInfo = quickInfo.Replace("__Typewriter.", string.Empty);
                     //quickInfo = quickInfo.Replace("__Code.", string.Empty);
-
                     return new Token
                     {
                         QuickInfo = quickInfo,
@@ -199,16 +200,16 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
                 var identifier = method.Identifier.ToString();
                 var parameter = method.ParameterList.Parameters.FirstOrDefault()?.Type.ToString();
 
-                if (identifier.StartsWith("__", StringComparison.OrdinalIgnoreCase) == false && parameter != null)
+                if (!identifier.StartsWith("__", StringComparison.OrdinalIgnoreCase) && parameter != null)
                 {
                     var context = contexts.Find(parameter);
                     if (context != null)
                     {
-                        var isBoolean = returnType == "bool" || returnType == "Boolean";
+                        var isBoolean = string.Equals(returnType, "bool", StringComparison.OrdinalIgnoreCase) || string.Equals(returnType, "Boolean", StringComparison.OrdinalIgnoreCase);
 
                         var contextType = ExtraxtContextType(returnType);
                         var childContext = contexts.Find(contextType)?.Name;
-                        var isCollection = childContext != null && contextType != returnType;
+                        var isCollection = childContext != null && !string.Equals(contextType, returnType, StringComparison.OrdinalIgnoreCase);
 
                         yield return new TemporaryIdentifier(context, new Identifier
                         {
@@ -228,7 +229,10 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         private static string ExtraxtContextType(string returnType)
         {
-            if (returnType.EndsWith("[]", StringComparison.OrdinalIgnoreCase)) return returnType.Substring(0, returnType.Length - 2);
+            if (returnType.EndsWith("[]", StringComparison.OrdinalIgnoreCase))
+            {
+                return returnType.Substring(0, returnType.Length - 2);
+            }
 
             var prefixes = new[] { "ICollection<", "IEnumerable<", "List<", "IList<" };
             var match = prefixes.FirstOrDefault(returnType.StartsWith);
@@ -246,7 +250,10 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
         {
             var snippet = snippets.FirstOrDefault(s => s.Contains(position));
 
-            if (snippet == null) return null;
+            if (snippet == null)
+            {
+                return null;
+            }
 
             return workspace.GetSymbol(documentId, snippet.ToShadowIndex(position));
         }
@@ -255,9 +262,12 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
         {
             var snippet = snippets.FirstOrDefault(s => s.Contains(position));
 
-            if (snippet == null) return Array.Empty<ISymbol>();
+            if (snippet == null)
+            {
+                return Array.Empty<ISymbol>();
+            }
 
-            return workspace.GetRecommendedSymbols(documentId, snippet.ToShadowIndex(position)).Where(s => s.Name.StartsWith("__", StringComparison.OrdinalIgnoreCase) == false);
+            return workspace.GetRecommendedSymbols(documentId, snippet.ToShadowIndex(position)).Where(s => !s.Name.StartsWith("__", StringComparison.OrdinalIgnoreCase));
         }
 
         public EmitResult Compile(string outputPath)

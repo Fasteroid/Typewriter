@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Events"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Events"), Collection(nameof(RoslynFixture))]
     public class RoslynEventTests : EventTests
     {
         public RoslynEventTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -17,19 +17,19 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class EventTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected EventTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\EventInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\EventInfo.cs");
         }
 
         [Fact]
         public void Expect_name_to_match_property_name()
         {
-            var classInfo = fileInfo.Classes.First();
-            var enumInfo = classInfo.Events.First(p => p.Name == "DelegateEvent");
-            
+            var classInfo = _fileInfo.Classes.First();
+            var enumInfo = classInfo.Events.First(p => string.Equals(p.Name, "DelegateEvent", System.StringComparison.OrdinalIgnoreCase));
+
             enumInfo.Name.ShouldEqual("DelegateEvent");
             enumInfo.FullName.ShouldEqual("Typewriter.Tests.CodeModel.Support.EventInfo.DelegateEvent");
             enumInfo.Parent.ShouldEqual(classInfo);
@@ -38,16 +38,16 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_doc_comment()
         {
-            var classInfo = fileInfo.Classes.First();
-            var enumInfo = classInfo.Events.First(p => p.Name == "DelegateEvent");
+            var classInfo = _fileInfo.Classes.First();
+            var enumInfo = classInfo.Events.First(p => string.Equals(p.Name, "DelegateEvent", System.StringComparison.OrdinalIgnoreCase));
             enumInfo.DocComment.Summary.ShouldEqual("summary");
         }
 
         [Fact]
         public void Expect_to_find_attributes()
         {
-            var classInfo = fileInfo.Classes.First();
-            var enumInfo = classInfo.Events.First(p => p.Name == "DelegateEvent");
+            var classInfo = _fileInfo.Classes.First();
+            var enumInfo = classInfo.Events.First(p => string.Equals(p.Name, "DelegateEvent", System.StringComparison.OrdinalIgnoreCase));
             var attributeInfo = enumInfo.Attributes.First();
 
             enumInfo.Attributes.Count.ShouldEqual(1);
@@ -58,8 +58,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_generic_delegate_type_type_to_match_generic_argument()
         {
-            var classInfo = fileInfo.Classes.First();
-            var eventInfo = classInfo.Events.First(e => e.Name == "GenericDelegateEvent");
+            var classInfo = _fileInfo.Classes.First();
+            var eventInfo = classInfo.Events.First(e => string.Equals(e.Name, "GenericDelegateEvent", System.StringComparison.OrdinalIgnoreCase));
             var typeInfo = eventInfo.Type;
 
             typeInfo.Name.ShouldEqual("GenericDelegate<string>");
@@ -68,7 +68,7 @@ namespace Typewriter.Tests.CodeModel
             typeInfo.TypeParameters.Count.ShouldEqual(1);
 
             typeInfo.TypeArguments.First().Name.ShouldEqual("string");
-            if (isRoslyn)
+            if (IsRoslyn)
             {
                 typeInfo.TypeParameters.First().Name.ShouldEqual("T");
             }

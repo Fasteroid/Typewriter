@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class ConstantCollectionImpl : ItemCollectionImpl<Constant>, ConstantCollection
+    public class ConstantCollectionImpl : ItemCollectionImpl<Constant>, IConstantCollection
     {
         public ConstantCollectionImpl(IEnumerable<Constant> values) : base(values)
         {

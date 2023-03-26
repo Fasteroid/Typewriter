@@ -2,15 +2,14 @@
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
 using System.Linq;
-using Typewriter.Configuration;
 using Typewriter.Generation;
-using Typewriter.Tests.Render.WebApiController;
+using Typewriter.Tests.Render.WebApiControllerTests;
 using Typewriter.Tests.TestInfrastructure;
 using Xunit;
 
 namespace Typewriter.Tests.Render
 {
-    [Trait("Render", "Roslyn"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Render), "Roslyn"), Collection(nameof(RoslynFixture))]
     public class RoslynRenderTests : RenderTests
     {
         public RoslynRenderTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -37,7 +36,7 @@ namespace Typewriter.Tests.Render
             var result = GetFileContents(path + ".result");
 
             var output = template.Render(file, out var success);
-            
+
             success.ShouldBeTrue();
             output.ShouldEqual(result);
         }
@@ -45,40 +44,28 @@ namespace Typewriter.Tests.Render
         [Fact]
         public void Expect_SingleFileMode_To_Render_Correctly()
         {
-            var ts = Path.Combine("Tests", "Render", "WebApiController", "SingleFile.tstemplate");
+            var ts = Path.Combine(nameof(Tests), nameof(Render), "WebApiControllerTests", "SingleFile.tstemplate");
             var projectItem = GetProjectItem(ts);
-           
-            var pathModels = Path.Combine("Tests","Render","WebApiController", "SingleFileModels");
-           
+
+            var pathModels = Path.Combine(nameof(Tests), "Render", "WebApiControllerTests", "SingleFileModels");
+
             pathModels = Path.Combine(SolutionDirectory, pathModels);
 
-            string[] models = Directory.GetFiles(pathModels, "*.cs");
+            var models = Directory.GetFiles(pathModels, "*.cs");
 
             var files = models.Select(x => GetFile(Path.Combine(pathModels, Path.GetFileName(x)))).ToArray();
-           
+
             var template = new Template(projectItem);
 
             template.Settings.IsSingleFileMode.ShouldBeTrue();
 
-            string tpl = template.Render(files, out var success);
+            var tpl = template.Render(files, out var success);
 
-            string resultFile = Path.Combine("Tests", "Render", "WebApiController", Path.GetFileNameWithoutExtension(ts) + ".result");
-            string content = GetFileContents(resultFile);
+            var resultFile = Path.Combine(nameof(Tests), nameof(Render), "WebApiControllerTests", Path.GetFileNameWithoutExtension(ts) + ".result");
+            var content = GetFileContents(resultFile);
             success.ShouldBeTrue();
 
             tpl.ShouldEqual(content);
-
         }
-        //[Fact]
-        //public void Expect_webapi_controller_to_angular_service_to_render_correctly()
-        //{
-        //    Assert<WebApiController.WebApiController>();
-        //}
-
-        //[Fact]
-        //public void Expect_routed_webapi_controller_to_render_correctly()
-        //{
-        //    Assert<BooksController>();
-        //}
     }
 }

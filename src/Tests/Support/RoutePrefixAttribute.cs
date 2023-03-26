@@ -4,11 +4,11 @@ namespace Typewriter.Tests.Support
 {
     internal class RoutePrefixAttribute : Attribute
     {
-        private string v;
+        private string _v;
 
         public RoutePrefixAttribute(string v)
         {
-            this.v = v;
+            this._v = v;
         }
     }
 }

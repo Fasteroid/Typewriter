@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Methods"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Methods"), Collection(nameof(RoslynFixture))]
     public class RoslynMethodTests : MethodTests
     {
         public RoslynMethodTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
@@ -17,20 +17,20 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class MethodTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected MethodTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\MethodInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\MethodInfo.cs");
         }
 
         [Fact]
         public void Expect_name_to_match_method_name()
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = GetMethod("Method");
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = GetMethod(nameof(Method));
 
-            methodInfo.Name.ShouldEqual("Method");
+            methodInfo.Name.ShouldEqual(nameof(Method));
             methodInfo.FullName.ShouldEqual("Typewriter.Tests.CodeModel.Support.MethodInfo.Method");
             methodInfo.Parent.ShouldEqual(classInfo);
         }
@@ -38,7 +38,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_doc_comment()
         {
-            var methodInfo = GetMethod("Method");
+            var methodInfo = GetMethod(nameof(Method));
             methodInfo.DocComment.Summary.ShouldEqual("summary");
             methodInfo.DocComment.Returns.ShouldEqual("returns");
             methodInfo.DocComment.Parameters.First().Name.ShouldEqual("parameter");
@@ -48,7 +48,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_attributes()
         {
-            var methodInfo = GetMethod("Method");
+            var methodInfo = GetMethod(nameof(Method));
             var attributeInfo = methodInfo.Attributes.First();
 
             methodInfo.Attributes.Count.ShouldEqual(1);
@@ -59,7 +59,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_parameters()
         {
-            var methodInfo = GetMethod("Method");
+            var methodInfo = GetMethod(nameof(Method));
             var parameterInfo = methodInfo.Parameters.First();
 
             methodInfo.Parameters.Count.ShouldEqual(1);
@@ -69,7 +69,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_parameter_attributes()
         {
-            var methodInfo = GetMethod("Method");
+            var methodInfo = GetMethod(nameof(Method));
             var parameterInfo = methodInfo.Parameters.First();
             var attributeInfo = parameterInfo.Attributes.First();
 
@@ -81,8 +81,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_void_methods_to_return_void()
         {
-            var methodInfo = GetMethod("Method");
-            
+            var methodInfo = GetMethod(nameof(Method));
+
             methodInfo.Type.FullName.ShouldEqual("System.Void");
             methodInfo.Type.Name.ShouldEqual("void");
             methodInfo.Type.OriginalName.ShouldEqual("Void");
@@ -114,8 +114,8 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_methods_to_handle_generic_type_arguments_from_class()
         {
-            var classInfo = fileInfo.Classes.First(c => c.Name == "GenericMethodInfo");
-            var methodInfo = classInfo.Methods.First(p => p.Name == "Method");
+            var classInfo = _fileInfo.Classes.First(c => string.Equals(c.Name, "GenericMethodInfo", System.StringComparison.OrdinalIgnoreCase));
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, nameof(Method), System.StringComparison.OrdinalIgnoreCase));
             var parameterTypeInfo = methodInfo.Parameters.First().Type;
 
             methodInfo.IsGeneric.ShouldBeFalse("IsGeneric");
@@ -130,10 +130,10 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_generic_methods_to_handle_generic_type_arguments_from_class_and_method()
         {
-            var classInfo = fileInfo.Classes.First(c => c.Name == "GenericMethodInfo");
-            var methodInfo = classInfo.Methods.First(p => p.Name == "Generic");
-            var firstParameterTypeInfo = methodInfo.Parameters.First(p => p.Name == "parameter1").Type;
-            var secondParameterTypeInfo = methodInfo.Parameters.First(p => p.Name == "parameter2").Type;
+            var classInfo = _fileInfo.Classes.First(c => string.Equals(c.Name, "GenericMethodInfo", System.StringComparison.OrdinalIgnoreCase));
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, "Generic", System.StringComparison.OrdinalIgnoreCase));
+            var firstParameterTypeInfo = methodInfo.Parameters.First(p => string.Equals(p.Name, "parameter1", System.StringComparison.OrdinalIgnoreCase)).Type;
+            var secondParameterTypeInfo = methodInfo.Parameters.First(p => string.Equals(p.Name, "parameter2", System.StringComparison.OrdinalIgnoreCase)).Type;
 
             methodInfo.IsGeneric.ShouldBeTrue("IsGeneric");
             methodInfo.TypeParameters.Count.ShouldEqual(1);
@@ -184,7 +184,7 @@ namespace Typewriter.Tests.CodeModel
             var methodInfo = GetMethod("TaskNullableInt");
 
             methodInfo.Type.FullName.ShouldEqual("System.Int32?");
-            methodInfo.Type.Name.ShouldEqual("number");
+            methodInfo.Type.Name.ShouldEqual("number | null");
             methodInfo.Type.OriginalName.ShouldEqual("int?");
             methodInfo.Type.IsEnum.ShouldBeFalse("IsEnum");
             methodInfo.Type.IsEnumerable.ShouldBeFalse("IsEnumerable");
@@ -205,7 +205,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_parameter_without_default_values_not_to_have_a_default_value()
         {
-            var methodInfo = GetMethod("Method");
+            var methodInfo = GetMethod(nameof(Method));
             methodInfo.Parameters.First().HasDefaultValue.ShouldBeFalse();
             methodInfo.Parameters.First().DefaultValue.ShouldBeNull();
         }
@@ -216,14 +216,14 @@ namespace Typewriter.Tests.CodeModel
             var methodInfo = GetMethod("DefaultValueParameter");
             methodInfo.Parameters.First().HasDefaultValue.ShouldBeTrue();
             methodInfo.Parameters.First().DefaultValue.ShouldEqual("null");
-            methodInfo.Parameters.First(p => p.name == "stringValue").DefaultValue.ShouldEqual("\"str\\\\ing\\\"quotes\\\"\"");
-            methodInfo.Parameters.First(p => p.name == "boolValue").DefaultValue.ShouldEqual("true");
+            methodInfo.Parameters.First(p => string.Equals(p.name, "stringValue", System.StringComparison.OrdinalIgnoreCase)).DefaultValue.ShouldEqual("\"str\\\\ing\\\"quotes\\\"\"");
+            methodInfo.Parameters.First(p => string.Equals(p.name, "boolValue", System.StringComparison.OrdinalIgnoreCase)).DefaultValue.ShouldEqual("true");
         }
 
         private Method GetMethod(string name)
         {
-            var classInfo = fileInfo.Classes.First();
-            var methodInfo = classInfo.Methods.First(p => p.Name == name);
+            var classInfo = _fileInfo.Classes.First();
+            var methodInfo = classInfo.Methods.First(p => string.Equals(p.Name, name, System.StringComparison.OrdinalIgnoreCase));
             return methodInfo;
         }
     }

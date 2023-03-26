@@ -25,16 +25,21 @@ namespace Typewriter.Metadata.Roslyn
         }
 
         public Settings Settings { get; }
+
         public string Name => _document.Name;
+
         public string FullName => _document.FilePath;
 
-        public IEnumerable<IClassMetadata> Classes => RoslynClassMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<ClassDeclarationSyntax>(), this);
-        public IEnumerable<IDelegateMetadata> Delegates => RoslynDelegateMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<DelegateDeclarationSyntax>());
-        public IEnumerable<IEnumMetadata> Enums => RoslynEnumMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<EnumDeclarationSyntax>());
-        public IEnumerable<IInterfaceMetadata> Interfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<InterfaceDeclarationSyntax>(), this);
+        public IEnumerable<IClassMetadata> Classes => RoslynClassMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<ClassDeclarationSyntax>(), this, Settings);
+
+        public IEnumerable<IDelegateMetadata> Delegates => RoslynDelegateMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<DelegateDeclarationSyntax>(), Settings);
+
+        public IEnumerable<IEnumMetadata> Enums => RoslynEnumMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<EnumDeclarationSyntax>(), Settings);
+
+        public IEnumerable<IInterfaceMetadata> Interfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<InterfaceDeclarationSyntax>(), this, Settings);
 
         public IEnumerable<IRecordMetadata> Records =>
-            RoslynRecordMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<RecordDeclarationSyntax>(), this);
+            RoslynRecordMetadata.FromNamedTypeSymbols(GetNamespaceChildNodes<RecordDeclarationSyntax>(), this, Settings);
 
         private void LoadDocument(Document document)
         {
@@ -46,7 +51,8 @@ namespace Typewriter.Metadata.Roslyn
             });
         }
 
-        private IEnumerable<INamedTypeSymbol> GetNamespaceChildNodes<T>() where T : SyntaxNode
+        private IEnumerable<INamedTypeSymbol> GetNamespaceChildNodes<T>()
+            where T : SyntaxNode
         {
             var symbols = _root.ChildNodes().OfType<T>().Concat(
                 _root.ChildNodes().OfType<NamespaceDeclarationSyntax>().SelectMany(n => n.ChildNodes().OfType<T>())).Concat(
@@ -57,7 +63,8 @@ namespace Typewriter.Metadata.Roslyn
             {
                 return symbols.Where(s =>
                 {
-                    var locationToRender = s.Locations.Select(l => l.SourceTree.FilePath).OrderBy(f => f).FirstOrDefault();
+                    var locationToRender = s?.Locations.Select(l => l.SourceTree?.FilePath)
+                        .OrderBy(f => f, StringComparer.OrdinalIgnoreCase).FirstOrDefault();
                     if (string.Equals(locationToRender, FullName, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
@@ -65,7 +72,9 @@ namespace Typewriter.Metadata.Roslyn
                     else
                     {
                         if (locationToRender != null)
+                        {
                             _requestRender?.Invoke(new[] { locationToRender });
+                        }
 
                         return false;
                     }

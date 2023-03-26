@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class DelegateCollectionImpl : ItemCollectionImpl<Delegate>, DelegateCollection
+    public class DelegateCollectionImpl : ItemCollectionImpl<Delegate>, IDelegateCollection
     {
         public DelegateCollectionImpl(IEnumerable<Delegate> values) : base(values)
         {

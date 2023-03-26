@@ -17,11 +17,17 @@
         }
 
         public SnippetType Type { get; private set; }
+
         public string Code { get; private set; }
+
         public int Length { get; set; }
+
         public int Offset { get; private set; }
+
         private int StartIndex { get; set; }
+
         private int EndIndex { get; set; }
+
         private int InternalOffset { get; set; }
 
         public int FromShadowIndex(int index)

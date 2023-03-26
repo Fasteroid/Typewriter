@@ -26,6 +26,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\Debug\Typewriter.Tests.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +37,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Typewriter.Tests.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,6 +60,7 @@
     <Compile Include="CodeModel\PropertyTests.cs" />
     <Compile Include="CodeModel\InterfaceTests.cs" />
     <Compile Include="CodeModel\ClassTests.cs" />
+    <Compile Include="CodeModel\Support\AttributeInfoAttribute.cs" />
     <Compile Include="CodeModel\Support\ConstantInfo.cs" />
     <Compile Include="CodeModel\Support\DelegateInfo.cs" />
     <Compile Include="CodeModel\Support\MethodInfo.cs" />
@@ -68,7 +73,7 @@
     <Compile Include="CodeModel\Support\ClassInfo.cs" />
     <Compile Include="CodeModel\Support\EnumInfo.cs" />
     <Compile Include="CodeModel\Support\FileInfo.cs" />
-    <Compile Include="CodeModel\Support\AttributeInfo.cs" />
+    <Compile Include="CodeModel\Support\AttributeTestClass.cs" />
     <Compile Include="CodeModel\FileTests.cs" />
     <Compile Include="CodeModel\TypeTests.cs" />
     <Compile Include="Extensions\Support\HttpMethodController.cs" />
@@ -84,9 +89,9 @@
     <Compile Include="Metadata\Roslyn\RoslynClassMetadataTests.cs" />
     <Compile Include="Metadata\Support\GeneratedClass.cs" />
     <Compile Include="Metadata\Support\GeneratedClass.Additional.cs" />
-    <Compile Include="Render\WebApiController\SingleFileModels\Model1.cs" />
-    <Compile Include="Render\WebApiController\SingleFileModels\Model2.cs" />
-    <Compile Include="Render\WebApiController\SingleFileModels\Model3.cs" />
+    <Compile Include="Render\WebApiControllerTests\SingleFileModels\Model1.cs" />
+    <Compile Include="Render\WebApiControllerTests\SingleFileModels\Model2.cs" />
+    <Compile Include="Render\WebApiControllerTests\SingleFileModels\Model3.cs" />
     <Compile Include="Support\AcceptVerbsAttribute.cs" />
     <Compile Include="TestInfrastructure\RoslynFixture.cs" />
     <Compile Include="TestInfrastructure\Dte.cs" />
@@ -99,22 +104,22 @@
     <Compile Include="Support\RouteAttribute.cs" />
     <Compile Include="Support\RoutePrefixAttribute.cs" />
     <Compile Include="Render\RoutedApiController\BooksController.cs" />
-    <Compile Include="Render\WebApiController\Support\ComplexClassModel.cs" />
+    <Compile Include="Render\WebApiControllerTests\Support\ComplexClassModel.cs" />
     <Compile Include="Support\HttpDeleteAttribute.cs" />
     <Compile Include="Support\HttpGetAttribute.cs" />
     <Compile Include="Support\HttpPostAttribute.cs" />
     <Compile Include="Support\HttpPutAttribute.cs" />
     <Compile Include="Support\IHttpActionResult.cs" />
-    <Compile Include="Render\WebApiController\WebApiController.cs" />
+    <Compile Include="Render\WebApiControllerTests\WebApiController.cs" />
     <Compile Include="TestInfrastructure\TestBase.cs" />
     <Compile Include="TestInfrastructure\RoslynMetadataProviderStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Render\RoutedApiController\BooksController.result" />
     <None Include="Render\RoutedApiController\BooksController.tstemplate" />
-    <None Include="Render\WebApiController\SingleFile.result" />
-    <None Include="Render\WebApiController\SingleFile.tstemplate" />
-    <None Include="Render\WebApiController\WebApiController.result" />
+    <None Include="Render\WebApiControllerTests\SingleFile.result" />
+    <None Include="Render\WebApiControllerTests\SingleFile.tstemplate" />
+    <None Include="Render\WebApiControllerTests\WebApiController.result" />
     <None Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -142,26 +147,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Render\WebApiController\WebApiController.tstemplate" />
+    <None Include="Render\WebApiControllerTests\WebApiController.tstemplate" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build">
-      <Version>17.4.0</Version>
+      <Version>17.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis">
-      <Version>4.4.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Common">
-      <Version>4.4.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common">
-      <Version>4.4.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
-      <Version>3.3.4</Version>
+      <Version>3.3.5-beta1.23121.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -169,7 +174,7 @@
       <Version>17.2.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.LanguageServices">
-      <Version>4.4.0</Version>
+      <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Sdk.TestFramework">
       <Version>17.2.7</Version>
@@ -178,7 +183,7 @@
       <Version>17.2.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Shell.Framework">
-      <Version>17.4.33103.184</Version>
+      <Version>17.5.33428.388</Version>
     </PackageReference>
     <PackageReference Include="NSubstitute">
       <Version>5.0.0</Version>

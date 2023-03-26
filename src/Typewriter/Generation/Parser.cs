@@ -16,7 +16,7 @@ namespace Typewriter.Generation
         {
             var instance = new Parser(extensions);
             var output = instance.ParseTemplate(projectItem, sourcePath, template, context);
-            success = instance.hasError == false;
+            success = !instance.hasError;
 
             return instance.matchFound ? output : null;
         }
@@ -32,14 +32,21 @@ namespace Typewriter.Generation
 
         private string ParseTemplate(ProjectItem projectItem, string sourcePath, string template, object context)
         {
-            if (string.IsNullOrEmpty(template)) return null;
+            if (string.IsNullOrEmpty(template))
+            {
+                return null;
+            }
 
             var output = string.Empty;
             var stream = new Stream(template);
 
             while (stream.Advance())
             {
-                if (ParseDollar(projectItem, sourcePath, stream, context, ref output)) continue;
+                if (ParseDollar(projectItem, sourcePath, stream, context, ref output))
+                {
+                    continue;
+                }
+
                 output += stream.Current;
             }
 
@@ -66,10 +73,14 @@ namespace Typewriter.Generation
                         {
                             var stringValue = value.ToString();
 
-                            if (stringValue != value.GetType().FullName)
+                            if (!stringValue.Equals(value.GetType().FullName, StringComparison.OrdinalIgnoreCase))
+                            {
                                 output += stringValue;
+                            }
                             else
+                            {
                                 output += "$" + identifier;
+                            }
                         }
                         else
                         {
@@ -111,6 +122,7 @@ namespace Typewriter.Generation
                             {
                                 items = ItemFilter.Apply(collection, filter, ref matchFound);
                             }
+
                             output += string.Join(ParseTemplate(projectItem, sourcePath, separator, context), items.Select(item => ParseTemplate(projectItem, sourcePath, block, item)));
                         }
                     }
@@ -163,7 +175,10 @@ namespace Typewriter.Generation
         {
             value = null;
 
-            if (identifier == null) return false;
+            if (identifier == null)
+            {
+                return false;
+            }
 
             var type = context.GetType();
 
@@ -204,7 +219,7 @@ namespace Typewriter.Generation
 
             var studioMessage = $"{message} Error: {exception.Message}. Source path: {sourcePath}. See Typewriter output for more detail.";
             var logMessage = $"{message} Source path: {sourcePath}{Environment.NewLine}{exception}";
-            
+
             Log.Error(logMessage);
             ErrorList.AddError(projectItem, studioMessage);
             ErrorList.Show();

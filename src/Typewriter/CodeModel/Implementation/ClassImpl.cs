@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Typewriter.CodeModel.Collections;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 using static Typewriter.CodeModel.Helpers;
 
@@ -10,88 +11,113 @@ namespace Typewriter.CodeModel.Implementation
     {
         private readonly IClassMetadata _metadata;
 
-        private ClassImpl(IClassMetadata metadata, Item parent)
+        private ClassImpl(IClassMetadata metadata, Item parent, Settings settings)
         {
             _metadata = metadata;
             Parent = parent;
+            Settings = settings;
         }
+
+        public Settings Settings { get; }
 
         public override Item Parent { get; }
 
         public override string name => CamelCase(_metadata.Name.TrimStart('@'));
+
         public override string Name => _metadata.Name.TrimStart('@');
+
         public override string FullName => _metadata.FullName;
+
         public override string Namespace => _metadata.Namespace;
+
         public override bool IsAbstract => _metadata.IsAbstract;
+
         public override bool IsGeneric => _metadata.IsGeneric;
 
         private Type _type;
-        protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent));
-        
-        private AttributeCollection _attributes;
-        public override AttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this));
 
-        private ConstantCollection _constants;
-        public override ConstantCollection Constants => _constants ?? (_constants = ConstantImpl.FromMetadata(_metadata.Constants, this));
+        protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent, Settings));
 
-        private DelegateCollection _delegates;
-        public override DelegateCollection Delegates => _delegates ?? (_delegates = DelegateImpl.FromMetadata(_metadata.Delegates, this));
+        private IAttributeCollection _attributes;
+
+        public override IAttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this, Settings));
+
+        private IConstantCollection _constants;
+
+        public override IConstantCollection Constants => _constants ?? (_constants = ConstantImpl.FromMetadata(_metadata.Constants, this, Settings));
+
+        private IDelegateCollection _delegates;
+
+        public override IDelegateCollection Delegates => _delegates ?? (_delegates = DelegateImpl.FromMetadata(_metadata.Delegates, this, Settings));
 
         private DocComment _docComment;
+
         public override DocComment DocComment => _docComment ?? (_docComment = DocCommentImpl.FromXml(_metadata.DocComment, this));
 
-        private EventCollection _events;
-        public override EventCollection Events => _events ?? (_events = EventImpl.FromMetadata(_metadata.Events, this));
+        private IEventCollection _events;
 
-        private FieldCollection _fields;
-        public override FieldCollection Fields => _fields ?? (_fields = FieldImpl.FromMetadata(_metadata.Fields, this));
+        public override IEventCollection Events => _events ?? (_events = EventImpl.FromMetadata(_metadata.Events, this, Settings));
+
+        private IFieldCollection _fields;
+
+        public override IFieldCollection Fields => _fields ?? (_fields = FieldImpl.FromMetadata(_metadata.Fields, this, Settings));
 
         private Class _baseClass;
-        public override Class BaseClass => _baseClass ?? (_baseClass = ClassImpl.FromMetadata(_metadata.BaseClass, this));
+
+        public override Class BaseClass => _baseClass ?? (_baseClass = FromMetadata(_metadata.BaseClass, this, Settings));
 
         private Class _containingClass;
-        public override Class ContainingClass => _containingClass ?? (_containingClass = ClassImpl.FromMetadata(_metadata.ContainingClass, this));
 
-        private InterfaceCollection _interfaces;
-        public override InterfaceCollection Interfaces => _interfaces ?? (_interfaces = InterfaceImpl.FromMetadata(_metadata.Interfaces, this));
+        public override Class ContainingClass => _containingClass ?? (_containingClass = FromMetadata(_metadata.ContainingClass, this, Settings));
 
-        private MethodCollection _methods;
-        public override MethodCollection Methods => _methods ?? (_methods = MethodImpl.FromMetadata(_metadata.Methods, this));
+        private IInterfaceCollection _interfaces;
 
-        private PropertyCollection _properties;
-        public override PropertyCollection Properties => _properties ?? (_properties = PropertyImpl.FromMetadata(GetPropertiesFromClassMetadata(_metadata.Properties), this));
+        public override IInterfaceCollection Interfaces => _interfaces ?? (_interfaces = InterfaceImpl.FromMetadata(_metadata.Interfaces, this, Settings));
 
-        private TypeParameterCollection _typeParameters;
-        public override TypeParameterCollection TypeParameters => _typeParameters ?? (_typeParameters = TypeParameterImpl.FromMetadata(_metadata.TypeParameters, this));
+        private IMethodCollection _methods;
 
-        private TypeCollection _typeArguments;
-        public override TypeCollection TypeArguments => _typeArguments ?? (_typeArguments = TypeImpl.FromMetadata(_metadata.TypeArguments, this));
+        public override IMethodCollection Methods => _methods ?? (_methods = MethodImpl.FromMetadata(_metadata.Methods, this, Settings));
 
-        private ClassCollection _nestedClasses;
-        public override ClassCollection NestedClasses => _nestedClasses ?? (_nestedClasses = ClassImpl.FromMetadata(_metadata.NestedClasses, this));
+        private IPropertyCollection _properties;
 
-        private EnumCollection _nestedEnums;
-        public override EnumCollection NestedEnums => _nestedEnums ?? (_nestedEnums = EnumImpl.FromMetadata(_metadata.NestedEnums, this));
+        public override IPropertyCollection Properties => _properties ?? (_properties = PropertyImpl.FromMetadata(GetPropertiesFromClassMetadata(_metadata.Properties), this, Settings));
 
-        private InterfaceCollection _nestedInterfaces;
-        public override InterfaceCollection NestedInterfaces => _nestedInterfaces ?? (_nestedInterfaces = InterfaceImpl.FromMetadata(_metadata.NestedInterfaces, this));
+        private ITypeParameterCollection _typeParameters;
+
+        public override ITypeParameterCollection TypeParameters => _typeParameters ?? (_typeParameters = TypeParameterImpl.FromMetadata(_metadata.TypeParameters, this));
+
+        private ITypeCollection _typeArguments;
+
+        public override ITypeCollection TypeArguments => _typeArguments ?? (_typeArguments = TypeImpl.FromMetadata(_metadata.TypeArguments, this, Settings));
+
+        private IClassCollection _nestedClasses;
+
+        public override IClassCollection NestedClasses => _nestedClasses ?? (_nestedClasses = FromMetadata(_metadata.NestedClasses, this, Settings));
+
+        private IEnumCollection _nestedEnums;
+
+        public override IEnumCollection NestedEnums => _nestedEnums ?? (_nestedEnums = EnumImpl.FromMetadata(_metadata.NestedEnums, this, Settings));
+
+        private IInterfaceCollection _nestedInterfaces;
+
+        public override IInterfaceCollection NestedInterfaces => _nestedInterfaces ?? (_nestedInterfaces = InterfaceImpl.FromMetadata(_metadata.NestedInterfaces, this, Settings));
 
         public override string ToString()
         {
             return Name;
         }
 
-        public static ClassCollection FromMetadata(IEnumerable<IClassMetadata> metadata, Item parent)
+        public static IClassCollection FromMetadata(IEnumerable<IClassMetadata> metadata, Item parent, Settings settings)
         {
-            return new ClassCollectionImpl(metadata.Select(c => new ClassImpl(c, parent)));
+            return new ClassCollectionImpl(metadata.Select(c => new ClassImpl(c, parent, settings)));
         }
 
-        public static Class FromMetadata(IClassMetadata metadata, Item parent)
+        public static Class FromMetadata(IClassMetadata metadata, Item parent, Settings settings)
         {
-            return metadata == null ? null : new ClassImpl(metadata, parent);
+            return metadata == null ? null : new ClassImpl(metadata, parent, settings);
         }
 
-        /** 
+        /**
          *  Example of this:
          *  generated type:
          *  public partial class GeneratedClass
@@ -116,9 +142,10 @@ namespace Typewriter.CodeModel.Implementation
         /// </summary>
         /// <returns>If there is a metadata type defined, returns a collection of overridden properties merged with the originals.
         /// Otherwise, returns the original collection.</returns>
+        /// <param name="originalProperties"><see cref="IEnumerable{IPropertyMetadata}"/> of <see cref="IPropertyMetadata"/>.</param>
         internal IEnumerable<IPropertyMetadata> GetPropertiesFromClassMetadata(IEnumerable<IPropertyMetadata> originalProperties)
         {
-            var classMetadata = _metadata.Attributes.FirstOrDefault(a => a.Name == "MetadataType" || a.Name == "ModelMetadataType");
+            var classMetadata = _metadata.Attributes.FirstOrDefault(a => string.Equals(a.Name, "MetadataType", System.StringComparison.OrdinalIgnoreCase) || string.Equals(a.Name, "ModelMetadataType", System.StringComparison.OrdinalIgnoreCase));
             if (classMetadata == null)
             {
                 return originalProperties;
@@ -130,14 +157,16 @@ namespace Typewriter.CodeModel.Implementation
             {
                 return originalProperties;
             }
+
             //loop through the original properties and use the metadata property whenever it matches the name of an original
             var mergedProperties = new List<IPropertyMetadata>();
             foreach (var property in originalProperties)
             {
                 var metadataProperty = metadataType.Properties
-                    .FirstOrDefault(mp => mp.Name == property.Name);
+                    .FirstOrDefault(mp => string.Equals(mp.Name, property.Name, System.StringComparison.OrdinalIgnoreCase));
                 mergedProperties.Add(metadataProperty ?? property);
             }
+
             return mergedProperties;
         }
     }

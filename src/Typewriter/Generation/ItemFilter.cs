@@ -9,9 +9,15 @@ namespace Typewriter.Generation
     {
         internal static IEnumerable<Item> Apply(IEnumerable<Item> items, string filter, ref bool matchFound)
         {
-            if (string.IsNullOrWhiteSpace(filter)) return items;
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return items;
+            }
 
-            if (!(items is IFilterable filterable)) return items;
+            if (!(items is IFilterable filterable))
+            {
+                return items;
+            }
 
             Func<Item, IEnumerable<string>> selector;
 
@@ -49,17 +55,17 @@ namespace Typewriter.Generation
 
                 if (parts.Length == 1)
                 {
-                    items = items.Where(item => selector(item).Any(p => p == part));
+                    items = items.Where(item => selector(item).Any(p => string.Equals(p, part, StringComparison.OrdinalIgnoreCase)));
                 }
-                else if (i == 0 && string.IsNullOrWhiteSpace(part) == false)
+                else if (i == 0 && !string.IsNullOrWhiteSpace(part))
                 {
                     items = items.Where(item => selector(item).Any(p => p.StartsWith(part, StringComparison.OrdinalIgnoreCase)));
                 }
-                else if (i == parts.Length - 1 && string.IsNullOrWhiteSpace(part) == false)
+                else if (i == parts.Length - 1 && !string.IsNullOrWhiteSpace(part))
                 {
                     items = items.Where(item => selector(item).Any(p => p.EndsWith(part, StringComparison.OrdinalIgnoreCase)));
                 }
-                else if (i > 0 && i < parts.Length - 1 && string.IsNullOrWhiteSpace(part) == false)
+                else if (i > 0 && i < parts.Length - 1 && !string.IsNullOrWhiteSpace(part))
                 {
                     items = items.Where(item => selector(item).Any(p => p.Contains(part)));
                 }

@@ -15,9 +15,11 @@ namespace Typewriter.Tests.CodeModel.Support
         internal const string InternalConstant = "";
 
         public delegate void PublicDelegate<T>(string param1, T param2);
+
         internal delegate void InternalDelegate();
 
         public event Delegate PublicEvent;
+
         internal event Delegate InternalEvent;
 
         public string PublicField = "";
@@ -27,15 +29,19 @@ namespace Typewriter.Tests.CodeModel.Support
         internal static string InternalStaticField = "";
 
         public void PublicMethod() { }
+
         internal void InternalMethod() { }
 
         public static void PublicStaticMethod() { }
+
         internal static void InternalStaticMethod() { }
 
         public string PublicProperty { get; set; }
+
         internal string InternalProperty { get; set; }
 
         public static string PublicStaticProperty { get; set; }
+
         internal static string InternalStaticProperty { get; set; }
 
         public class NestedClassInfo
@@ -52,7 +58,6 @@ namespace Typewriter.Tests.CodeModel.Support
         {
             NestedValue
         }
-
     }
 
     public class BaseClassInfo

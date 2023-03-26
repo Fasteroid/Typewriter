@@ -26,7 +26,7 @@ namespace Typewriter.Tests.TestInfrastructure
                 Marshal.ThrowExceptionForHR(GetRunningObjectTable(0, out runningObjectTable));
                 runningObjectTable.EnumRunning(out enumMoniker);
 
-                IMoniker[] monikers = new IMoniker[1];
+                var monikers = new IMoniker[1];
                 enumMoniker.Reset();
 
                 Marshal.ThrowExceptionForHR(CreateBindCtx(0, out bindCtx));
@@ -41,7 +41,10 @@ namespace Typewriter.Tests.TestInfrastructure
 
                         var d = (DTE)o;
 
-                        if (d.Solution.FullName.EndsWith(solution, StringComparison.InvariantCultureIgnoreCase)) return d;
+                        if (d.Solution.FullName.EndsWith(solution, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return d;
+                        }
                     }
                 }
             }

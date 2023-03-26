@@ -8,20 +8,27 @@ namespace Typewriter.CodeModel
     {
         public static string CamelCase(string s)
         {
-            if (string.IsNullOrEmpty(s)) return s;
-            if (char.IsUpper(s[0]) == false) return s;
+            if (string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+
+            if (!char.IsUpper(s[0]))
+            {
+                return s;
+            }
 
             var chars = s.ToCharArray();
 
             for (var i = 0; i < chars.Length; i++)
             {
-                if (i == 1 && char.IsUpper(chars[i]) == false)
+                if (i == 1 && !char.IsUpper(chars[i]))
                 {
                     break;
                 }
 
-                var hasNext = (i + 1 < chars.Length);
-                if (i > 0 && hasNext && char.IsUpper(chars[i + 1]) == false)
+                var hasNext = (i + 1) < chars.Length;
+                if (i > 0 && hasNext && !char.IsUpper(chars[i + 1]))
                 {
                     break;
                 }
@@ -35,7 +42,9 @@ namespace Typewriter.CodeModel
         public static string GetTypeScriptName(ITypeMetadata metadata)
         {
             if (metadata == null)
+            {
                 return "any";
+            }
 
             if (metadata.IsEnumerable)
             {
@@ -51,17 +60,27 @@ namespace Typewriter.CodeModel
                     {
                         var genericInterface = metadata.Interfaces.FirstOrDefault(i => i.IsGeneric);
                         if (genericInterface != null)
+                        {
                             typeArguments = genericInterface.TypeArguments.ToList();
+                        }
                     }
 
-                    if (typeArguments.Any(t => t.FullName == metadata.FullName))
+                    if (typeArguments.Any(t => string.Equals(t.FullName, metadata.FullName, System.StringComparison.OrdinalIgnoreCase)))
                     {
                         return "any[]";
                     }
                 }
 
                 if (typeArguments.Count == 1)
-                    return GetTypeScriptName(typeArguments.FirstOrDefault()) + "[]";
+                {
+                    var typeName = GetTypeScriptName(typeArguments.FirstOrDefault());
+                    if (typeName.Contains("|"))
+                    {
+                        typeName = $"({typeName})";
+                    }
+
+                    return $"{typeName}[]";
+                }
 
                 if (typeArguments.Count == 2)
                 {
@@ -81,7 +100,9 @@ namespace Typewriter.CodeModel
             }
 
             if (metadata.IsGeneric)
+            {
                 return metadata.Name + string.Concat("<", string.Join(", ", metadata.TypeArguments.Select(GetTypeScriptName)), ">");
+            }
 
             return ExtractTypeScriptName(metadata);
         }
@@ -92,7 +113,9 @@ namespace Typewriter.CodeModel
             var fullName = metadata.IsNullable ? metadata.FullName.TrimEnd('?') : metadata.FullName;
 
             if (primitiveTypes.ContainsKey(fullName))
+            {
                 name = primitiveTypes[fullName] + (metadata.IsNullable ? "?" : string.Empty);
+            }
 
             return name;
         }
@@ -104,12 +127,12 @@ namespace Typewriter.CodeModel
             switch (fullName)
             {
                 case "System.Boolean":
-                    return "boolean";
+                    return metadata.IsNullable ? "boolean | null" : "boolean";
                 case "System.String":
                 case "System.Char":
                 case "System.Guid":
                 case "System.TimeSpan":
-                    return "string";
+                    return metadata.IsNullable ? "string | null" : "string";
                 case "System.Byte":
                 case "System.SByte":
                 case "System.Int16":
@@ -121,10 +144,10 @@ namespace Typewriter.CodeModel
                 case "System.Single":
                 case "System.Double":
                 case "System.Decimal":
-                    return "number";
+                    return metadata.IsNullable ? "number | null" : "number";
                 case "System.DateTime":
                 case "System.DateTimeOffset":
-                    return "Date";
+                    return metadata.IsNullable ? "Date | null" : "Date";
                 case "System.Void":
                     return "void";
                 case "System.Object":

@@ -6,7 +6,7 @@ using Typewriter.VisualStudio;
 
 namespace Typewriter.TemplateEditor.FormatDefinitions
 {
-    [Export(typeof (EditorFormatDefinition)), Name("TypeScript Template Interface Symbol")]
+    [Export(typeof(EditorFormatDefinition)), Name("TypeScript Template Interface Symbol")]
     [ClassificationType(ClassificationTypeNames = Classifications.InterfaceSymbol)]
     internal sealed class InterfaceSymbolFormatDefinition : ClassificationFormatDefinition
     {
@@ -15,7 +15,7 @@ namespace Typewriter.TemplateEditor.FormatDefinitions
 
         public InterfaceSymbolFormatDefinition()
         {
-            this.ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
+            ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
         }
     }
 }

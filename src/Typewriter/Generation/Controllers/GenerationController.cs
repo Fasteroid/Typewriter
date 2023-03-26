@@ -38,7 +38,7 @@ namespace Typewriter.Generation.Controllers
 
                 var template = _templateController.GetTemplate(projectItem);
 
-                if (force == false && ExtensionPackage.Instance.RenderOnSave == false)
+                if (!force && !ExtensionPackage.Instance.RenderOnSave)
                 {
                     Log.Debug("Render skipped {0}", templatePath);
                     return;
@@ -46,7 +46,6 @@ namespace Typewriter.Generation.Controllers
 
                 var filesToRender = template.GetFilesToRender();
                 Log.Debug(" Will Check/Render {0} .cs files in referenced projects", filesToRender.Count);
-
 
                 // Delay to wait for Roslyn to refresh the current Workspace after a change.
                 await Task.Delay(1000).ConfigureAwait(true);
@@ -58,7 +57,6 @@ namespace Typewriter.Generation.Controllers
                     if (template.Settings.IsSingleFileMode)
                     {
                         // Single File Render
-
                         var files = filesToRender.Select(path =>
                         {
                             var metadata = _metadataProvider.GetFile(path, template.Settings, null);
@@ -68,11 +66,10 @@ namespace Typewriter.Generation.Controllers
                                 return null;
                             }
 
-                            var file = new FileImpl(metadata);
+                            var file = new FileImpl(metadata, template.Settings);
 
                             return file;
                         }).Where(f => f != null).ToArray();
-
 
                         template.RenderFile(files);
 
@@ -81,10 +78,7 @@ namespace Typewriter.Generation.Controllers
                         stopwatch.ElapsedMilliseconds);
 
                         return;
-
                     }
-
-
 
                     foreach (var path in filesToRender)
                     {
@@ -95,7 +89,7 @@ namespace Typewriter.Generation.Controllers
                             continue;
                         }
 
-                        var file = new FileImpl(metadata);
+                        var file = new FileImpl(metadata, template.Settings);
 
                         template.RenderFile(file);
 
@@ -116,7 +110,7 @@ namespace Typewriter.Generation.Controllers
 
         public void OnCsFileChanged(string[] paths)
         {
-            if (ExtensionPackage.Instance.TrackSourceFiles == false)
+            if (!ExtensionPackage.Instance.TrackSourceFiles)
             {
                 Log.Debug("Render skipped {0}", paths?.FirstOrDefault());
                 return;
@@ -132,8 +126,6 @@ namespace Typewriter.Generation.Controllers
                 // Delay to wait for Roslyn to refresh the current Workspace after a change.
                 await Task.Delay(1000).ConfigureAwait(true);
 
-               
-
                 Enqueue(GenerationType.Render, paths, (path, template) => _metadataProvider.GetFile(path, template.Settings, RenderFile), (fileMeta, template) =>
                 {
                     if (fileMeta == null)
@@ -142,8 +134,7 @@ namespace Typewriter.Generation.Controllers
                         return;
                     }
 
-
-                    var file = new FileImpl(fileMeta);
+                    var file = new FileImpl(fileMeta, template.Settings);
 
                     if (template.Settings.IsSingleFileMode)
                     {
@@ -151,7 +142,6 @@ namespace Typewriter.Generation.Controllers
                         // In this case we need all files
                         if (template.ShouldRenderFile(file.FullName))
                         {
-                          
                             var files = filesToRender.Select(path =>
                             {
                                 var metadata = _metadataProvider.GetFile(path, template.Settings, null);
@@ -159,13 +149,12 @@ namespace Typewriter.Generation.Controllers
                                 {
                                     // the cs-file was found, but the build-action is not set to compile.
                                     return null;
-                                } 
+                                }
 
-                                return new FileImpl(metadata);
+                                return new FileImpl(metadata, template.Settings);
                             }).Where(f => f != null).ToArray();
 
                             template.RenderFile(files);
-
                         }
 
                         return;
@@ -181,7 +170,7 @@ namespace Typewriter.Generation.Controllers
 
         public void OnCsFileDeleted(string[] paths)
         {
-            if (ExtensionPackage.Instance.TrackSourceFiles == false)
+            if (!ExtensionPackage.Instance.TrackSourceFiles)
             {
                 Log.Debug("Delete skipped {0}", paths?.FirstOrDefault());
                 return;
@@ -209,7 +198,7 @@ namespace Typewriter.Generation.Controllers
                                 return null;
                             }
 
-                            return new FileImpl(metadata);
+                            return new FileImpl(metadata, template.Settings);
                         }).Where(f => f != null).ToArray();
 
                         template.RenderFile(files);
@@ -217,11 +206,11 @@ namespace Typewriter.Generation.Controllers
                         return;
                     }
 
-
                     template.DeleteFile(path);
                 });
             });
         }
+
         private void Enqueue(GenerationType type, string[] paths, Action<string, Template> action)
         {
             Enqueue(type, paths, (s, t, i) => s, action);
@@ -229,7 +218,7 @@ namespace Typewriter.Generation.Controllers
 
         public void OnCsFileRenamed(string[] newPaths, string[] oldPaths)
         {
-            if (ExtensionPackage.Instance.TrackSourceFiles == false)
+            if (!ExtensionPackage.Instance.TrackSourceFiles)
             {
                 Log.Debug("Rename skipped {0}", oldPaths?.FirstOrDefault());
                 return;
@@ -255,7 +244,6 @@ namespace Typewriter.Generation.Controllers
                         }
 
                         // Single mode?
-
                         if (template.Settings.IsSingleFileMode)
                         {
                             // In case of single file mode we need to recheck all files for this template
@@ -268,7 +256,7 @@ namespace Typewriter.Generation.Controllers
                                     return null;
                                 }
 
-                                return new FileImpl(metadata);
+                                return new FileImpl(metadata, template.Settings);
                             }).Where(f => f != null).ToArray();
 
                             template.RenderFile(files);
@@ -276,7 +264,7 @@ namespace Typewriter.Generation.Controllers
                             return;
                         }
 
-                        var newFile = new FileImpl(item.NewFileMeta);
+                        var newFile = new FileImpl(item.NewFileMeta, template.Settings);
                         template.RenameFile(newFile, item.OldPath, item.NewPath);
                     });
             });
@@ -294,11 +282,11 @@ namespace Typewriter.Generation.Controllers
             {
                 return;
             }
+
             Log.Debug("{0} queued {1}", type, string.Join(", ", paths));
 
             _eventQueue.Enqueue(() =>
             {
-
                 var stopwatch = Stopwatch.StartNew();
 
                 paths.ForEach((path, i) =>
@@ -314,10 +302,7 @@ namespace Typewriter.Generation.Controllers
 
                 stopwatch.Stop();
                 Log.Debug("{0} processed {1} in {2}ms", type, string.Join(", ", paths), stopwatch.ElapsedMilliseconds);
-
             });
         }
-
-
     }
 }

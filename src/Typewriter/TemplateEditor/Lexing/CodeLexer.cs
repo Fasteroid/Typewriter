@@ -19,7 +19,7 @@ namespace Typewriter.TemplateEditor.Lexing
         public CodeLexer(Contexts contexts)
         {
             this.contexts = contexts;
-            this.fileContext = contexts.Find(nameof(File));
+            fileContext = contexts.Find(nameof(File));
         }
 
         public void Tokenize(SemanticModel semanticModel, string code, ProjectItem templateProjectItem)
@@ -53,13 +53,11 @@ namespace Typewriter.TemplateEditor.Lexing
             while (stream.Advance());
         }
 
-
-
         private void ParseReference(Stream stream)
         {
             const string keyword = "reference";
 
-            if (stream.Current == '#' && stream.Peek() == keyword[0] && stream.PeekWord(1) == keyword)
+            if (stream.Current == '#' && stream.Peek() == keyword[0] && string.Equals(stream.PeekWord(1), keyword, StringComparison.OrdinalIgnoreCase))
             {
                 var reference = stream.PeekLine(keyword.Length + 1);
                 if (reference != null)
@@ -69,7 +67,9 @@ namespace Typewriter.TemplateEditor.Lexing
                     try
                     {
                         if (reference.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
-                            reference = PathResolver.ResolveRelative(reference, this.templateProjectItem);
+                        {
+                            reference = PathResolver.ResolveRelative(reference, templateProjectItem);
+                        }
 
                         semanticModel.ShadowClass.AddReference(reference);
                     }
@@ -90,8 +90,15 @@ namespace Typewriter.TemplateEditor.Lexing
                 for (var i = 0; ; i--)
                 {
                     var current = stream.Peek(i);
-                    if (current == '`' || (current == '/' && stream.Peek(i - 1) == '/')) return;
-                    if (current == '\n' || current == char.MinValue) break;
+                    if (current == '`' || (current == '/' && stream.Peek(i - 1) == '/'))
+                    {
+                        return;
+                    }
+
+                    if (current == '\n' || current == char.MinValue)
+                    {
+                        break;
+                    }
                 }
 
                 stream.Advance();
@@ -117,7 +124,7 @@ namespace Typewriter.TemplateEditor.Lexing
             {
                 stream.SkipWhitespace();
 
-                if ((stream.Current == 'u' && stream.PeekWord() == "using") || (stream.Current == '/' && stream.Peek() == '/'))
+                if ((stream.Current == 'u' && string.Equals(stream.PeekWord(), "using", StringComparison.OrdinalIgnoreCase)) || (stream.Current == '/' && stream.Peek() == '/'))
                 {
                     var line = stream.PeekLine();
                     semanticModel.ShadowClass.AddUsing(line, stream.Position);
@@ -140,7 +147,9 @@ namespace Typewriter.TemplateEditor.Lexing
             do
             {
                 if (stream.Current != char.MinValue)
+                {
                     code.Append(stream.Current);
+                }
 
                 if (isString && stream.Current == open && stream.Peek(-1) != '\\')
                 {
@@ -152,7 +161,7 @@ namespace Typewriter.TemplateEditor.Lexing
                     isString = true;
                 }
 
-                if (isString == false)
+                if (!isString)
                 {
                     semanticModel.Tokens.AddBrace(stream);
                 }
@@ -222,6 +231,7 @@ namespace Typewriter.TemplateEditor.Lexing
                     semanticModel.ContextSpans.Add(null, null, ContextType.Lambda, stream.Position + 1, stream.Position + block.Length + 1);
                     semanticModel.ShadowClass.AddLambda(block, context.Peek().Name, name, stream.Position + 1);
                 }
+
                 stream.Advance(block.Length);
 
                 if (stream.Peek() == ')')
@@ -246,24 +256,35 @@ namespace Typewriter.TemplateEditor.Lexing
         private Identifier GetIdentifier(Stream stream)
         {
             var word = stream.PeekWord(1);
-            if (word == null) return null;
+            if (word == null)
+            {
+                return null;
+            }
 
             var c = context.Peek();
             var identifier = semanticModel.GetIdentifier(c, word);
 
             if (identifier == null)
+            {
                 return null;
+            }
 
-            if (identifier.IsBoolean == false && identifier.IsCollection == false)
+            if (!identifier.IsBoolean && !identifier.IsCollection)
+            {
                 return identifier;
+            }
 
             var next = stream.Peek(identifier.Name.Length + 1);
 
             if (identifier.IsBoolean && next == '[')
+            {
                 return identifier;
+            }
 
-            if (identifier.IsCollection && (identifier.RequireTemplate == false || next == '[' || (identifier.IsCustom == false && next == '(')))
+            if (identifier.IsCollection && (!identifier.RequireTemplate || next == '[' || (!identifier.IsCustom && next == '(')))
+            {
                 return identifier;
+            }
 
             return null;
         }

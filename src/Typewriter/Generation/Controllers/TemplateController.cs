@@ -9,7 +9,6 @@ namespace Typewriter.Generation.Controllers
 {
     public class TemplateController
     {
-
         private readonly DTE _dte;
         private readonly Func<ProjectItem, Template> _templateFactory;
         private ICollection<Template> _templates;
@@ -31,7 +30,7 @@ namespace Typewriter.Generation.Controllers
         private ICollection<Template> LoadTemplates()
         {
             var stopwatch = Stopwatch.StartNew();
-            
+
             if (_templates == null)
             {
                 var items = GetProjectItems();
@@ -40,7 +39,6 @@ namespace Typewriter.Generation.Controllers
                     try
                     {
                         return _templateFactory(i);
-
                     }
                     catch (Exception e)
                     {
@@ -53,7 +51,6 @@ namespace Typewriter.Generation.Controllers
 
                 stopwatch.Stop();
                 Log.Debug("{1} Templates loaded in {0} ms", stopwatch.ElapsedMilliseconds, _templates.Count);
-
             }
             else
             {
@@ -71,9 +68,9 @@ namespace Typewriter.Generation.Controllers
                         return LoadTemplates();
                     }
                 }
+
                 stopwatch.Stop();
                 Log.Debug("{1} Templates verified in {0} ms", stopwatch.ElapsedMilliseconds, _templates.Count);
-
             }
 
             return _templates;
@@ -87,7 +84,7 @@ namespace Typewriter.Generation.Controllers
         private IEnumerable<ProjectItem> GetProjectItems()
         {
             var result = _dte.Solution.AllProjects().SelectMany(m => m.AllProjectItems(Constants.TemplateExtension));
-            
+
             return result;
         }
 

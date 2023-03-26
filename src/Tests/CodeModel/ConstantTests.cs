@@ -7,27 +7,27 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait("CodeModel", "Constants"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Constants"), Collection(nameof(RoslynFixture))]
     public class RoslynConstantTests : ConstantTests
     {
         public RoslynConstantTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
         }
     }
-    
+
     public abstract class ConstantTests : TestInfrastructure.TestBase
     {
-        private readonly File fileInfo;
+        private readonly File _fileInfo;
 
         protected ConstantTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
         {
-            fileInfo = GetFile(@"Tests\CodeModel\Support\ConstantInfo.cs");
+            _fileInfo = GetFile(@"Tests\CodeModel\Support\ConstantInfo.cs");
         }
 
         [Fact]
         public void Expect_name_to_match_cosntant_name()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var constantInfo = classInfo.Constants.First();
 
             constantInfo.Name.ShouldEqual("StringField");
@@ -38,7 +38,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_to_find_doc_comment()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var constantInfo = classInfo.Constants.First();
             constantInfo.DocComment.Summary.ShouldEqual("summary");
         }
@@ -46,7 +46,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_value_not_empty()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var constantInfo = classInfo.Constants.First();
 
             constantInfo.Value.ShouldEqual("test\"quotes\"");
@@ -55,7 +55,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_value_to_be_empty()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var constantInfo = classInfo.Constants.Skip(1).First();
 
             constantInfo.Value.ShouldEqual(string.Empty);
@@ -64,7 +64,7 @@ namespace Typewriter.Tests.CodeModel
         [Fact]
         public void Expect_value_to_be_number()
         {
-            var classInfo = fileInfo.Classes.First();
+            var classInfo = _fileInfo.Classes.First();
             var constantInfo = classInfo.Constants.Skip(2).First();
 
             constantInfo.Value.ShouldEqual("123");

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Typewriter.Tests.Render.WebApiController.Support;
+using Typewriter.Tests.Render.WebApiControllerTests.Support;
 using Typewriter.Tests.Support;
 
-namespace Typewriter.Tests.Render.WebApiController
+namespace Typewriter.Tests.Render.WebApiControllerTests
 {
     public class WebApiController
     {

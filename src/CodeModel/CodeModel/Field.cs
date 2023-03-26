@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a field.
     /// </summary>
-    [Context("Field", "Fields")]
+    [Context(nameof(Field), "Fields")]
     public abstract class Field : Item
     {
         /// <summary>
         /// All attributes defined on the field.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The XML documentation comment of the field.
@@ -26,7 +26,13 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// The name of the field (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the field.
@@ -46,16 +52,9 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// Converts the current instance to string.
         /// </summary>
-        public static implicit operator string (Field instance)
+        public static implicit operator string(Field instance)
         {
             return instance.ToString();
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of fields.
-    /// </summary>
-    public interface FieldCollection : ItemCollection<Field>
-    {
     }
 }

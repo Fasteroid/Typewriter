@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public abstract class ItemCollectionImpl<T> : List<T>, ItemCollection<T> where T : Item
+    public abstract class ItemCollectionImpl<T> : List<T>, IItemCollection<T> where T : Item
     {
         protected ItemCollectionImpl(IEnumerable<T> values) : base(values)
         {

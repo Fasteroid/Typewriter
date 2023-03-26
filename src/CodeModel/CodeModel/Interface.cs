@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents an interface.
     /// </summary>
-    [Context("Interface", "Interfaces")]
+    [Context(nameof(Interface), nameof(Interfaces))]
     public abstract class Interface : Item
     {
         /// <summary>
         /// All attributes defined on the interface.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The containing class of the interface if it is nested.
@@ -26,7 +26,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All events defined in the interface.
         /// </summary>
-        public abstract EventCollection Events { get; }
+        public abstract IEventCollection Events { get; }
 
         /// <summary>
         /// The full original name of the interface including namespace and containing class names.
@@ -36,7 +36,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All interfaces implemented by the interface.
         /// </summary>
-        public abstract InterfaceCollection Interfaces { get; }
+        public abstract IInterfaceCollection Interfaces { get; }
 
         /// <summary>
         /// Determines if the interface is generic.
@@ -46,18 +46,24 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All methods defined in the interface.
         /// </summary>
-        public abstract MethodCollection Methods { get; }
+        public abstract IMethodCollection Methods { get; }
 
         /// <summary>
         /// The name of the interface (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the interface.
         /// </summary>
         public abstract string Name { get; }
-        
+
         /// <summary>
         /// The namespace of the interface.
         /// </summary>
@@ -71,34 +77,34 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All properties defined in the interface.
         /// </summary>
-        public abstract PropertyCollection Properties { get; }
+        public abstract IPropertyCollection Properties { get; }
 
         /// <summary>
         /// All generic type arguments of the interface.
-        /// TypeArguments are the specified arguments for the TypeParametes on a generic interface e.g. &lt;string&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// TypeArguments are the specified arguments for the TypeParameters on a generic interface e.g. &lt;string&gt;.
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeCollection TypeArguments { get; }
+        public abstract ITypeCollection TypeArguments { get; }
 
         /// <summary>
         /// All generic type parameters of the interface.
         /// TypeParameters are the type placeholders of a generic interface e.g. &lt;T&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeParameterCollection TypeParameters { get; }
-
-        /// <summary>
-        /// Converts the current instance to string.
-        /// </summary>
-        public static implicit operator string (Interface instance)
-        {
-            return instance.ToString();
-        }
+        public abstract ITypeParameterCollection TypeParameters { get; }
 
         /// <summary>
         /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
         /// </summary>
         protected abstract Type Type { get; }
+
+        /// <summary>
+        /// Converts the current instance to string.
+        /// </summary>
+        public static implicit operator string(Interface instance)
+        {
+            return instance.ToString();
+        }
 
         /// <summary>
         /// Converts the current instance to a Type.
@@ -107,12 +113,5 @@ namespace Typewriter.CodeModel
         {
             return instance?.Type;
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of interfaces.
-    /// </summary>
-    public interface InterfaceCollection : ItemCollection<Interface>
-    {
     }
 }

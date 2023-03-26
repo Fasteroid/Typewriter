@@ -6,7 +6,7 @@ using Typewriter.VisualStudio;
 
 namespace Typewriter.TemplateEditor.FormatDefinitions
 {
-    [Export(typeof (EditorFormatDefinition)), Name("TypeScript Template Class Symbold")]
+    [Export(typeof(EditorFormatDefinition)), Name("TypeScript Template Class Symbold")]
     [ClassificationType(ClassificationTypeNames = Classifications.ClassSymbol)]
     internal sealed class ClassSymbolFormatDefinition : ClassificationFormatDefinition
     {
@@ -15,7 +15,7 @@ namespace Typewriter.TemplateEditor.FormatDefinitions
 
         public ClassSymbolFormatDefinition()
         {
-            this.ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
+            ForegroundColor = ThemeInfo.IsDark ? _dark : _light;
         }
     }
 }

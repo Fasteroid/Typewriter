@@ -51,7 +51,7 @@ namespace Typewriter.VisualStudio.ContextMenu
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
 
-            OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, RenderOneCommandId);
@@ -81,16 +81,23 @@ namespace Typewriter.VisualStudio.ContextMenu
                 // start by assuming that the menu will not be shown
                 menuCommand.Visible = false;
                 menuCommand.Enabled = false;
-                if (!IsSingleProjectItemSelection(out var hierarchy, out var itemid)) return;
+                if (!IsSingleProjectItemSelection(out var hierarchy, out var itemid))
+                {
+                    return;
+                }
+
                 // Get the file path
                 itemFullPath = null;
                 ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
                 var transformFileInfo = new FileInfo(itemFullPath);
 
-                bool isTemplate = transformFileInfo.Name.EndsWith(".tst", StringComparison.OrdinalIgnoreCase);
+                var isTemplate = transformFileInfo.Name.EndsWith(".tst", StringComparison.OrdinalIgnoreCase);
 
                 // if not leave the menu hidden
-                if (!isTemplate) return;
+                if (!isTemplate)
+                {
+                    return;
+                }
 
                 menuCommand.Visible = true;
                 menuCommand.Enabled = true;
@@ -108,8 +115,8 @@ namespace Typewriter.VisualStudio.ContextMenu
                 return false;
             }
 
-            IntPtr hierarchyPtr = IntPtr.Zero;
-            IntPtr selectionContainerPtr = IntPtr.Zero;
+            var hierarchyPtr = IntPtr.Zero;
+            var selectionContainerPtr = IntPtr.Zero;
 
             try
             {
@@ -122,16 +129,24 @@ namespace Typewriter.VisualStudio.ContextMenu
                 }
 
                 // multiple items are selected
-                if (multiItemSelect != null) return false;
+                if (multiItemSelect != null)
+                {
+                    return false;
+                }
 
                 // there is a hierarchy root node selected, thus it is not a single item inside a project
-
-                if (itemid == VSConstants.VSITEMID_ROOT) return false;
+                if (itemid == VSConstants.VSITEMID_ROOT)
+                {
+                    return false;
+                }
 
                 hierarchy = Marshal.GetObjectForIUnknown(hierarchyPtr) as IVsHierarchy;
-                if (hierarchy == null) return false;
+                if (hierarchy == null)
+                {
+                    return false;
+                }
 
-                Guid guidProjectID = Guid.Empty;
+                var guidProjectID = Guid.Empty;
 
                 if (ErrorHandler.Failed(solution.GetGuidOfProject(hierarchy, out guidProjectID)))
                 {
@@ -171,7 +186,7 @@ namespace Typewriter.VisualStudio.ContextMenu
         {
             get
             {
-                return this.package;
+                return package;
             }
         }
 
@@ -195,7 +210,6 @@ namespace Typewriter.VisualStudio.ContextMenu
         {
             //string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
             //string title = "RenderTemplate";
-
             var renderTemplateClicked = RenderTemplateClicked;
             renderTemplateClicked?.Invoke(this, new SingleFileChangedEventArgs(FileChangeType.Changed, itemFullPath));
         }

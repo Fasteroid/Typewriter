@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a constant.
     /// </summary>
-    [Context("Constant", "Constants")]
+    [Context(nameof(Constant), "Constants")]
     public abstract class Constant : Item
     {
         /// <summary>
         /// All attributes defined on the constant.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The XML documentation comment of the constant.
@@ -26,7 +26,13 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// The name of the constant (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the constant.
@@ -51,16 +57,9 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// Converts the current instance to string.
         /// </summary>
-        public static implicit operator string (Constant instance)
+        public static implicit operator string(Constant instance)
         {
             return instance.ToString();
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of constants.
-    /// </summary>
-    public interface ConstantCollection : ItemCollection<Constant>
-    {
     }
 }

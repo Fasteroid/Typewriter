@@ -9,6 +9,7 @@ namespace Typewriter.Tests.Metadata.Support
         {
             [Key]
             public int Id { get; set; }
+
             [Display(Name = "NewPropertyName")]
             public string Title { get; set; }
         }

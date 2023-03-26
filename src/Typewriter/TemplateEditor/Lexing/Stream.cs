@@ -27,7 +27,7 @@ namespace Typewriter.TemplateEditor.Lexing
 
         public bool Advance(int offset = 1)
         {
-            for (int i = 0; i < offset; i++)
+            for (var i = 0; i < offset; i++)
             {
                 position ++;
 
@@ -57,7 +57,10 @@ namespace Typewriter.TemplateEditor.Lexing
 
         public string PeekWord(int start = 0)
         {
-            if (char.IsLetter(Peek(start)) == false) return null;
+            if (!char.IsLetter(Peek(start)))
+            {
+                return null;
+            }
 
             var identifier = new StringBuilder();
             var i = start;
@@ -90,19 +93,30 @@ namespace Typewriter.TemplateEditor.Lexing
             var i = start;
             var depth = 1;
             var identifier = new StringBuilder();
-            
+
             while (depth > 0)
             {
                 var letter = Peek(i);
 
-                if (letter == char.MinValue) break;
+                if (letter == char.MinValue)
+                {
+                    break;
+                }
+
                 //if (letter == close) depth--;
-                if (IsMatch(i, letter, close)) depth--;
+                if (IsMatch(i, letter, close))
+                {
+                    depth--;
+                }
+
                 if (depth > 0)
                 {
                     identifier.Append(letter);
                     //if (letter == open) depth++;
-                    if (IsMatch(i, letter, open)) depth++;
+                    if (IsMatch(i, letter, open))
+                    {
+                        depth++;
+                    }
 
                     i++;
 
@@ -131,7 +145,10 @@ namespace Typewriter.TemplateEditor.Lexing
                 var isString = match == '"' || match == '\'';
                 if (isString)
                 {
-                    if (Peek(index - 1) == '\\' && Peek(index - 2) != '\\') return false;
+                    if (Peek(index - 1) == '\\' && Peek(index - 2) != '\\')
+                    {
+                        return false;
+                    }
                 }
 
                 return true;
@@ -142,7 +159,10 @@ namespace Typewriter.TemplateEditor.Lexing
 
         public bool SkipWhitespace()
         {
-            if (position < 0) Advance();
+            if (position < 0)
+            {
+                Advance();
+            }
 
             while (char.IsWhiteSpace(Current))
             {

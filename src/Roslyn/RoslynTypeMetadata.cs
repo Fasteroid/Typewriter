@@ -1,72 +1,109 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynTypeMetadata : ITypeMetadata
     {
-        private readonly ITypeSymbol symbol;
-        private readonly bool isNullable;
-        private readonly bool isTask;
+        private readonly ITypeSymbol _symbol;
+        private readonly bool _isNullable;
+        private readonly bool _isTask;
 
-        public RoslynTypeMetadata(ITypeSymbol symbol, bool isNullable, bool isTask)
+        public RoslynTypeMetadata(ITypeSymbol symbol, bool isNullable, bool isTask, Settings settings)
         {
-            this.symbol = symbol;
-            this.isNullable = isNullable;
-            this.isTask = isTask;
+            _symbol = symbol;
+            _isNullable = isNullable;
+            _isTask = isTask;
+            Settings = settings;
         }
 
-        public string DocComment => symbol.GetDocumentationCommentXml();
-        public string Name => symbol.GetName() + (IsNullable? "?" : string.Empty);
-        public string FullName => symbol.GetFullName() + (IsNullable? "?" : string.Empty);
-        public bool IsAbstract => (symbol as INamedTypeSymbol)?.IsAbstract ?? false;
-        public bool IsGeneric => (symbol as INamedTypeSymbol)?.TypeParameters.Any() ?? false;
-        public bool IsDefined => symbol.Locations.Any(l => l.IsInSource);
-        public bool IsValueTuple => symbol.Name == "" && symbol.BaseType?.Name == "ValueType" && symbol.BaseType.ContainingNamespace.Name == "System";
+        public Settings Settings { get; }
 
-        public string Namespace => symbol.GetNamespace();
+        public string DocComment => _symbol.GetDocumentationCommentXml();
+
+        public string Name => _symbol.GetName() + (IsNullable ? "?" : string.Empty);
+
+        public string FullName => _symbol.GetFullName() + (IsNullable ? "?" : string.Empty);
+
+        public bool IsAbstract => (_symbol as INamedTypeSymbol)?.IsAbstract ?? false;
+
+        public bool IsGeneric => (_symbol as INamedTypeSymbol)?.TypeParameters.Any() ?? false;
+
+        public bool IsDefined => _symbol.Locations.Any(l => l.IsInSource);
+
+        public bool IsValueTuple => _symbol.Name.Equals(string.Empty, StringComparison.OrdinalIgnoreCase) &&
+                                    string.Equals(_symbol.BaseType?.Name, "ValueType", StringComparison.OrdinalIgnoreCase) &&
+                                    string.Equals(_symbol.BaseType.ContainingNamespace.Name, "System", StringComparison.OrdinalIgnoreCase);
+
+        public string Namespace => _symbol.GetNamespace();
+
         public ITypeMetadata Type => this;
+
         public string DefaultValue { get; set; }
 
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
-        public IClassMetadata BaseClass => RoslynClassMetadata.FromNamedTypeSymbol(symbol.BaseType);
-        public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(symbol.ContainingType);
-        public IEnumerable<IConstantMetadata> Constants => RoslynConstantMetadata.FromFieldSymbols(symbol.GetMembers().OfType<IFieldSymbol>());
-        public IEnumerable<IDelegateMetadata> Delegates => RoslynDelegateMetadata.FromNamedTypeSymbols(symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Delegate));
-        public IEnumerable<IEventMetadata> Events => RoslynEventMetadata.FromEventSymbols(symbol.GetMembers().OfType<IEventSymbol>());
-        public IEnumerable<IFieldMetadata> Fields => RoslynFieldMetadata.FromFieldSymbols(symbol.GetMembers().OfType<IFieldSymbol>());
-        public IEnumerable<IInterfaceMetadata> Interfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(symbol.Interfaces);
-        public IEnumerable<IMethodMetadata> Methods => RoslynMethodMetadata.FromMethodSymbols(symbol.GetMembers().OfType<IMethodSymbol>());
-        public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(symbol.GetMembers().OfType<IPropertySymbol>());
-        public IEnumerable<IClassMetadata> NestedClasses => RoslynClassMetadata.FromNamedTypeSymbols(symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Class));
-        public IEnumerable<IEnumMetadata> NestedEnums => RoslynEnumMetadata.FromNamedTypeSymbols(symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Enum));
-        public IEnumerable<IInterfaceMetadata> NestedInterfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Interface));
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public IClassMetadata BaseClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.BaseType, Settings);
+
+        public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.ContainingType, Settings);
+
+        public IEnumerable<IConstantMetadata> Constants => RoslynConstantMetadata.FromFieldSymbols(_symbol.GetMembers().OfType<IFieldSymbol>(), Settings);
+
+        public IEnumerable<IDelegateMetadata> Delegates => RoslynDelegateMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Delegate), Settings);
+
+        public IEnumerable<IEventMetadata> Events => RoslynEventMetadata.FromEventSymbols(_symbol.GetMembers().OfType<IEventSymbol>(), Settings);
+
+        public IEnumerable<IFieldMetadata> Fields => RoslynFieldMetadata.FromFieldSymbols(_symbol.GetMembers().OfType<IFieldSymbol>(), Settings);
+
+        public IEnumerable<IInterfaceMetadata> Interfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(_symbol.Interfaces, null, Settings);
+
+        public IEnumerable<IMethodMetadata> Methods => RoslynMethodMetadata.FromMethodSymbols(_symbol.GetMembers().OfType<IMethodSymbol>(), Settings);
+
+        public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(_symbol.GetMembers().OfType<IPropertySymbol>(), Settings);
+
+        public IEnumerable<IClassMetadata> NestedClasses => RoslynClassMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Class), null, Settings);
+
+        public IEnumerable<IEnumMetadata> NestedEnums => RoslynEnumMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Enum), Settings);
+
+        public IEnumerable<IInterfaceMetadata> NestedInterfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Interface), null, Settings);
+
         public IEnumerable<IFieldMetadata> TupleElements
         {
             get
             {
+#pragma warning disable CC0004 // Catch block cannot be empty
                 try
                 {
-                    if (symbol is INamedTypeSymbol n)
+                    if (_symbol is INamedTypeSymbol n && n.Name == string.Empty && string.Equals(
+                            n.BaseType?.Name,
+                            "ValueType",
+                            StringComparison.OrdinalIgnoreCase) &&
+                        string.Equals(
+                            n.BaseType.ContainingNamespace.Name,
+                            "System",
+                            StringComparison.OrdinalIgnoreCase))
                     {
-                        if (n.Name == "" && n.BaseType?.Name == "ValueType" && n.BaseType.ContainingNamespace.Name == "System")
+                        var property = n.GetType().GetProperty(nameof(TupleElements));
+                        if (property != null)
                         {
-                            var property = n.GetType().GetProperty(nameof(TupleElements));
-                            if (property != null)
-                            {
-                                var value = property.GetValue(symbol);
-                                var tupleElements = value as IEnumerable<IFieldSymbol>;
+                            var value = property.GetValue(_symbol);
+                            var tupleElements = value as IEnumerable<IFieldSymbol>;
 
-                                return RoslynFieldMetadata.FromFieldSymbols(tupleElements);
-                            }
+                            return RoslynFieldMetadata.FromFieldSymbols(tupleElements, Settings);
                         }
                     }
                 }
-                catch { }
-                
-                return new IFieldMetadata[0];
+                catch
+                {
+                    // noop
+                }
+#pragma warning restore CC0004 // Catch block cannot be empty
+
+                return Array.Empty<IFieldMetadata>();
             }
         }
 
@@ -74,13 +111,17 @@ namespace Typewriter.Metadata.Roslyn
         {
             get
             {
-                if (symbol is INamedTypeSymbol namedTypeSymbol)
-                    return FromTypeSymbols(namedTypeSymbol.TypeArguments);
+                if (_symbol is INamedTypeSymbol namedTypeSymbol)
+                {
+                    return FromTypeSymbols(namedTypeSymbol.TypeArguments, Settings);
+                }
 
-                if (symbol is IArrayTypeSymbol arrayTypeSymbol)
-                    return FromTypeSymbols(new [] { arrayTypeSymbol.ElementType});
+                if (_symbol is IArrayTypeSymbol arrayTypeSymbol)
+                {
+                    return FromTypeSymbols(new[] { arrayTypeSymbol.ElementType }, Settings);
+                }
 
-                return new ITypeMetadata[0];
+                return Array.Empty<ITypeMetadata>();
             }
         }
 
@@ -88,60 +129,77 @@ namespace Typewriter.Metadata.Roslyn
         {
             get
             {
-                if (symbol is INamedTypeSymbol namedTypeSymbol)
+                if (_symbol is INamedTypeSymbol namedTypeSymbol)
+                {
                     return RoslynTypeParameterMetadata.FromTypeParameterSymbols(namedTypeSymbol.TypeParameters);
+                }
 
-                return new ITypeParameterMetadata[0];
+                return Array.Empty<ITypeParameterMetadata>();
             }
         }
 
-        public bool IsEnum => symbol.TypeKind == TypeKind.Enum;
+        public bool IsEnum => _symbol.TypeKind == TypeKind.Enum;
 
-        public bool IsEnumerable => symbol.ToDisplayString() != "string" &&
-                                    symbol.ToDisplayString() != "string?" && (
-                                        symbol.TypeKind == TypeKind.Array ||
-                                        symbol.ToDisplayString() == "System.Collections.IEnumerable" ||
-                                        symbol.AllInterfaces.Any(i =>
-                                            i.ToDisplayString() == "System.Collections.IEnumerable"));
-        public bool IsNullable => isNullable || symbol.NullableAnnotation == NullableAnnotation.Annotated;
-        public bool IsTask => isTask;
+        public bool IsEnumerable => !_symbol.ToDisplayString().Equals("string", StringComparison.OrdinalIgnoreCase) &&
+                                    !_symbol.ToDisplayString().Equals("string?", StringComparison.OrdinalIgnoreCase) &&
+                                    (
+                                        _symbol.TypeKind == TypeKind.Array ||
+                                        _symbol.ToDisplayString().Equals(
+                                            "System.Collections.IEnumerable",
+                                            StringComparison.OrdinalIgnoreCase) ||
+                                        _symbol.AllInterfaces.Any(
+                                            i =>
+                                                i.ToDisplayString().Equals(
+                                                    "System.Collections.IEnumerable",
+                                                    StringComparison.OrdinalIgnoreCase)));
 
-        public static ITypeMetadata FromTypeSymbol(ITypeSymbol symbol)
+        public bool IsNullable => _isNullable || _symbol.NullableAnnotation == NullableAnnotation.Annotated;
+
+        public bool IsTask => _isTask;
+
+        public static ITypeMetadata FromTypeSymbol(ITypeSymbol symbol, Settings settings)
         {
-            if (symbol.Name == "Nullable" && symbol.ContainingNamespace.Name == "System")
-            {
-                var type = symbol as INamedTypeSymbol;
-                var argument = type?.TypeArguments.FirstOrDefault();
-
-                if (argument != null)
-                    return new RoslynTypeMetadata(argument, true, false);
-            }
-            else if (symbol.Name == "Task" && symbol.ContainingNamespace.GetFullName() == "System.Threading.Tasks")
+            if (symbol.Name.Equals("Nullable", StringComparison.OrdinalIgnoreCase) &&
+                symbol.ContainingNamespace.Name.Equals("System", StringComparison.OrdinalIgnoreCase))
             {
                 var type = symbol as INamedTypeSymbol;
                 var argument = type?.TypeArguments.FirstOrDefault();
 
                 if (argument != null)
                 {
-                    if (argument.Name == "Nullable" && argument.ContainingNamespace.Name == "System")
+                    return new RoslynTypeMetadata(argument, true, false, settings);
+                }
+            }
+            else if (symbol.Name.Equals("Task", StringComparison.OrdinalIgnoreCase) &&
+                     symbol.ContainingNamespace.GetFullName().Equals("System.Threading.Tasks", StringComparison.OrdinalIgnoreCase))
+            {
+                var type = symbol as INamedTypeSymbol;
+                var argument = type?.TypeArguments.FirstOrDefault();
+
+                if (argument != null)
+                {
+                    if (argument.Name.Equals("Nullable", StringComparison.OrdinalIgnoreCase) &&
+                        argument.ContainingNamespace.Name.Equals("System", StringComparison.OrdinalIgnoreCase))
                     {
                         type = argument as INamedTypeSymbol;
                         var innerArgument = type?.TypeArguments.FirstOrDefault();
 
                         if (innerArgument != null)
-                            return new RoslynTypeMetadata(innerArgument, true, true);
+                        {
+                            return new RoslynTypeMetadata(innerArgument, true, true, settings);
+                        }
                     }
 
-                    return new RoslynTypeMetadata(argument, false, true);
+                    return new RoslynTypeMetadata(argument, false, true, settings);
                 }
 
                 return new RoslynVoidTaskMetadata();
             }
             else if (symbol.BaseType?.SpecialType == SpecialType.System_Enum)
             {
-                var result = new RoslynTypeMetadata(symbol, false, false);
+                var result = new RoslynTypeMetadata(symbol, false, false, settings);
                 var namedTypeSymbol = symbol as INamedTypeSymbol;
-                
+
                 var symbols = namedTypeSymbol.GetMembers();
                 if (symbols.Length == 0)
                 {
@@ -155,47 +213,12 @@ namespace Typewriter.Metadata.Roslyn
                 return result;
             }
 
-            return new RoslynTypeMetadata(symbol, false, false);
+            return new RoslynTypeMetadata(symbol, false, false, settings);
         }
 
-        public static IEnumerable<ITypeMetadata> FromTypeSymbols(IEnumerable<ITypeSymbol> symbols)
+        public static IEnumerable<ITypeMetadata> FromTypeSymbols(IEnumerable<ITypeSymbol> symbols, Settings settings)
         {
-            return symbols.Select(FromTypeSymbol);
+            return symbols.Select(item => FromTypeSymbol(item, settings));
         }
-    }
-
-    public class RoslynVoidTaskMetadata : ITypeMetadata
-    {
-        public string DocComment => null;
-        public string Name => "Void";
-        public string FullName => "System.Void";
-        public bool IsAbstract => false;
-        public bool IsEnum => false;
-        public bool IsEnumerable => false;
-        public bool IsGeneric => false;
-        public bool IsNullable => false;
-        public bool IsTask => true;
-        public bool IsDefined => false;
-        public bool IsValueTuple => false;
-        public string Namespace => "System";
-        public ITypeMetadata Type => null;
-        public string DefaultValue => "void(0)";
-
-        public IEnumerable<IAttributeMetadata> Attributes => new IAttributeMetadata[0];
-        public IClassMetadata BaseClass => null;
-        public IClassMetadata ContainingClass => null;
-        public IEnumerable<IConstantMetadata> Constants => new IConstantMetadata[0];
-        public IEnumerable<IDelegateMetadata> Delegates => new IDelegateMetadata[0];
-        public IEnumerable<IEventMetadata> Events => new IEventMetadata[0];
-        public IEnumerable<IFieldMetadata> Fields => new IFieldMetadata[0];
-        public IEnumerable<IInterfaceMetadata> Interfaces => new IInterfaceMetadata[0];
-        public IEnumerable<IMethodMetadata> Methods => new IMethodMetadata[0];
-        public IEnumerable<IPropertyMetadata> Properties => new IPropertyMetadata[0];
-        public IEnumerable<IClassMetadata> NestedClasses => new IClassMetadata[0];
-        public IEnumerable<IEnumMetadata> NestedEnums => new IEnumMetadata[0];
-        public IEnumerable<IInterfaceMetadata> NestedInterfaces => new IInterfaceMetadata[0];
-        public IEnumerable<ITypeMetadata> TypeArguments => new ITypeMetadata[0];
-        public IEnumerable<ITypeParameterMetadata> TypeParameters => new ITypeParameterMetadata[0];
-        public IEnumerable<IFieldMetadata> TupleElements => new IFieldMetadata[0];
     }
 }

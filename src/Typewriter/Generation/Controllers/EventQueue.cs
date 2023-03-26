@@ -9,7 +9,6 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Typewriter.Generation.Controllers
 {
-
     public interface IEventQueue : IDisposable
     {
         void Enqueue(Action action);
@@ -23,7 +22,7 @@ namespace Typewriter.Generation.Controllers
 
         public EventQueue(IVsStatusbar statusBar)
         {
-            this._statusBar = statusBar;
+            _statusBar = statusBar;
             _queue = new BlockingQueue<Action>();
 
             _queueTask = Task.Run(() => ProcessQueue());
@@ -83,14 +82,14 @@ namespace Typewriter.Generation.Controllers
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 // You're now on the UI thread.
-
                 try
                 {
-
                     _statusBar.IsFrozen(out var frozen);
 
                     if (frozen != 0)
+                    {
                         return;
+                    }
 
                     _statusBar.SetText("Rendering template...");
                     _statusBar.Animation(1, ref tmpIcon);
@@ -125,7 +124,9 @@ namespace Typewriter.Generation.Controllers
         public void Dispose()
         {
             if (disposed)
+            {
                 return;
+            }
 
             disposed = true;
             _queue.Close();
@@ -141,5 +142,4 @@ namespace Typewriter.Generation.Controllers
         Rename,
         Template
     }
-
 }

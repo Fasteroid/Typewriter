@@ -17,10 +17,12 @@ namespace Typewriter.CodeModel.Implementation
         }
 
         public override Item Parent { get; }
+
         public override string name => CamelCase(_metadata.Name.TrimStart('@'));
+
         public override string Name => _metadata.Name.TrimStart('@');
 
-        public static TypeParameterCollection FromMetadata(IEnumerable<ITypeParameterMetadata> metadata, Item parent)
+        public static ITypeParameterCollection FromMetadata(IEnumerable<ITypeParameterMetadata> metadata, Item parent)
         {
             return new TypeParameterCollectionImpl(metadata.Select(t => new TypeParameterImpl(t, parent)));
         }

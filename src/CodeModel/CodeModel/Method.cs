@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a method.
     /// </summary>
-    [Context("Method", "Methods")]
+    [Context(nameof(Method), "Methods")]
     public abstract class Method : Item
     {
         /// <summary>
         /// All attributes defined on the method.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The XML documentation comment of the method.
@@ -36,7 +36,13 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// The name of the method (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the method.
@@ -46,7 +52,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All parameters of the method.
         /// </summary>
-        public abstract ParameterCollection Parameters { get; }
+        public abstract IParameterCollection Parameters { get; }
 
         /// <summary>
         /// The parent context of the method.
@@ -62,21 +68,14 @@ namespace Typewriter.CodeModel
         /// All generic type parameters of the method.
         /// TypeParameters are the type placeholders of a generic method e.g. &lt;T&gt;.
         /// </summary>
-        public abstract TypeParameterCollection TypeParameters { get; }
+        public abstract ITypeParameterCollection TypeParameters { get; }
 
         /// <summary>
         /// Converts the current instance to string.
         /// </summary>
-        public static implicit operator string (Method instance)
+        public static implicit operator string(Method instance)
         {
             return instance.ToString();
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of methods.
-    /// </summary>
-    public interface MethodCollection : ItemCollection<Method>
-    {
     }
 }

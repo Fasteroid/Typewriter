@@ -37,7 +37,9 @@ namespace Typewriter.TemplateEditor
         private SemanticModel GetSemanticModel(ITextBuffer buffer)
         {
             if (currentSnapshot == buffer.CurrentSnapshot)
+            {
                 return semanticModelCache;
+            }
 
             currentSnapshot = buffer.CurrentSnapshot;
             semanticModelCache = new SemanticModel(shadowClass);
@@ -58,7 +60,7 @@ namespace Typewriter.TemplateEditor
                 Log.Debug("Unable to find the ProjectItem the fast way.");
 
                 //Fallback
-                string templatePath = GetFilePath(textBuffer);
+                var templatePath = GetFilePath(textBuffer);
                 ret = ExtensionPackage.Instance.Dte.Solution.FindProjectItem(templatePath);
             }
 
@@ -68,9 +70,11 @@ namespace Typewriter.TemplateEditor
         private static ProjectItem GetProjectItemFastAndHacky(ITextBuffer textBuffer)
         {
             if (!textBuffer.Properties.TryGetProperty<IVsTextBuffer>(typeof(IVsTextBuffer), out var vstb))
+            {
                 return null;
+            }
 
-            //HACK: reflection on internal property of VsTextBufferAdapter. 
+            //HACK: reflection on internal property of VsTextBufferAdapter.
             var adapterType = vstb.GetType();
             var prop = adapterType.BaseType?.GetProperty("DTEDocument", BindingFlags.Instance | BindingFlags.NonPublic);
             var doc = prop?.GetValue(vstb) as Document;
@@ -98,7 +102,7 @@ namespace Typewriter.TemplateEditor
             var token = tokens.GetToken(point.Position - 1);
             var tag = new TextMarkerTag(Classifications.BraceHighlight);
 
-            if (token?.MatchingToken != null && token.IsOpen == false)
+            if (token?.MatchingToken != null && !token.IsOpen)
             {
                 yield return new TagSpan<TextMarkerTag>(new SnapshotSpan(point.Snapshot, token.Start, 1), tag);
                 yield return new TagSpan<TextMarkerTag>(new SnapshotSpan(point.Snapshot, token.MatchingToken.Start, 1), tag);
@@ -150,12 +154,12 @@ namespace Typewriter.TemplateEditor
             var completions = identifiers.Select(i =>
             {
                 var imageSource = glyphService.GetGlyph(i.Glyph, StandardGlyphItem.GlyphItemPublic);
-                var quickInfo = i.IsParent ? i.QuickInfo.Replace("Item", contextSpan.ParentContext?.Name) : i.QuickInfo;
+                var quickInfo = i.IsParent ? i.QuickInfo.Replace(nameof(Item), contextSpan.ParentContext?.Name) : i.QuickInfo;
 
                 return new Completion(prefix + i.Name, prefix + i.Name, quickInfo, imageSource, null);
             });
 
-            if (contextSpan.Type == ContextType.Template && contextSpan.Context.Name == nameof(File))
+            if (contextSpan.Type == ContextType.Template && string.Equals(contextSpan.Context.Name, nameof(File), System.StringComparison.OrdinalIgnoreCase))
             {
                 var imageSource = glyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemPublic);
                 var codeBlock = new[]

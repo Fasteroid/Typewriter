@@ -18,13 +18,16 @@ namespace Typewriter.CodeModel.Implementation
         public override Item Parent { get; }
 
         private string _summary;
+
         public override string Summary => _summary ?? (_summary = FormatValue(_root.Element("summary") == null ? string.Empty : string.Concat(_root.Element("summary").Nodes())));
 
         private string _returns;
+
         public override string Returns => _returns ?? (_returns = FormatValue(_root.Element("returns") == null ? string.Empty : string.Concat(_root.Element("returns").Nodes())));
 
-        private ParameterCommentCollection _parameters;
-        public override ParameterCommentCollection Parameters => _parameters ?? (_parameters = ParameterCommentImpl.FromXElements(_root.Elements("param"), this));
+        private IParameterCommentCollection _parameters;
+
+        public override IParameterCommentCollection Parameters => _parameters ?? (_parameters = ParameterCommentImpl.FromXElements(_root.Elements("param"), this));
 
         public override string ToString()
         {
@@ -33,7 +36,10 @@ namespace Typewriter.CodeModel.Implementation
 
         public static string FormatValue(string value)
         {
-            if (string.IsNullOrEmpty(value)) return value;
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
 
             var lines = value.Split('\r', '\n');
             return string.Join(" ", lines.Select(l => l.Trim())).Trim();
@@ -43,7 +49,10 @@ namespace Typewriter.CodeModel.Implementation
         {
             try
             {
-                if (string.IsNullOrEmpty(xml)) return null;
+                if (string.IsNullOrEmpty(xml))
+                {
+                    return null;
+                }
 
                 var root = XDocument.Parse(xml).Root;
                 return root != null ? new DocCommentImpl(root, parent) : null;
@@ -54,7 +63,7 @@ namespace Typewriter.CodeModel.Implementation
             }
         }
     }
-    
+
     public class ParameterCommentImpl : ParameterComment
     {
         private ParameterCommentImpl(XElement element, Item parent)
@@ -67,6 +76,7 @@ namespace Typewriter.CodeModel.Implementation
         public override Item Parent { get; }
 
         public override string Name { get; }
+
         public override string Description { get; }
 
         public override string ToString()
@@ -74,7 +84,7 @@ namespace Typewriter.CodeModel.Implementation
             return Name;
         }
 
-        public static ParameterCommentCollection FromXElements(IEnumerable<XElement> elements, Item parent)
+        public static IParameterCommentCollection FromXElements(IEnumerable<XElement> elements, Item parent)
         {
            return new ParameterCommentCollectionImpl(elements.Select(e => new ParameterCommentImpl(e, parent)));
         }

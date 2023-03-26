@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class PropertyCollectionImpl : ItemCollectionImpl<Property>, PropertyCollection
+    public class PropertyCollectionImpl : ItemCollectionImpl<Property>, IPropertyCollection
     {
         public PropertyCollectionImpl(IEnumerable<Property> values) : base(values)
         {

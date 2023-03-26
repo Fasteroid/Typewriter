@@ -14,14 +14,23 @@ namespace Typewriter.TemplateEditor.Lexing
     public class Identifier
     {
         public string Name { get; set; }
+
         public string QuickInfo { get; set; }
+
         public string Context { get; set; }
+
         public bool IsCollection { get; set; }
+
         public bool IsBoolean { get; set; }
+
         public bool HasContext { get; set; }
+
         public bool IsParent { get; set; }
+
         public bool RequireTemplate { get; set; }
+
         public bool IsCustom { get; set; }
+
         public StandardGlyphGroup Glyph { get; set; } = StandardGlyphGroup.GlyphGroupProperty;
 
         public static Identifier FromSymbol(ISymbol symbol)
@@ -45,7 +54,7 @@ namespace Typewriter.TemplateEditor.Lexing
             var propertyInfo = memberInfo as PropertyInfo;
             if (propertyInfo != null)
             {
-                documentation = string.Concat(GetTypeName(propertyInfo.PropertyType.Name), " ", name, 
+                documentation = string.Concat(GetTypeName(propertyInfo.PropertyType.Name), " ", name,
                     ParseDocumentation(documentationProvider.GetDocumentationForSymbol("P:" + propertyInfo.ReflectedType.FullName + "." + propertyInfo.Name)));
             }
             else
@@ -53,7 +62,7 @@ namespace Typewriter.TemplateEditor.Lexing
                 var methodInfo = memberInfo as MethodInfo;
                 if (methodInfo != null)
                 {
-                    var prefix = methodInfo.IsDefined(typeof (ExtensionAttribute), false) ? "(extension) " : "";
+                    var prefix = methodInfo.IsDefined(typeof(ExtensionAttribute), false) ? "(extension) " : "";
                     var parameters = string.Join(",", methodInfo.GetParameters().Select(p => p.ParameterType.FullName));
                     var typName = $"M:{methodInfo.ReflectedType.FullName}.{methodInfo.Name}({parameters})";
 
@@ -71,8 +80,15 @@ namespace Typewriter.TemplateEditor.Lexing
 
         private static string GetTypeName(string name)
         {
-            if (name == "String") return "string";
-            if (name == "Boolean") return "bool";
+            if (string.Equals(name, "String", StringComparison.OrdinalIgnoreCase))
+            {
+                return "string";
+            }
+
+            if (string.Equals(name, "Boolean", StringComparison.OrdinalIgnoreCase))
+            {
+                return "bool";
+            }
 
             return name;
         }
@@ -102,7 +118,6 @@ namespace Typewriter.TemplateEditor.Lexing
 
                 summary = summary.Replace("__Typewriter.", string.Empty);
                 //summary = summary.Replace("__Code.", string.Empty);
-
                 var documentation = symbol.GetDocumentationCommentXml();
                 summary += ParseDocumentation(documentation);
             }
@@ -112,18 +127,18 @@ namespace Typewriter.TemplateEditor.Lexing
 
         private static string ParseDocumentation(string documentation)
         {
-            if (string.IsNullOrEmpty(documentation) == false)
+            if (!string.IsNullOrEmpty(documentation))
             {
                 if (documentation.Contains("<summary>"))
                 {
                     try
                     {
                         documentation = XDocument.Parse("<r>" + documentation + "</r>").Descendants("summary").Select(GetValue).FirstOrDefault() ?? string.Empty;
-                        documentation = Regex.Replace(documentation, @"^ +", "", RegexOptions.Multiline);
+                        documentation = Regex.Replace(documentation, @"^ +", "", RegexOptions.Multiline, TimeSpan.FromSeconds(5));
 
                         if (Constants.RoslynEnabled)
                         {
-                            documentation = Regex.Replace(documentation, @"^\s*\(In Visual Studio 2013.*", "", RegexOptions.Multiline);
+                            documentation = Regex.Replace(documentation, @"^\s*\(In Visual Studio 2013.*", string.Empty, RegexOptions.Multiline, TimeSpan.FromSeconds(5));
                         }
                     }
                     catch
@@ -139,7 +154,7 @@ namespace Typewriter.TemplateEditor.Lexing
 
         private static string GetValue(XElement element)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             foreach (var node in element.Nodes())
             {
                 if (node is XText textNode)
@@ -156,6 +171,7 @@ namespace Typewriter.TemplateEditor.Lexing
                     }
                 }
             }
+
             return stringBuilder.ToString();
         }
     }
@@ -169,6 +185,7 @@ namespace Typewriter.TemplateEditor.Lexing
         }
 
         public Context Context { get; set; }
+
         public Identifier Identifier { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace Typewriter.Metadata.Roslyn
@@ -13,10 +15,14 @@ namespace Typewriter.Metadata.Roslyn
         public static string GetFullName(this ISymbol symbol)
         {
             if (symbol is ITypeParameterSymbol)
+            {
                 return symbol.Name;
+            }
 
             if (symbol is IDynamicTypeSymbol)
+            {
                 return symbol.Name;
+            }
 
             var name = (symbol is INamedTypeSymbol type) ? GetFullTypeName(type) : symbol.Name;
 
@@ -45,38 +51,41 @@ namespace Typewriter.Metadata.Roslyn
             var result = symbol.ContainingNamespace.Name;
 
             if (restOfResult != null)
+            {
                 result = restOfResult + '.' + result;
+            }
 
             return result;
         }
 
         public static string GetFullTypeName(this INamedTypeSymbol type)
         {
-            var result = type.Name;
+            var sb = new StringBuilder(type.Name);
 
-            if (type.Name == "Nullable" && type.ContainingNamespace.Name == "System")
+            if (type.Name.Equals("Nullable", StringComparison.OrdinalIgnoreCase) &&
+                type.ContainingNamespace.Name.Equals("System", StringComparison.OrdinalIgnoreCase) &&
+                type.TypeArguments.First() is INamedTypeSymbol typeSymbol)
             {
-                if (type.TypeArguments.First() is INamedTypeSymbol typeSymbol)
-                    return GetFullTypeName(typeSymbol) + "?";
+                return GetFullTypeName(typeSymbol) + "?";
             }
 
             if (type.TypeArguments.Any())
             {
-                result += "<";
-                result += string.Join(", ", type.TypeArguments.Select(t =>
-                {
-                    return !(t is INamedTypeSymbol typeSymbol) ? t.Name : GetFullName(typeSymbol);
-                }));
-                result += ">";
+                sb.Append("<");
+                sb.Append(string.Join(
+                    ", ",
+                    type.TypeArguments.Select(
+                        t => !(t is INamedTypeSymbol typeSymbol2) ? t.Name : GetFullName(typeSymbol2))));
+                sb.Append(">");
             }
             else if (type.TypeParameters.Any())
             {
-                result += "<";
-                result += string.Join(", ", type.TypeParameters.Select(t => t.Name));
-                result += ">";
+                sb.Append("<");
+                sb.Append(string.Join(", ", type.TypeParameters.Select(t => t.Name)));
+                sb.Append(">");
             }
 
-            return result;
+            return sb.ToString();
         }
     }
 }

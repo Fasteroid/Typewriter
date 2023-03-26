@@ -5,13 +5,13 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents a class.
     /// </summary>
-    [Context("Class", "Classes")]
+    [Context(nameof(Class), "Classes")]
     public abstract class Class : Item
     {
         /// <summary>
         /// All attributes defined on the class.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract IAttributeCollection Attributes { get; }
 
         /// <summary>
         /// The base class of the class.
@@ -21,7 +21,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All constants defined in the class.
         /// </summary>
-        public abstract ConstantCollection Constants { get; }
+        public abstract IConstantCollection Constants { get; }
 
         /// <summary>
         /// The containing class of the class if it's nested.
@@ -31,7 +31,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All delegates defined in the class.
         /// </summary>
-        public abstract DelegateCollection Delegates { get; }
+        public abstract IDelegateCollection Delegates { get; }
 
         /// <summary>
         /// The XML documentation comment of the class.
@@ -41,12 +41,12 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All events defined in the class.
         /// </summary>
-        public abstract EventCollection Events { get; }
+        public abstract IEventCollection Events { get; }
 
         /// <summary>
         /// All fields defined in the class.
         /// </summary>
-        public abstract FieldCollection Fields { get; }
+        public abstract IFieldCollection Fields { get; }
 
         /// <summary>
         /// The full original name of the class including namespace and containing class names.
@@ -56,7 +56,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All interfaces implemented by the class.
         /// </summary>
-        public abstract InterfaceCollection Interfaces { get; }
+        public abstract IInterfaceCollection Interfaces { get; }
 
         /// <summary>
         /// Determines if the class is abstract.
@@ -71,18 +71,24 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All methods defined in the class.
         /// </summary>
-        public abstract MethodCollection Methods { get; }
+        public abstract IMethodCollection Methods { get; }
 
         /// <summary>
         /// The name of the class (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the class.
         /// </summary>
         public abstract string Name { get; }
-        
+
         /// <summary>
         /// The namespace of the class.
         /// </summary>
@@ -91,17 +97,17 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All classes defined in the class.
         /// </summary>
-        public abstract ClassCollection NestedClasses { get; }
+        public abstract IClassCollection NestedClasses { get; }
 
         /// <summary>
         /// All enums defined in the class.
         /// </summary>
-        public abstract EnumCollection NestedEnums { get; }
+        public abstract IEnumCollection NestedEnums { get; }
 
         /// <summary>
         /// All interfaces defined in the class.
         /// </summary>
-        public abstract InterfaceCollection NestedInterfaces { get; }
+        public abstract IInterfaceCollection NestedInterfaces { get; }
 
         /// <summary>
         /// The parent context of the class.
@@ -111,22 +117,26 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All properties defined in the class.
         /// </summary>
-        public abstract PropertyCollection Properties { get; }
+        public abstract IPropertyCollection Properties { get; }
 
         /// <summary>
         /// All generic type arguments of the class.
-        /// TypeArguments are the specified arguments for the TypeParametes on a generic class e.g. &lt;string&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// TypeArguments are the specified arguments for the TypeParameters on a generic class e.g. &lt;string&gt;.
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeCollection TypeArguments { get; }
+        public abstract ITypeCollection TypeArguments { get; }
 
         /// <summary>
         /// All generic type parameters of the class.
         /// TypeParameters are the type placeholders of a generic class e.g. &lt;T&gt;.
-        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same)
+        /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).
         /// </summary>
-        public abstract TypeParameterCollection TypeParameters { get; }
+        public abstract ITypeParameterCollection TypeParameters { get; }
 
+        /// <summary>
+        /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
+        /// </summary>
+        protected abstract Type Type { get; }
 
         /// <summary>
         /// Converts the current instance to string.
@@ -137,23 +147,11 @@ namespace Typewriter.CodeModel
         }
 
         /// <summary>
-        /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
-        /// </summary>
-        protected abstract Type Type { get; }
-
-        /// <summary>
         /// Converts the current instance to a Type.
         /// </summary>
         public static implicit operator Type(Class instance)
         {
             return instance?.Type;
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of classes.
-    /// </summary>
-    public interface ClassCollection : ItemCollection<Class>
-    {
     }
 }

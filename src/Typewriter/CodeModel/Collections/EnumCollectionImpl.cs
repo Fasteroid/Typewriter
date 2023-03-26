@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class EnumCollectionImpl : ItemCollectionImpl<Enum>, EnumCollection
+    public class EnumCollectionImpl : ItemCollectionImpl<Enum>, IEnumCollection
     {
         public EnumCollectionImpl(IEnumerable<Enum> values) : base(values)
         {

@@ -5,7 +5,7 @@ namespace Typewriter.CodeModel
     /// <summary>
     /// Represents an attribute.
     /// </summary>
-    [Context("Attribute", "Attributes")]
+    [Context(nameof(Attribute), nameof(Attributes))]
     public abstract class Attribute : Item
     {
         /// <summary>
@@ -16,7 +16,13 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// The name of the attribute (camelCased).
         /// </summary>
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+#pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         public abstract string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
         /// <summary>
         /// The name of the attribute.
@@ -36,7 +42,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// The arguments of the attribute.
         /// </summary>
-        public abstract AttributeArgumentCollection Arguments { get; }
+        public abstract IAttributeArgumentCollection Arguments { get; }
 
         /// <summary>
         /// Converts the current instance to string.
@@ -45,12 +51,5 @@ namespace Typewriter.CodeModel
         {
             return instance.ToString();
         }
-    }
-
-    /// <summary>
-    /// Represents a collection of attributes.
-    /// </summary>
-    public interface AttributeCollection : ItemCollection<Attribute>
-    {
     }
 }

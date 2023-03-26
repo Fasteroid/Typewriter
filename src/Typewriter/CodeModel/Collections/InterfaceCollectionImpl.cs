@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class InterfaceCollectionImpl : ItemCollectionImpl<Interface>, InterfaceCollection
+    public class InterfaceCollectionImpl : ItemCollectionImpl<Interface>, IInterfaceCollection
     {
         public InterfaceCollectionImpl(IEnumerable<Interface> values) : base(values)
         {

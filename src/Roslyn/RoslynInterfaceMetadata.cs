@@ -11,14 +11,45 @@ namespace Typewriter.Metadata.Roslyn
     {
         private readonly INamedTypeSymbol _symbol;
         private readonly RoslynFileMetadata _file;
+        private IReadOnlyCollection<ISymbol> _members;
 
-        public RoslynInterfaceMetadata(INamedTypeSymbol symbol, RoslynFileMetadata file)
+        public RoslynInterfaceMetadata(INamedTypeSymbol symbol, RoslynFileMetadata file, Settings settings)
         {
             _symbol = symbol;
             _file = file;
+            Settings = settings;
         }
 
-        private IReadOnlyCollection<ISymbol> _members;
+        public Settings Settings { get; }
+
+        public string DocComment => _symbol.GetDocumentationCommentXml();
+
+        public string Name => _symbol.Name;
+
+        public string FullName => _symbol.ToDisplayString();
+
+        public bool IsGeneric => _symbol.TypeParameters.Any();
+
+        public string Namespace => _symbol.GetNamespace();
+
+        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(_symbol, Settings);
+
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.ContainingType, Settings);
+
+        public IEnumerable<IEventMetadata> Events => RoslynEventMetadata.FromEventSymbols(Members.OfType<IEventSymbol>(), Settings);
+
+        public IEnumerable<IInterfaceMetadata> Interfaces => FromNamedTypeSymbols(_symbol.Interfaces, null, Settings);
+
+        public IEnumerable<IMethodMetadata> Methods => RoslynMethodMetadata.FromMethodSymbols(Members.OfType<IMethodSymbol>(), Settings);
+
+        public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(Members.OfType<IPropertySymbol>(), Settings);
+
+        public IEnumerable<ITypeParameterMetadata> TypeParameters => RoslynTypeParameterMetadata.FromTypeParameterSymbols(_symbol.TypeParameters);
+
+        public IEnumerable<ITypeMetadata> TypeArguments => RoslynTypeMetadata.FromTypeSymbols(_symbol.TypeArguments, Settings);
+
         private IReadOnlyCollection<ISymbol> Members
         {
             get
@@ -34,30 +65,14 @@ namespace Typewriter.Metadata.Roslyn
                         _members = _symbol.GetMembers();
                     }
                 }
+
                 return _members;
             }
         }
 
-        public string DocComment => _symbol.GetDocumentationCommentXml();
-        public string Name => _symbol.Name;
-        public string FullName => _symbol.ToDisplayString();
-        public bool IsGeneric => _symbol.TypeParameters.Any();
-        public string Namespace => _symbol.GetNamespace();
-
-        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(_symbol);
-
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes());
-        public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.ContainingType);
-        public IEnumerable<IEventMetadata> Events => RoslynEventMetadata.FromEventSymbols(Members.OfType<IEventSymbol>());
-        public IEnumerable<IInterfaceMetadata> Interfaces => RoslynInterfaceMetadata.FromNamedTypeSymbols(_symbol.Interfaces);
-        public IEnumerable<IMethodMetadata> Methods => RoslynMethodMetadata.FromMethodSymbols(Members.OfType<IMethodSymbol>());
-        public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(Members.OfType<IPropertySymbol>());
-        public IEnumerable<ITypeParameterMetadata> TypeParameters => RoslynTypeParameterMetadata.FromTypeParameterSymbols(_symbol.TypeParameters);
-        public IEnumerable<ITypeMetadata> TypeArguments => RoslynTypeMetadata.FromTypeSymbols(_symbol.TypeArguments);
-
-        public static IEnumerable<IInterfaceMetadata> FromNamedTypeSymbols(IEnumerable<INamedTypeSymbol> symbols, RoslynFileMetadata file = null)
+        public static IEnumerable<IInterfaceMetadata> FromNamedTypeSymbols(IEnumerable<INamedTypeSymbol> symbols, RoslynFileMetadata file, Settings settings)
         {
-            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public).Select(s => new RoslynInterfaceMetadata(s, file));
+            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public).Select(s => new RoslynInterfaceMetadata(s, file, settings));
         }
     }
 }

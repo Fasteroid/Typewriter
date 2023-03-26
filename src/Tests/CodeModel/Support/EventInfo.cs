@@ -9,6 +9,7 @@ namespace Typewriter.Tests.CodeModel.Support
         /// </summary>
         [AttributeInfo]
         public event Delegate DelegateEvent;
+
         public event GenericDelegate<string> GenericDelegateEvent;
     }
 }

@@ -1,24 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynConstantMetadata : RoslynFieldMetadata, IConstantMetadata
     {
-        private readonly IFieldSymbol symbol;
+        private readonly IFieldSymbol _symbol;
 
-        private RoslynConstantMetadata(IFieldSymbol symbol) : base(symbol)
+        private RoslynConstantMetadata(IFieldSymbol symbol, Settings settings)
+            : base(symbol, settings)
         {
-            this.symbol = symbol;
+            _symbol = symbol;
         }
 
-        public string Value => $"{symbol.ConstantValue}";
+        public string Value => $"{_symbol.ConstantValue}";
 
-        public new static IEnumerable<IConstantMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols)
+        // ReSharper disable once ArrangeModifiersOrder
+        public static new IEnumerable<IConstantMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols, Settings settings)
         {
-            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public && s.IsConst).Select(s => new RoslynConstantMetadata(s));
+            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public && s.IsConst).Select(s => new RoslynConstantMetadata(s, settings));
         }
     }
 }

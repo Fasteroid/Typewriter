@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build"
-  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,8 +43,16 @@
     </Compile>
     <Compile Include="CodeModel\Attribute.cs" />
     <Compile Include="Attributes\ContextAttribute.cs" />
-    <Compile Include="Attributes\PropertyAttribute.cs" />
     <Compile Include="CodeModel\AttributeArgument.cs" />
+    <Compile Include="CodeModel\IEventCollection.cs" />
+    <Compile Include="CodeModel\IEnumValueCollection.cs" />
+    <Compile Include="CodeModel\IFieldCollection.cs" />
+    <Compile Include="CodeModel\IEnumCollection.cs" />
+    <Compile Include="CodeModel\IDelegateCollection.cs" />
+    <Compile Include="CodeModel\IConstantCollection.cs" />
+    <Compile Include="CodeModel\IClassCollection.cs" />
+    <Compile Include="CodeModel\IAttributeCollection.cs" />
+    <Compile Include="CodeModel\IAttributeArgumentCollection.cs" />
     <Compile Include="CodeModel\Class.cs" />
     <Compile Include="CodeModel\Constant.cs" />
     <Compile Include="CodeModel\Delegate.cs" />
@@ -53,15 +60,25 @@
     <Compile Include="CodeModel\Enum.cs" />
     <Compile Include="CodeModel\EnumValue.cs" />
     <Compile Include="CodeModel\Event.cs" />
-    <Compile Include="CodeModel\IStringConvertable.cs" />
+    <Compile Include="CodeModel\IFilterable.cs" />
+    <Compile Include="CodeModel\IInterfaceCollection.cs" />
+    <Compile Include="CodeModel\IStringConvertible.cs" />
     <Compile Include="CodeModel\Field.cs" />
     <Compile Include="CodeModel\File.cs" />
     <Compile Include="CodeModel\Interface.cs" />
     <Compile Include="CodeModel\Item.cs" />
-    <Compile Include="CodeModel\ItemCollection.cs" />
+    <Compile Include="CodeModel\IItemCollection.cs" />
     <Compile Include="CodeModel\Method.cs" />
+    <Compile Include="CodeModel\IMethodCollection.cs" />
     <Compile Include="CodeModel\Parameter.cs" />
+    <Compile Include="CodeModel\IParameterCommentCollection.cs" />
+    <Compile Include="CodeModel\IParameterCollection.cs" />
+    <Compile Include="CodeModel\ParameterComment.cs" />
+    <Compile Include="CodeModel\IPropertyCollection.cs" />
     <Compile Include="CodeModel\Record.cs" />
+    <Compile Include="CodeModel\ITypeParameterCollection.cs" />
+    <Compile Include="CodeModel\ITypeCollection.cs" />
+    <Compile Include="CodeModel\IRecordCollection.cs" />
     <Compile Include="Configuration\PartialRenderingMode.cs" />
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Extensions\Types\TypeExtensions.cs" />

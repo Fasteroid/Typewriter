@@ -1,28 +1,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynFieldMetadata : IFieldMetadata
     {
-        private readonly IFieldSymbol symbol;
+        private readonly IFieldSymbol _symbol;
 
-        protected RoslynFieldMetadata(IFieldSymbol symbol)
+        protected RoslynFieldMetadata(IFieldSymbol symbol, Settings settings)
         {
-            this.symbol = symbol;
+            _symbol = symbol;
+            Settings = settings;
         }
 
-        public string DocComment => symbol.GetDocumentationCommentXml();
-        public string Name => symbol.Name;
-        public string FullName => symbol.ToDisplayString();
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
-        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(symbol.Type);
+        public Settings Settings { get; }
 
-        public static IEnumerable<IFieldMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols)
+        public string DocComment => _symbol.GetDocumentationCommentXml();
+
+        public string Name => _symbol.Name;
+
+        public string FullName => _symbol.ToDisplayString();
+
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(_symbol.Type, Settings);
+
+        public static IEnumerable<IFieldMetadata> FromFieldSymbols(IEnumerable<IFieldSymbol> symbols, Settings settings)
         {
-            return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public && s.IsConst == false && s.IsStatic == false).Select(s => new RoslynFieldMetadata(s));
+            return symbols
+                .Where(
+                    s => s.DeclaredAccessibility == Accessibility.Public && !s.IsConst && !s.IsStatic)
+                .Select(s => new RoslynFieldMetadata(s, settings));
         }
     }
 }

@@ -22,16 +22,16 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         private readonly string filePath;
         private readonly Lazy<Dictionary<string, string>> docComments;
-        
+
         public XmlDocumentationProvider(string filePath)
         {
             this.filePath = filePath;
-            this.docComments = new Lazy<Dictionary<string, string>>(CreateDocComments, true);
+            docComments = new Lazy<Dictionary<string, string>>(CreateDocComments, true);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is XmlDocumentationProvider other && filePath == other.filePath;
+            return obj is XmlDocumentationProvider other && string.Equals(filePath, other.filePath, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
@@ -74,30 +74,52 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
             catch
             {
             }
+
             return commentsDictionary;
         }
 
         private static string GetDocumentationFilePath(string path)
         {
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             var fileName = Path.GetFileName(path);
-            if (fileName == null) return null;
+            if (fileName == null)
+            {
+                return null;
+            }
 
             path = Path.Combine(Constants.ResourcesDirectory, fileName);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             path = Path.Combine(Constants.ReferenceAssembliesDirectory, @"v4.5.2", fileName);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             path = Path.Combine(Constants.ReferenceAssembliesDirectory, @"v4.5.1", fileName);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             path = Path.Combine(Constants.ReferenceAssembliesDirectory, @"v4.5", fileName);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             path = Path.Combine(Constants.ReferenceAssembliesDirectory, @"v4.6", fileName);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
             return null;
         }

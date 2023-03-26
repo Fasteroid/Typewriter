@@ -18,7 +18,10 @@ namespace Typewriter.Generation
 
         public static string Parse(ProjectItem templateProjectItem, string template, List<Type> extensions)
         {
-            if (string.IsNullOrWhiteSpace(template)) return null;
+            if (string.IsNullOrWhiteSpace(template))
+            {
+                return null;
+            }
 
             var output = string.Empty;
             var stream = new Stream(template);
@@ -29,9 +32,21 @@ namespace Typewriter.Generation
 
             while (stream.Advance())
             {
-                if (ParseReference(stream, shadowClass, templateProjectItem)) continue;
-                if (ParseCodeBlock(stream, shadowClass)) continue;
-                if (ParseLambda(stream, shadowClass, contexts, ref output)) continue;
+                if (ParseReference(stream, shadowClass, templateProjectItem))
+                {
+                    continue;
+                }
+
+                if (ParseCodeBlock(stream, shadowClass))
+                {
+                    continue;
+                }
+
+                if (ParseLambda(stream, shadowClass, contexts, ref output))
+                {
+                    continue;
+                }
+
                 output += stream.Current;
             }
 
@@ -55,10 +70,10 @@ namespace Typewriter.Generation
 
                 foreach (var assembly in shadowClass.ReferencedAssemblies)
                 {
-                    types.AddRange(assembly.GetExportedTypes().Where(t => t.Namespace == ns &&
-                        t.GetMethods(BindingFlags.Static | BindingFlags.Public).Any(m => 
-                            m.IsDefined(typeof (ExtensionAttribute), false) && 
-                            m.GetParameters().First().ParameterType.Namespace == "Typewriter.CodeModel")));
+                    types.AddRange(assembly.GetExportedTypes().Where(t => string.Equals(t.Namespace, ns, StringComparison.OrdinalIgnoreCase) &&
+                        t.GetMethods(BindingFlags.Static | BindingFlags.Public).Any(m =>
+                            m.IsDefined(typeof(ExtensionAttribute), false) &&
+string.Equals(m.GetParameters().First().ParameterType.Namespace, "Typewriter.CodeModel", StringComparison.OrdinalIgnoreCase))));
                 }
             }
 
@@ -72,8 +87,15 @@ namespace Typewriter.Generation
                 for (var i = 0; ; i--)
                 {
                     var current = stream.Peek(i);
-                    if (current == '`' || (current == '/' && stream.Peek(i-1) == '/')) return false;
-                    if (current == '\n' || current == char.MinValue) break;
+                    if (current == '`' || (current == '/' && stream.Peek(i-1) == '/'))
+                    {
+                        return false;
+                    }
+
+                    if (current == '\n' || current == char.MinValue)
+                    {
+                        break;
+                    }
                 }
 
                 stream.Advance();
@@ -100,7 +122,7 @@ namespace Typewriter.Generation
             {
                 stream.SkipWhitespace();
 
-                if ((stream.Current == 'u' && stream.PeekWord() == "using") || (stream.Current == '/' && stream.Peek() == '/'))
+                if ((stream.Current == 'u' && string.Equals(stream.PeekWord(), "using", StringComparison.OrdinalIgnoreCase)) || (stream.Current == '/' && stream.Peek() == '/'))
                 {
                     var line = stream.PeekLine();
                     shadowClass.AddUsing(line, stream.Position);
@@ -120,7 +142,9 @@ namespace Typewriter.Generation
             do
             {
                 if (stream.Current != char.MinValue)
+                {
                     code.Append(stream.Current);
+                }
             }
             while (stream.Advance());
 
@@ -146,13 +170,24 @@ namespace Typewriter.Generation
                                 var name = filter.Substring(0, index);
 
                                 var contextName = identifier;
-                                // Todo: Make the TemplateCodeParser context aware
-                                if (contextName == "TypeArguments") contextName = "Types";
-                                else if (contextName.StartsWith("Nested", StringComparison.OrdinalIgnoreCase)) contextName = contextName.Remove(0, 6);
+#pragma warning disable MA0026
+                                // TODO: Make the TemplateCodeParser context aware
+#pragma warning restore MA0026
+                                if (string.Equals(contextName, "TypeArguments", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    contextName = "Types";
+                                }
+                                else if (contextName.StartsWith("Nested", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    contextName = contextName.Remove(0, 6);
+                                }
 
                                 var type = contexts.Find(contextName)?.Type.FullName;
 
-                                if (type == null) return false;
+                                if (type == null)
+                                {
+                                    return false;
+                                }
 
                                 var methodIndex = counter++;
 
@@ -178,7 +213,7 @@ namespace Typewriter.Generation
         {
             const string keyword = "reference";
 
-            if (stream.Current == '#' && stream.Peek() == keyword[0] && stream.PeekWord(1) == keyword)
+            if (stream.Current == '#' && stream.Peek() == keyword[0] && string.Equals(stream.PeekWord(1), keyword, StringComparison.OrdinalIgnoreCase))
             {
                 var reference = stream.PeekLine(keyword.Length + 1);
                 if (reference != null)
@@ -188,7 +223,9 @@ namespace Typewriter.Generation
                     try
                     {
                         if (reference.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                        {
                             reference = PathResolver.ResolveRelative(reference, templateProjectItem);
+                        }
 
                         shadowClass.AddReference(reference);
                         return true;

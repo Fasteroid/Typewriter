@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class TypeCollectionImpl : ItemCollectionImpl<Type>, TypeCollection
+    public class TypeCollectionImpl : ItemCollectionImpl<Type>, ITypeCollection
     {
         public TypeCollectionImpl(IEnumerable<Type> values) : base(values)
         {
@@ -36,8 +36,10 @@ namespace Typewriter.CodeModel.Collections
 
         public override string ToString()
         {
-            if(Count == 0)
+            if (Count == 0)
+            {
                 return string.Empty;
+            }
 
             return string.Concat("<", string.Join(", ", this.Select(t => t.Name)), ">");
         }

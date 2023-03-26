@@ -45,12 +45,12 @@
 //            Parameters = parameters;
 //            this.textView = textView;
 //        }
-        
+
 //        public IParameter CurrentParameter
 //        {
-//            get 
+//            get
 //            {
-//                return currentParameter; 
+//                return currentParameter;
 //            }
 //            set
 //            {
@@ -58,7 +58,7 @@
 //                {
 //                    var previousParameter = currentParameter;
 //                    var tempHandler = this.CurrentParameterChanged;
-                    
+
 //                    currentParameter = value;
 
 //                    if (tempHandler != null)
@@ -77,7 +77,7 @@
 //                return;
 //            }
 
-//            //the number of commas in the string is the index of the current parameter 
+//            //the number of commas in the string is the index of the current parameter
 //            var sigText = ApplicableToSpan.GetText(textView.TextBuffer.CurrentSnapshot);
 
 //            Log.Print("{0}", textView.Caret.Position.BufferPosition.Position);
@@ -101,7 +101,7 @@
 //            }
 //            else
 //            {
-//                //too many commas, so use the last parameter as the current one. 
+//                //too many commas, so use the last parameter as the current one.
 //                this.CurrentParameter = Parameters[Parameters.Count - 1];
 //            }
 //        }
@@ -127,7 +127,6 @@
 //    //CreateSignature
 //    //CreateSignature
 //    //CreateSignature
-
 
 //    internal class SignatureHelpSource : ISignatureHelpSource
 //    {
@@ -156,7 +155,7 @@
 //            //    ITrackingSpan applicableToSpan = session.Signatures[0].ApplicableToSpan;
 //            //    string text = applicableToSpan.GetText(applicableToSpan.TextBuffer.CurrentSnapshot);
 
-//            //    if (text.Trim().Equals("Properties"))  //get only "add"  
+//            //    if (text.Trim().Equals("Properties"))  //get only "add"
 //            //        return session.Signatures[0];
 //            //}
 //            return null;
@@ -168,7 +167,7 @@
 //            var sig = new Signature(textView, methodSig, methodDoc, null);
 //            textView.TextBuffer.Changed += sig.OnSubjectBufferChanged;
 
-//            //find the parameters in the method signature (expect methodname(one, two) 
+//            //find the parameters in the method signature (expect methodname(one, two)
 //            var pars = methodSig.Split(new char[] { '[', ',', ']' });
 //            var paramList = new List<IParameter>();
 
@@ -180,7 +179,7 @@
 //                if (string.IsNullOrEmpty(param))
 //                    continue;
 
-//                //find where this parameter is located in the method signature 
+//                //find where this parameter is located in the method signature
 //                var locusStart = methodSig.IndexOf(param, locusSearchStart);
 //                if (locusStart >= 0)
 //                {

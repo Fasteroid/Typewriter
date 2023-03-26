@@ -17,7 +17,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Typewriter.VisualStudio
 {
-    [ProvideOptionPage(typeof(TypewriterOptionsPage), "Typewriter", "General", 101, 106, true)]
+    [ProvideOptionPage(typeof(TypewriterOptionsPage), nameof(Typewriter), "General", 101, 106, true)]
     [Guid(Constants.ExtensionPackageId)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
@@ -45,10 +45,12 @@ namespace Typewriter.VisualStudio
         private TypewriterOptionsPage _options;
 
         public bool AddGeneratedFilesToProject { get; set; }
+
         public bool RenderOnSave { get; set; }
+
         public bool TrackSourceFiles { get; set; }
 
-        protected override async System.Threading.Tasks.Task InitializeAsync(
+        protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
             IProgress<ServiceProgressData> progress)
         {
@@ -134,7 +136,10 @@ namespace Typewriter.VisualStudio
                 Dte = await GetServiceAsync(typeof(DTE)).ConfigureAwait(true) as DTE;
                 Assumes.Present(Dte);
                 if (Dte == null)
+                {
                     ErrorHandler.ThrowOnFailure(1);
+                }
+
                 _log = new Log(Dte);
             });
         }
@@ -147,7 +152,9 @@ namespace Typewriter.VisualStudio
                 _statusBar = await GetServiceAsync(typeof(SVsStatusbar)).ConfigureAwait(true) as IVsStatusbar;
 
                 if (_statusBar == null)
+                {
                     ErrorHandler.ThrowOnFailure(1);
+                }
             });
         }
 
@@ -185,7 +192,7 @@ namespace Typewriter.VisualStudio
 
                     for (var i = 0; i < productVersion.Length; i++)
                     {
-                        if (char.IsDigit(productVersion, i) == false && productVersion[i] != '.')
+                        if (!char.IsDigit(productVersion, i) && productVersion[i] != '.')
                         {
                             productVersion = productVersion.Substring(0, i);
                             break;
@@ -219,9 +226,12 @@ namespace Typewriter.VisualStudio
                 var icon = ThemeInfo.IsDark ? "dark.ico" : "light.ico";
                 var path = Path.Combine(Constants.ResourcesDirectory, icon);
 
-                using (RegistryKey classes = Registry.CurrentUser.OpenSubKey("SoftWare\\Classes", true))
+                using (var classes = Registry.CurrentUser.OpenSubKey("SoftWare\\Classes", true))
                 {
-                    if (classes == null) return;
+                    if (classes == null)
+                    {
+                        return;
+                    }
 
                     using (var key = classes.CreateSubKey(Constants.TemplateExtension + "\\DefaultIcon"))
                     {
@@ -258,7 +268,10 @@ namespace Typewriter.VisualStudio
         {
             base.Dispose(disposing);
 
-            if (!disposing) return;
+            if (!disposing)
+            {
+                return;
+            }
 
             if (_eventQueue != null)
             {

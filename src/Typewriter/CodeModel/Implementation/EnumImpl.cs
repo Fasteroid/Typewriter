@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Typewriter.CodeModel.Collections;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 using static Typewriter.CodeModel.Helpers;
 
@@ -10,45 +11,57 @@ namespace Typewriter.CodeModel.Implementation
     {
         private readonly IEnumMetadata _metadata;
 
-        private EnumImpl(IEnumMetadata metadata, Item parent)
+        private EnumImpl(IEnumMetadata metadata, Item parent, Settings settings)
         {
             _metadata = metadata;
             Parent = parent;
+            Settings = settings;
         }
+
+        public Settings Settings { get; }
 
         public override Item Parent { get; }
 
         public override string name => CamelCase(_metadata.Name.TrimStart('@'));
+
         public override string Name => _metadata.Name.TrimStart('@');
+
         public override string FullName => _metadata.FullName;
+
         public override string Namespace => _metadata.Namespace;
 
         private Type _type;
-        protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent));
+
+        protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent, Settings));
 
         private bool? _isFlags;
-        public override bool IsFlags => _isFlags ?? (_isFlags = Attributes.Any(a => a.FullName == "System.FlagsAttribute")).Value;
 
-        private AttributeCollection _attributes;
-        public override AttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this));
+        public override bool IsFlags => _isFlags ?? (_isFlags = Attributes.Any(a => string.Equals(a.FullName, "System.FlagsAttribute", System.StringComparison.OrdinalIgnoreCase))).Value;
+
+        private IAttributeCollection _attributes;
+
+        public override IAttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this, Settings));
 
         private DocComment _docComment;
+
         public override DocComment DocComment => _docComment ?? (_docComment = DocCommentImpl.FromXml(_metadata.DocComment, this));
 
-        private EnumValueCollection _values;
-        public override EnumValueCollection Values => _values ?? (_values = EnumValueImpl.FromMetadata(_metadata.Values, this));
+        private IEnumValueCollection _values;
+
+        public override IEnumValueCollection Values => _values ?? (_values = EnumValueImpl.FromMetadata(_metadata.Values, this, Settings));
 
         private Class _containingClass;
-        public override Class ContainingClass => _containingClass ?? (_containingClass = ClassImpl.FromMetadata(_metadata.ContainingClass, this));
+
+        public override Class ContainingClass => _containingClass ?? (_containingClass = ClassImpl.FromMetadata(_metadata.ContainingClass, this, Settings));
 
         public override string ToString()
         {
             return Name;
         }
 
-        public static EnumCollection FromMetadata(IEnumerable<IEnumMetadata> metadata, Item parent)
+        public static IEnumCollection FromMetadata(IEnumerable<IEnumMetadata> metadata, Item parent, Settings settings)
         {
-            return new EnumCollectionImpl(metadata.Select(e => new EnumImpl(e, parent)));
+            return new EnumCollectionImpl(metadata.Select(e => new EnumImpl(e, parent, settings)));
         }
     }
 }

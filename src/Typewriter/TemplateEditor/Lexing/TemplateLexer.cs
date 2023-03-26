@@ -38,7 +38,7 @@ namespace Typewriter.TemplateEditor.Lexing
             var context = new Stack<Context>(new[] { _fileContext });
             Parse(code, semanticModel, context, 0, 0);
 
-            if (semanticModel.Tokens.BraceStack.IsBalanced(']') == false)
+            if (!semanticModel.Tokens.BraceStack.IsBalanced(']'))
             {
                 semanticModel.ErrorTokens.Add(new Token
                 {
@@ -55,18 +55,53 @@ namespace Typewriter.TemplateEditor.Lexing
 
             do
             {
-                if (ParseCodeBlock(stream, semanticModel, context)) continue;
-                if (ParseDollar(stream, semanticModel, context, depth)) continue;
-                if (ParseString(stream, semanticModel, context, depth)) continue;
-                if (ParseComment(stream, semanticModel, context, depth)) continue;
-                if (ParseNumber(stream, semanticModel)) continue;
-                if (ParseOperators(stream, semanticModel)) continue;
-                if (ParseKeywords(stream, semanticModel)) continue;
-                if (ParseReference(stream, semanticModel)) continue;
-                if (ParseSymbols(stream, semanticModel)) continue;
+                if (ParseCodeBlock(stream, semanticModel, context))
+                {
+                    continue;
+                }
+
+                if (ParseDollar(stream, semanticModel, context, depth))
+                {
+                    continue;
+                }
+
+                if (ParseString(stream, semanticModel, context, depth))
+                {
+                    continue;
+                }
+
+                if (ParseComment(stream, semanticModel, context, depth))
+                {
+                    continue;
+                }
+
+                if (ParseNumber(stream, semanticModel))
+                {
+                    continue;
+                }
+
+                if (ParseOperators(stream, semanticModel))
+                {
+                    continue;
+                }
+
+                if (ParseKeywords(stream, semanticModel))
+                {
+                    continue;
+                }
+
+                if (ParseReference(stream, semanticModel))
+                {
+                    continue;
+                }
+
+                if (ParseSymbols(stream, semanticModel))
+                {
+                    continue;
+                }
 
                 TerminateSymbol(stream);
-                
+
                 semanticModel.Tokens.AddBrace(stream);
             }
             while (stream.Advance());
@@ -82,8 +117,15 @@ namespace Typewriter.TemplateEditor.Lexing
                 for (var i = 0; ; i--)
                 {
                     var current = stream.Peek(i);
-                    if (current == '`' || (current == '/' && stream.Peek(i - 1) == '/')) return false;
-                    if (current == '\n' || current == char.MinValue) break;
+                    if (current == '`' || (current == '/' && stream.Peek(i - 1) == '/'))
+                    {
+                        return false;
+                    }
+
+                    if (current == '\n' || current == char.MinValue)
+                    {
+                        break;
+                    }
                 }
 
                 semanticModel.Tokens.Add(Classifications.Property, stream.Position);
@@ -179,8 +221,10 @@ namespace Typewriter.TemplateEditor.Lexing
 
                 var block = stream.PeekBlock(1, '(', ')');
 
-                if (block.Contains("=>") == false)
+                if (!block.Contains("=>"))
+                {
                     semanticModel.Tokens.Add(Classifications.String, stream.Position + 1, block.Length);
+                }
 
                 stream.Advance(block.Length);
 
@@ -191,68 +235,6 @@ namespace Typewriter.TemplateEditor.Lexing
                 }
             }
         }
-
-        //private void ParseDot(Stream stream, SemanticModel semanticModel, Stack<Context> context, int depth)
-        //{
-        //    if (stream.Peek() == '.')
-        //    {
-        //        stream.Advance();
-        //        var identifier = GetIdentifier(stream, semanticModel, context);
-                
-        //        if (identifier != null)
-        //        {
-        //            var classification = GetPropertyClassification(depth);
-        //            var parent = context.Skip(1).FirstOrDefault();
-
-        //            semanticModel.Tokens.Add(classification, stream.Position);
-        //            semanticModel.ContextSpans.Add(context.Peek(), parent, ContextType.Template, stream.Position, stream.Position + 1);
-
-        //            if (identifier.IsParent)
-        //            {
-        //                semanticModel.Tokens.Add(classification, stream.Position + 1, identifier.Name.Length, identifier.QuickInfo.Replace("$parent", parent?.Name.ToLowerInvariant()));
-        //                stream.Advance(identifier.Name.Length);
-                        
-        //                var current = context.Pop();
-
-        //                ParseDot(stream, semanticModel, context, depth); // identifier
-        //                ParseBlock(stream, semanticModel, context, depth); // template
-
-        //                context.Push(current);
-        //            }
-        //            else
-        //            {
-        //                semanticModel.Tokens.Add(classification, stream.Position + 1, identifier.Name.Length, identifier.QuickInfo);
-        //                stream.Advance(identifier.Name.Length);
-
-        //                if (identifier.IsCollection)
-        //                {
-        //                    context.Push(_contexts.Find(identifier.Context));
-
-        //                    ParseFilter(stream, semanticModel, context, depth);
-        //                    ParseBlock(stream, semanticModel, context, depth); // template
-
-        //                    context.Pop();
-
-        //                    ParseBlock(stream, semanticModel, context, depth); // separator
-        //                }
-        //                else if (identifier.IsBoolean)
-        //                {
-        //                    ParseBlock(stream, semanticModel, context, depth); // true
-        //                    ParseBlock(stream, semanticModel, context, depth); // false
-        //                }
-        //                else if (identifier.HasContext)
-        //                {
-        //                    context.Push(_contexts.Find(identifier.Context));
-
-        //                    ParseDot(stream, semanticModel, context, depth); // identifier
-        //                    ParseBlock(stream, semanticModel, context, depth); // template
-
-        //                    context.Pop();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
 
         private void ParseBlock(Stream stream, SemanticModel semanticModel, Stack<Context> context, int depth)
         {
@@ -288,7 +270,11 @@ namespace Typewriter.TemplateEditor.Lexing
                     if (ParseDollar(stream, semanticModel, context, depth))
                     {
                         semanticModel.Tokens.Add(Classifications.String, start, length);
-                        if (stream.Advance() == false || stream.Current == Constants.NewLine) return true;
+                        if (!stream.Advance() || stream.Current == Constants.NewLine)
+                        {
+                            return true;
+                        }
+
                         start = stream.Position;
                     }
 
@@ -324,12 +310,23 @@ namespace Typewriter.TemplateEditor.Lexing
                         if (ParseDollar(stream, semanticModel, context, depth))
                         {
                             if (length > 0)
+                            {
                                 semanticModel.Tokens.Add(Classifications.Comment, start, length);
+                            }
+
                             //if (stream.Advance() == false || stream.Current == Constants.NewLine) return true;
-                            if (stream.Peek() == char.MinValue) return true;
+                            if (stream.Peek() == char.MinValue)
+                            {
+                                return true;
+                            }
+
                             start = stream.Position + 1;
                         }
-                        if (stream.Current == Constants.NewLine) break;
+
+                        if (stream.Current == Constants.NewLine)
+                        {
+                            break;
+                        }
                     }
 
                     semanticModel.Tokens.Add(Classifications.Comment, start, stream.Position - start);
@@ -345,16 +342,27 @@ namespace Typewriter.TemplateEditor.Lexing
                         if (ParseDollar(stream, semanticModel, context, depth))
                         {
                             if (length > 0)
+                            {
                                 semanticModel.Tokens.Add(Classifications.Comment, start, length);
+                            }
+
                             //if (stream.Advance() == false || stream.Current == Constants.NewLine) return true;
-                            if (stream.Peek() == char.MinValue) return true;
+                            if (stream.Peek() == char.MinValue)
+                            {
+                                return true;
+                            }
+
                             start = stream.Position + 1;
                         }
 
                         if (stream.Current == Constants.NewLine)
                         {
                             semanticModel.Tokens.Add(Classifications.Comment, start, length);
-                            if (stream.Advance(2) == false) return true;
+                            if (!stream.Advance(2))
+                            {
+                                return true;
+                            }
+
                             start = stream.Position;
                         }
 
@@ -382,8 +390,10 @@ namespace Typewriter.TemplateEditor.Lexing
 
                 do
                 {
-                    if (char.IsDigit(stream.Peek()) == false && (stream.Peek() == '.' && char.IsDigit(stream.Peek(2))) == false)
+                    if (!char.IsDigit(stream.Peek()) && !(stream.Peek() == '.' && char.IsDigit(stream.Peek(2))))
+                    {
                         break;
+                    }
                 }
                 while (stream.Advance());
 
@@ -405,6 +415,7 @@ namespace Typewriter.TemplateEditor.Lexing
                     while (stream.Peek() == ' ') stream.Advance();
                     _isSymbol = true;
                 }
+
                 return true;
             }
 
@@ -415,7 +426,7 @@ namespace Typewriter.TemplateEditor.Lexing
         {
             var peek = stream.Peek(-1);
 
-            if (char.IsLetterOrDigit(peek) == false && peek != '.')
+            if (!char.IsLetterOrDigit(peek) && peek != '.')
             {
                 var name = stream.PeekWord();
 
@@ -441,7 +452,7 @@ namespace Typewriter.TemplateEditor.Lexing
         {
             const string keyword = "reference";
 
-            if (stream.Current == '#' && stream.Peek() == keyword[0] && stream.PeekWord(1) == keyword)
+            if (stream.Current == '#' && stream.Peek() == keyword[0] && string.Equals(stream.PeekWord(1), keyword, StringComparison.OrdinalIgnoreCase))
             {
                 semanticModel.Tokens.Add(Classifications.Directive, stream.Position, keyword.Length + 1);
                 stream.Advance(keyword.Length);
@@ -457,11 +468,14 @@ namespace Typewriter.TemplateEditor.Lexing
             if (_isSymbol && stream.Position > _objectLiteralEnds)
             {
                 var name = stream.PeekWord();
-                if (name == null) return false;
+                if (name == null)
+                {
+                    return false;
+                }
 
                 semanticModel.Tokens.Add(Classifications.ClassSymbol, stream.Position, name.Length);
                 stream.Advance(name.Length - 1);
-                
+
                 return true;
             }
 
@@ -479,7 +493,10 @@ namespace Typewriter.TemplateEditor.Lexing
             if (stream.Current == '{')
             {
                 var i = 0;
-                while (true) if (stream.Peek(--i) != ' ') break;
+                while (true) if (stream.Peek(--i) != ' ')
+                {
+                    break;
+                }
 
                 var peek = stream.Peek(i);
 
@@ -494,24 +511,35 @@ namespace Typewriter.TemplateEditor.Lexing
         private Identifier GetIdentifier(Stream stream, SemanticModel semanticModel, Stack<Context> context)
         {
             var word = stream.PeekWord(1);
-            if (word == null) return null;
+            if (word == null)
+            {
+                return null;
+            }
 
             var c = context.Peek();
             var identifier = semanticModel.GetIdentifier(c, word);
 
             if (identifier == null)
+            {
                 return null;
+            }
 
-            if (identifier.IsBoolean == false && identifier.IsCollection == false)
+            if (!identifier.IsBoolean && !identifier.IsCollection)
+            {
                 return identifier;
+            }
 
             var next = stream.Peek(identifier.Name.Length + 1);
 
             if (identifier.IsBoolean && next == '[')
+            {
                 return identifier;
+            }
 
-            if (identifier.IsCollection && (identifier.RequireTemplate == false || next == '[' || (identifier.IsCustom == false && next == '(')))
+            if (identifier.IsCollection && (!identifier.RequireTemplate || next == '[' || (!identifier.IsCustom && next == '(')))
+            {
                 return identifier;
+            }
 
             return null;
         }

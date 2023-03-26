@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Typewriter.CodeModel.Collections
 {
-    public class EventCollectionImpl : ItemCollectionImpl<Event>, EventCollection
+    public class EventCollectionImpl : ItemCollectionImpl<Event>, IEventCollection
     {
         public EventCollectionImpl(IEnumerable<Event> values) : base(values)
         {

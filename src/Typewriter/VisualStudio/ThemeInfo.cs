@@ -28,7 +28,9 @@ namespace Typewriter.VisualStudio
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 if (!(Package.GetGlobalService(typeof(SVsFontAndColorStorage)) is IVsFontAndColorStorage storage))
+                {
                     return false;
+                }
 
                 var category = Microsoft.VisualStudio.Editor.DefGuidList.guidTextEditorFontCategory;
                 var success = storage.OpenCategory(ref category,

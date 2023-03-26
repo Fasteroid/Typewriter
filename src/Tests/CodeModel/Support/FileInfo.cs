@@ -11,7 +11,7 @@ public class PublicClassNoNamespace
     {
     }
 
-    public interface PublicNestedInterfaceNoNamespace
+    public interface IPublicNestedInterfaceNoNamespace
     {
     }
 }
@@ -21,6 +21,7 @@ internal class InternalClassNoNamespace
 }
 
 public delegate void PublicDelegateNoNamespace();
+
 internal delegate void InternalDelegateNoNamespace();
 
 public enum PublicEnumNoNamespace
@@ -31,11 +32,11 @@ internal enum InternalEnumNoNamespace
 {
 }
 
-public interface PublicInterfaceNoNamespace
+public interface IPublicInterfaceNoNamespace
 {
 }
 
-internal interface InternalInterfaceNoNamespace
+internal interface INternalInterfaceNoNamespace
 {
 }
 
@@ -53,7 +54,7 @@ namespace Typewriter.Tests.CodeModel.Support
         {
         }
 
-        public interface PublicNestedInterface
+        public interface IPublicNestedInterface
         {
         }
     }
@@ -63,6 +64,7 @@ namespace Typewriter.Tests.CodeModel.Support
     }
 
     public delegate void PublicDelegate();
+
     internal delegate void InternalDelegate();
 
     public enum PublicEnum
@@ -73,11 +75,11 @@ namespace Typewriter.Tests.CodeModel.Support
     {
     }
 
-    public interface PublicInterface
+    public interface IPublicInterface
     {
     }
 
-    internal interface InternalInterface
+    internal interface INternalInterface
     {
     }
 }

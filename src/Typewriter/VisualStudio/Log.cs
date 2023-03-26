@@ -51,10 +51,14 @@ namespace Typewriter.VisualStudio
                 try
                 {
                     if (parameters.Any())
+                    {
                         OutputWindow.OutputString(string.Format(CultureInfo.InvariantCulture, message, parameters) +
                                                   Environment.NewLine);
+                    }
                     else
+                    {
                         OutputWindow.OutputString(message + Environment.NewLine);
+                    }
                 }
                 catch
                 {
@@ -69,7 +73,10 @@ namespace Typewriter.VisualStudio
                 return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    if (outputWindowPane != null) return outputWindowPane;
+                    if (outputWindowPane != null)
+                    {
+                        return outputWindowPane;
+                    }
 
                     var window = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
                     var outputWindow = (OutputWindow) window.Object;
@@ -77,14 +84,14 @@ namespace Typewriter.VisualStudio
                     for (uint i = 1; i <= outputWindow.OutputWindowPanes.Count; i++)
                     {
                         if (outputWindow.OutputWindowPanes.Item(i).Name
-                            .Equals("Typewriter", StringComparison.CurrentCultureIgnoreCase))
+                            .Equals(nameof(Typewriter), StringComparison.CurrentCultureIgnoreCase))
                         {
                             outputWindowPane = outputWindow.OutputWindowPanes.Item(i);
                             break;
                         }
                     }
 
-                    return outputWindowPane ?? (outputWindowPane = outputWindow.OutputWindowPanes.Add("Typewriter"));
+                    return outputWindowPane ?? (outputWindowPane = outputWindow.OutputWindowPanes.Add(nameof(Typewriter)));
                 });
             }
         }

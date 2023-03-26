@@ -1,46 +1,63 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.Metadata.Roslyn
 {
     public class RoslynParameterMetadata : IParameterMetadata
     {
-        private readonly IParameterSymbol symbol;
+        private readonly IParameterSymbol _symbol;
 
-        private RoslynParameterMetadata(IParameterSymbol symbol)
+        private RoslynParameterMetadata(IParameterSymbol symbol, Settings settings)
         {
-            this.symbol = symbol;
+            _symbol = symbol;
+            Settings = settings;
         }
 
-        public string Name => symbol.Name;
-        public string FullName => symbol.ToDisplayString();
-        public bool HasDefaultValue => symbol.HasExplicitDefaultValue;
+        public Settings Settings { get; }
+
+        public string Name => _symbol.Name;
+
+        public string FullName => _symbol.ToDisplayString();
+
+        public bool HasDefaultValue => _symbol.HasExplicitDefaultValue;
+
         public string DefaultValue => GetDefaultValue();
-        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
-        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(symbol.Type);
+
+        public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
+
+        public ITypeMetadata Type => RoslynTypeMetadata.FromTypeSymbol(_symbol.Type, Settings);
+
+        public static IEnumerable<IParameterMetadata> FromParameterSymbols(IEnumerable<IParameterSymbol> symbols, Settings settings)
+        {
+            return symbols.Select(s => new RoslynParameterMetadata(s, settings));
+        }
 
         private string GetDefaultValue()
         {
-            if (symbol.HasExplicitDefaultValue == false)
+            if (!_symbol.HasExplicitDefaultValue)
+            {
                 return null;
+            }
 
-            if (symbol.ExplicitDefaultValue == null)
+            if (_symbol.ExplicitDefaultValue == null)
+            {
                 return "null";
+            }
 
-            if (symbol.ExplicitDefaultValue is string stringValue)
+            if (_symbol.ExplicitDefaultValue is string stringValue)
+            {
                 return $"\"{stringValue.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
+            }
 
-            if(symbol.ExplicitDefaultValue is bool)
-                return (bool)symbol.ExplicitDefaultValue ? "true" : "false";
+            if (_symbol.ExplicitDefaultValue is bool)
+            {
+                return (bool)_symbol.ExplicitDefaultValue ? "true" : "false";
+            }
 
-            return symbol.ExplicitDefaultValue.ToString();
-        }
-
-        public static IEnumerable<IParameterMetadata> FromParameterSymbols(IEnumerable<IParameterSymbol> symbols)
-        {
-            return symbols.Select(s => new RoslynParameterMetadata(s));
+            return _symbol.ExplicitDefaultValue.ToString();
         }
     }
 }

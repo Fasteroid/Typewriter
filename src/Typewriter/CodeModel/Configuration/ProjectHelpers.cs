@@ -21,7 +21,7 @@ namespace Typewriter.CodeModel.Configuration
                 {
                     try
                     {
-                        if (project.Name == projectName)
+                        if (string.Equals(project.Name, projectName, StringComparison.OrdinalIgnoreCase))
                         {
                             AddProject(projectList, project);
                             return;
@@ -33,7 +33,7 @@ namespace Typewriter.CodeModel.Configuration
                     }
                 }
 
-                string message = $"Cannot find project named '{projectName}'";
+                var message = $"Cannot find project named '{projectName}'";
 
                 ErrorList.AddWarning(projectItem, message);
                 Log.Warn(message);
@@ -89,7 +89,9 @@ namespace Typewriter.CodeModel.Configuration
                 try
                 {
                     if (dte.Solution.FindProjectItem(file.FullName) == null)
+                    {
                         continue;
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -109,7 +111,9 @@ namespace Typewriter.CodeModel.Configuration
                 {
                     var projectItem = dte.Solution.FindProjectItem(filename);
                     if (projectItem == null)
+                    {
                         return false;
+                    }
 
                     return projectList.Contains(projectItem.ContainingProject.FullName);
                 }
@@ -126,7 +130,7 @@ namespace Typewriter.CodeModel.Configuration
             try
             {
                 var filename = project?.FileName;
-                if (filename != null && projectList.Contains(filename) == false)
+                if (filename != null && !projectList.Contains(filename))
                 {
                     projectList.Add(filename);
                 }
