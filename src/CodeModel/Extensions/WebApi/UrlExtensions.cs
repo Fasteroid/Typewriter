@@ -107,6 +107,11 @@ namespace Typewriter.Extensions.WebApi
                     return $"encodeURIComponent({name})";
                 }
 
+                if (parameter.Type.Name.Equals("string | null", StringComparison.OrdinalIgnoreCase))
+                {
+                    return $"encodeURIComponent({name})";
+                }
+
                 if (parameter.Type.IsDate)
                 {
                     return $"encodeURIComponent(String({name}))";

@@ -11,7 +11,8 @@ namespace Typewriter.Tests.Extensions
     [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
     public class RoslynWebApiRouteClassRouteExtensionsTests : WebApiRouteClassRouteExtensionsTests
     {
-        public RoslynWebApiRouteClassRouteExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynWebApiRouteClassRouteExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -21,7 +22,8 @@ namespace Typewriter.Tests.Extensions
         private readonly File _fileInfo;
         private readonly File _inheritedFileInfo;
 
-        protected WebApiRouteClassRouteExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected WebApiRouteClassRouteExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\Extensions\Support\RouteControllerWithDefaultRoute.cs");
             _inheritedFileInfo = GetFile(@"Tests\Extensions\Support\InheritedController.cs");
@@ -82,7 +84,6 @@ namespace Typewriter.Tests.Extensions
             var result = methodInfo.Url();
             result.ShouldEqual("api/Inherited/inherited/${id}");
         }
-
 
         [Fact]
         public void Expect_to_find_url_on_in_httpget_action_withparameter()
