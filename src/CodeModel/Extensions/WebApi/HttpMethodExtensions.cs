@@ -43,7 +43,7 @@ namespace Typewriter.Extensions.WebApi
             }
 
             var methodName = method.Name.ToLowerInvariant();
-            return _validVerbs.FirstOrDefault(v => methodName.StartsWith(v, StringComparison.OrdinalIgnoreCase)) ?? "post";
+            return Array.Find(_validVerbs, v => methodName.StartsWith(v, StringComparison.OrdinalIgnoreCase)) ?? "post";
         }
     }
 }

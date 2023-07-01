@@ -36,7 +36,7 @@ namespace Typewriter.Extensions.WebApi
 
             if (dataParameters.Count == 1)
             {
-                return dataParameters.First().Name;
+                return dataParameters[0].Name;
             }
 
             if (dataParameters.Count > 1)
