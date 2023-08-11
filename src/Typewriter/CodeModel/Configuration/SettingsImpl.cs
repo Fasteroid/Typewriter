@@ -12,13 +12,13 @@ namespace Typewriter.CodeModel.Configuration
         private bool _isSingleFileMode;
         private string _singleFileName;
         private char _stringLiteralCharacter = '"';
+        private List<string> _includedProjects;
+        private bool _strictNullGeneration = true;
 
         public SettingsImpl(ProjectItem projectItem)
         {
             _projectItem = projectItem;
         }
-
-        private List<string> _includedProjects;
 
         public override Settings IncludeProject(string projectName)
         {
@@ -33,8 +33,8 @@ namespace Typewriter.CodeModel.Configuration
 
         public override Settings SingleFileMode(string singleFilename)
         {
-            _isSingleFileMode= true;
-            _singleFileName= singleFilename;
+            _isSingleFileMode = true;
+            _singleFileName = singleFilename;
 
             return this;
         }
@@ -129,12 +129,37 @@ namespace Typewriter.CodeModel.Configuration
         public override char StringLiteralCharacter => _stringLiteralCharacter;
 
         /// <summary>
-        /// Use given string literal character in TypeScript;
+        /// Strict null generation.
+        /// In C# whenever some property is defined as nullable in
+        /// default it is generated in TypeScript with `type | null` signature.
+        /// This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+        ///
+        /// When false only `type` is generated.
         /// </summary>
-        /// <param name="ch">Character used as string literal start finish mark</param>
+        public override bool StrictNullGeneration => _strictNullGeneration;
+
+        /// <summary>
+        /// Use given string literal character in TypeScript.
+        /// </summary>
+        /// <param name="ch">Character used as string literal start finish mark.</param>
         public override Settings UseStringLiteralCharacter(char ch)
         {
             _stringLiteralCharacter = ch;
+            return this;
+        }
+
+        /// <summary>
+        /// Disable strict null generation.
+        /// In C# whenever some property is defined as nullable in
+        /// default it is generated in TypeScript with `type | null` signature.
+        /// This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+        ///
+        /// Using this method falls back to previous method of generating type name when only `type` is generated.
+        /// </summary>
+        /// <returns><see cref="Settings"/> implementation.</returns>
+        public override Settings DisableStrictNullGeneration()
+        {
+            _strictNullGeneration = false;
             return this;
         }
     }

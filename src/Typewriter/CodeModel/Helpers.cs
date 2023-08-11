@@ -1,11 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Typewriter.Configuration;
 using Typewriter.Metadata.Interfaces;
 
 namespace Typewriter.CodeModel
 {
     public static class Helpers
     {
+        private static readonly Dictionary<string, string> _primitiveTypes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "System.Boolean", "bool" },
+            { "System.Byte", "byte" },
+            { "System.Char", "char" },
+            { "System.Decimal", "decimal" },
+            { "System.Double", "double" },
+            { "System.Int16", "short" },
+            { "System.Int32", "int" },
+            { "System.Int64", "long" },
+            { "System.SByte", "sbyte" },
+            { "System.Single", "float" },
+            { "System.String", "string" },
+            { "System.UInt32", "uint" },
+            { "System.UInt16", "ushort" },
+            { "System.UInt64", "ulong" },
+            { "System.DateTime", "DateTime" },
+            { "System.DateTimeOffset", "DateTimeOffset" },
+            { "System.Guid", "Guid" },
+            { "System.TimeSpan", "TimeSpan" },
+        };
+
         public static string CamelCase(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -39,7 +63,7 @@ namespace Typewriter.CodeModel
             return new string(chars);
         }
 
-        public static string GetTypeScriptName(ITypeMetadata metadata)
+        public static string GetTypeScriptName(ITypeMetadata metadata, Settings settings)
         {
             if (metadata == null)
             {
@@ -65,7 +89,7 @@ namespace Typewriter.CodeModel
                         }
                     }
 
-                    if (typeArguments.Any(t => string.Equals(t.FullName, metadata.FullName, System.StringComparison.OrdinalIgnoreCase)))
+                    if (typeArguments.Exists(t => string.Equals(t.FullName, metadata.FullName, System.StringComparison.OrdinalIgnoreCase)))
                     {
                         return "any[]";
                     }
@@ -73,7 +97,7 @@ namespace Typewriter.CodeModel
 
                 if (typeArguments.Count == 1)
                 {
-                    var typeName = GetTypeScriptName(typeArguments.FirstOrDefault());
+                    var typeName = GetTypeScriptName(typeArguments.FirstOrDefault(), settings);
                     if (typeName.Contains("|"))
                     {
                         typeName = $"({typeName})";
@@ -84,8 +108,8 @@ namespace Typewriter.CodeModel
 
                 if (typeArguments.Count == 2)
                 {
-                    var key = GetTypeScriptName(typeArguments[0]);
-                    var value = GetTypeScriptName(typeArguments[1]);
+                    var key = GetTypeScriptName(typeArguments[0], settings);
+                    var value = GetTypeScriptName(typeArguments[1], settings);
 
                     return string.Concat("{ [key: ", key, "]: ", value, "; }");
                 }
@@ -95,16 +119,20 @@ namespace Typewriter.CodeModel
 
             if (metadata.IsValueTuple)
             {
-                var types = string.Join(", ", metadata.TupleElements.Select(p => $"{p.Name}: {GetTypeScriptName(p.Type)}"));
+                var types = string.Join(", ", metadata.TupleElements.Select(p => $"{p.Name}: {GetTypeScriptName(p.Type, settings)}"));
                 return $"{{ {types} }}";
             }
 
             if (metadata.IsGeneric)
             {
-                return metadata.Name + string.Concat("<", string.Join(", ", metadata.TypeArguments.Select(GetTypeScriptName)), ">");
+                return string.Concat(
+                    metadata.Name,
+                    "<",
+                    string.Join(", ", metadata.TypeArguments.Select(m => GetTypeScriptName(m, settings))),
+                    ">");
             }
 
-            return ExtractTypeScriptName(metadata);
+            return ExtractTypeScriptName(metadata, settings);
         }
 
         public static string GetOriginalName(ITypeMetadata metadata)
@@ -112,50 +140,12 @@ namespace Typewriter.CodeModel
             var name = metadata.Name;
             var fullName = metadata.IsNullable ? metadata.FullName.TrimEnd('?') : metadata.FullName;
 
-            if (primitiveTypes.ContainsKey(fullName))
+            if (_primitiveTypes.TryGetValue(fullName, out var type))
             {
-                name = primitiveTypes[fullName] + (metadata.IsNullable ? "?" : string.Empty);
+                name = string.Concat(type, metadata.IsNullable ? "?" : string.Empty);
             }
 
             return name;
-        }
-
-        private static string ExtractTypeScriptName(ITypeMetadata metadata)
-        {
-            var fullName = metadata.IsNullable ? metadata.FullName.TrimEnd('?') : metadata.FullName;
-
-            switch (fullName)
-            {
-                case "System.Boolean":
-                    return metadata.IsNullable ? "boolean | null" : "boolean";
-                case "System.String":
-                case "System.Char":
-                case "System.Guid":
-                case "System.TimeSpan":
-                    return metadata.IsNullable ? "string | null" : "string";
-                case "System.Byte":
-                case "System.SByte":
-                case "System.Int16":
-                case "System.Int32":
-                case "System.Int64":
-                case "System.UInt16":
-                case "System.UInt32":
-                case "System.UInt64":
-                case "System.Single":
-                case "System.Double":
-                case "System.Decimal":
-                    return metadata.IsNullable ? "number | null" : "number";
-                case "System.DateTime":
-                case "System.DateTimeOffset":
-                    return metadata.IsNullable ? "Date | null" : "Date";
-                case "System.Void":
-                    return "void";
-                case "System.Object":
-                case "dynamic":
-                    return "any";
-            }
-
-            return metadata.IsNullable ? metadata.Name.TrimEnd('?') : metadata.Name;
         }
 
         public static bool IsPrimitive(ITypeMetadata metadata)
@@ -179,30 +169,45 @@ namespace Typewriter.CodeModel
                 }
             }
 
-            return metadata.IsEnum || primitiveTypes.ContainsKey(fullName);
+            return metadata.IsEnum || _primitiveTypes.ContainsKey(fullName);
         }
 
-        private static readonly Dictionary<string, string> primitiveTypes = new Dictionary<string, string>
+        private static string ExtractTypeScriptName(ITypeMetadata metadata, Settings settings)
         {
-            { "System.Boolean", "bool" },
-            { "System.Byte", "byte" },
-            { "System.Char", "char" },
-            { "System.Decimal", "decimal" },
-            { "System.Double", "double" },
-            { "System.Int16", "short" },
-            { "System.Int32", "int" },
-            { "System.Int64", "long" },
-            { "System.SByte", "sbyte" },
-            { "System.Single", "float" },
-            { "System.String", "string" },
-            { "System.UInt32", "uint" },
-            { "System.UInt16", "ushort" },
-            { "System.UInt64", "ulong" },
+            var fullName = metadata.IsNullable ? metadata.FullName.TrimEnd('?') : metadata.FullName;
 
-            { "System.DateTime", "DateTime" },
-            { "System.DateTimeOffset", "DateTimeOffset" },
-            { "System.Guid", "Guid" },
-            { "System.TimeSpan", "TimeSpan" },
-        };
+            switch (fullName)
+            {
+                case "System.Boolean":
+                    return metadata.IsNullable && settings.StrictNullGeneration ? "boolean | null" : "boolean";
+                case "System.String":
+                case "System.Char":
+                case "System.Guid":
+                case "System.TimeSpan":
+                    return metadata.IsNullable && settings.StrictNullGeneration ? "string | null" : "string";
+                case "System.Byte":
+                case "System.SByte":
+                case "System.Int16":
+                case "System.Int32":
+                case "System.Int64":
+                case "System.UInt16":
+                case "System.UInt32":
+                case "System.UInt64":
+                case "System.Single":
+                case "System.Double":
+                case "System.Decimal":
+                    return metadata.IsNullable && settings.StrictNullGeneration ? "number | null" : "number";
+                case "System.DateTime":
+                case "System.DateTimeOffset":
+                    return metadata.IsNullable && settings.StrictNullGeneration ? "Date | null" : "Date";
+                case "System.Void":
+                    return "void";
+                case "System.Object":
+                case "dynamic":
+                    return "any";
+            }
+
+            return metadata.IsNullable ? metadata.Name.TrimEnd('?') : metadata.Name;
+        }
     }
 }

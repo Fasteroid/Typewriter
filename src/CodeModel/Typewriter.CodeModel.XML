@@ -1446,6 +1446,16 @@
             Default ".
             </summary>
         </member>
+        <member name="P:Typewriter.Configuration.Settings.StrictNullGeneration">
+             <summary>
+             Strict null generation.
+             In C# whenever some property is defined as nullable in
+             default it is generated in TypeScript with `type | null` signature.
+             This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+            
+             When false only `type` is generated.
+             </summary>
+        </member>
         <member name="M:Typewriter.Configuration.Settings.IncludeProject(System.String)">
             <summary>
             Includes files in the specified project when rendering the template.
@@ -1481,6 +1491,17 @@
             Use given string literal character in TypeScript.
             </summary>
             <param name="ch">Character used as string literal start finish mark.</param>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.DisableStrictNullGeneration">
+             <summary>
+             Disable strict null generation.
+             In C# whenever some property is defined as nullable in
+             default it is generated in TypeScript with `type | null` signature.
+             This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+            
+             Using this method falls back to previous method of generating type name when only `type` is generated.
+             </summary>
+             <returns><see cref="T:Typewriter.Configuration.Settings"/> implementation.</returns>
         </member>
         <member name="T:Typewriter.Extensions.Types.TypeExtensions">
             <summary>

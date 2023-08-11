@@ -33,7 +33,7 @@ namespace Typewriter.Configuration
         /// <summary>
         /// Gets or sets output directory to which generated files needs to be saved.
         /// </summary>
-        public string OutputDirectory { get; set; } = null;
+        public string OutputDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets value indicating if generated files should not be added to project.
@@ -61,6 +61,16 @@ namespace Typewriter.Configuration
         /// Default ".
         /// </summary>
         public abstract char StringLiteralCharacter { get; }
+
+        /// <summary>
+        /// Strict null generation.
+        /// In C# whenever some property is defined as nullable in
+        /// default it is generated in TypeScript with `type | null` signature.
+        /// This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+        ///
+        /// When false only `type` is generated.
+        /// </summary>
+        public abstract bool StrictNullGeneration { get; }
 
         /// <summary>
         /// Includes files in the specified project when rendering the template.
@@ -97,5 +107,16 @@ namespace Typewriter.Configuration
         /// </summary>
         /// <param name="ch">Character used as string literal start finish mark.</param>
         public abstract Settings UseStringLiteralCharacter(char ch);
+
+        /// <summary>
+        /// Disable strict null generation.
+        /// In C# whenever some property is defined as nullable in
+        /// default it is generated in TypeScript with `type | null` signature.
+        /// This is in sync with https://github.com/microsoft/TypeScript/pull/7140
+        ///
+        /// Using this method falls back to previous method of generating type name when only `type` is generated.
+        /// </summary>
+        /// <returns><see cref="Settings"/> implementation.</returns>
+        public abstract Settings DisableStrictNullGeneration();
     }
 }

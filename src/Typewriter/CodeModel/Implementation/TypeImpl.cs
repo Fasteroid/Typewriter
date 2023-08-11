@@ -18,7 +18,7 @@ namespace Typewriter.CodeModel.Implementation
         {
             _metadata = metadata;
             Parent = parent;
-            _lazyName = new Lazy<string>(() => GetTypeScriptName(metadata));
+            _lazyName = new Lazy<string>(() => GetTypeScriptName(metadata, settings));
             _lazyOriginalName = new Lazy<string>(() => GetOriginalName(metadata));
             Settings = settings;
         }
@@ -47,7 +47,19 @@ namespace Typewriter.CodeModel.Implementation
 
         public override bool IsPrimitive => IsPrimitive(_metadata);
 
-        public override bool IsDate => string.Equals(Name, "Date", StringComparison.OrdinalIgnoreCase) || string.Equals(Name, "Date | null", StringComparison.OrdinalIgnoreCase);
+        public override bool IsDate => string.Equals(FullName, "System.DateTime", StringComparison.OrdinalIgnoreCase) ||
+                                       string.Equals(
+                                           FullName,
+                                           "System.DateTime?",
+                                           StringComparison.OrdinalIgnoreCase) ||
+                                       string.Equals(
+                                           FullName,
+                                           "System.DateTimeOffset",
+                                           StringComparison.OrdinalIgnoreCase) ||
+                                       string.Equals(
+                                           FullName,
+                                           "System.DateTimeOffset?",
+                                           StringComparison.OrdinalIgnoreCase);
 
         public override bool IsDefined => _metadata.IsDefined;
 
