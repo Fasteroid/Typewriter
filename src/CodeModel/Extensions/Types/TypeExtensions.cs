@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Type = Typewriter.CodeModel.Type;
 
@@ -67,7 +68,7 @@ namespace Typewriter.Extensions.Types
             var slc = type.Settings?.StringLiteralCharacter ?? '"';
             if (type.IsGuid)
             {
-                return $"{slc}00000000-0000-0000-0000-00000000000{slc}";
+                return $"{slc}{Guid.Empty.ToString("D", CultureInfo.InvariantCulture)}{slc}";
             }
 
             if (type.IsDate)

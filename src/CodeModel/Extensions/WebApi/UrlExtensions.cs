@@ -128,13 +128,13 @@ namespace Typewriter.Extensions.WebApi
                 return null;
             }
 
-            var routePrefix = @class?.Attributes
+            var routePrefix = @class.Attributes
                 .FirstOrDefault(a => a.Name.Equals("RoutePrefix", StringComparison.OrdinalIgnoreCase))?.Value
                 ?.TrimEnd('/');
 
             if (string.IsNullOrEmpty(routePrefix))
             {
-                routePrefix = @class?.Attributes
+                routePrefix = @class.Attributes
                     .FirstOrDefault(a => a.Name.Equals(nameof(Route), StringComparison.OrdinalIgnoreCase))?.Value
                     ?.TrimEnd('/');
             }
