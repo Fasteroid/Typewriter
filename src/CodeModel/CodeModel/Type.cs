@@ -1,4 +1,5 @@
-﻿using Typewriter.CodeModel.Attributes;
+﻿using System.Collections.Generic;
+using Typewriter.CodeModel.Attributes;
 using Typewriter.Configuration;
 
 namespace Typewriter.CodeModel
@@ -65,6 +66,16 @@ namespace Typewriter.CodeModel
         /// (In Visual Studio 2013 IsDefined returns false for generic types).
         /// </summary>
         public abstract bool IsDefined { get; }
+
+        /// <summary>
+        /// Determines if the type is an <see cref="Dictionary{TKey,TValue}"/> or <see cref="IDictionary{TKey,TValue}"/>.
+        /// </summary>
+        public abstract bool IsDictionary { get; }
+
+        /// <summary>
+        /// Determines if the type is an dynamic.
+        /// </summary>
+        public abstract bool IsDynamic { get; }
 
         /// <summary>
         /// Determines if the type is an enum.

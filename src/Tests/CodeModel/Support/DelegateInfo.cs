@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Typewriter.Tests.CodeModel.Support
@@ -23,6 +24,10 @@ namespace Typewriter.Tests.CodeModel.Support
         public delegate Task<string> TaskString();
 
         public delegate Task<Nullable<int>> TaskNullableInt();
+
+        public delegate Task<IDictionary<string, string>> TaskIDictionary();
+
+        public delegate Task<Dictionary<string, string>> TaskDictionary();
     }
 
     public class GenericDelegateInfo<T>

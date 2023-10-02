@@ -15,6 +15,10 @@ namespace Typewriter.Metadata.Roslyn
 
         public bool IsAbstract => false;
 
+        public bool IsDictionary => false;
+
+        public bool IsDynamic => false;
+
         public bool IsEnum => false;
 
         public bool IsEnumerable => false;

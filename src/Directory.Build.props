@@ -13,10 +13,10 @@
     <PackageReference Include="Asyncify" Version="0.9.7" PrivateAssets="all" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="all" />
     <PackageReference Include="ConcurrencyLab.ParallelChecker" Version="2.7.0" PrivateAssets="all" />
-    <PackageReference Include="IDisposableAnalyzers" Version="4.0.6" PrivateAssets="all" />
+    <PackageReference Include="IDisposableAnalyzers" Version="4.0.7" PrivateAssets="all" />
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.84" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23364.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23420.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.7.0" PrivateAssets="all" />
@@ -29,7 +29,7 @@
     <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.5.0" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.5.0" PrivateAssets="all" />
     <!--<PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="all" />-->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.9.0.77355" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.11.0.78383" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" />
   </ItemGroup>
 

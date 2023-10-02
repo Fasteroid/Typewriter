@@ -1220,6 +1220,16 @@
             (In Visual Studio 2013 IsDefined returns false for generic types).
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Type.IsDictionary">
+            <summary>
+            Determines if the type is an <see cref="T:System.Collections.Generic.Dictionary`2"/> or <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Type.IsDynamic">
+            <summary>
+            Determines if the type is an dynamic.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Type.IsEnum">
             <summary>
             Determines if the type is an enum.

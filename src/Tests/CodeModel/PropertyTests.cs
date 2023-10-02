@@ -276,6 +276,22 @@ namespace Typewriter.Tests.CodeModel
         }
 
         [Fact]
+        public void Expect_dictionary_property_to_be_dictionary()
+        {
+            var propertyInfo = GetFirstProperty("Dictionary");
+
+            propertyInfo.Type.IsDictionary.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void Expect_idictionary_property_to_be_dictionary()
+        {
+            var propertyInfo = GetFirstProperty("IDictionary");
+
+            propertyInfo.Type.IsDictionary.ShouldBeTrue();
+        }
+
+        [Fact]
         public void Expect_enumerable_properties_to_be_enumerable()
         {
             var arrayInfo = GetFirstProperty("Array");

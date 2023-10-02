@@ -138,6 +138,15 @@ namespace Typewriter.Metadata.Roslyn
             }
         }
 
+        public bool IsDictionary => _symbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType
+            && (namedTypeSymbol.OriginalDefinition.Name.Equals("Dictionary", StringComparison.OrdinalIgnoreCase) ||
+                namedTypeSymbol.OriginalDefinition.Name.Equals("IDictionary", StringComparison.OrdinalIgnoreCase))
+            && namedTypeSymbol.OriginalDefinition.ContainingNamespace.ToDisplayString().Equals(
+                "System.Collections.Generic",
+                StringComparison.OrdinalIgnoreCase);
+
+        public bool IsDynamic => _symbol.TypeKind == TypeKind.Dynamic;
+
         public bool IsEnum => _symbol.TypeKind == TypeKind.Enum;
 
         public bool IsEnumerable => !_symbol.ToDisplayString().Equals("string", StringComparison.OrdinalIgnoreCase) &&

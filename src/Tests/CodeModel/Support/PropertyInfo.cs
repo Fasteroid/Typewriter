@@ -98,6 +98,10 @@ namespace Typewriter.Tests.CodeModel.Support
         public GenericClassInfo<string> GenericClass { get; set; }
 
         public IInterfaceInfo Interface { get; set; }
+
+        public Dictionary<string, string> Dictionary { get; set; }
+
+        public IDictionary<string, string> IDictionary { get; set; }
     }
 
     public class GenericPropertyInfo<T>

@@ -96,6 +96,7 @@ namespace Typewriter.Tests.CodeModel
             delegateInfo.Type.IsNullable.ShouldBeFalse("IsNullable");
             delegateInfo.Type.IsTask.ShouldBeFalse("IsTask");
             delegateInfo.Type.IsPrimitive.ShouldBeFalse("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeFalse("IsDictionary");
         }
 
         [Fact]
@@ -166,6 +167,7 @@ namespace Typewriter.Tests.CodeModel
             delegateInfo.Type.IsNullable.ShouldBeFalse("IsNullable");
             delegateInfo.Type.IsTask.ShouldBeTrue("IsTask");
             delegateInfo.Type.IsPrimitive.ShouldBeFalse("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeFalse("IsDictionary");
         }
 
         [Fact]
@@ -183,6 +185,7 @@ namespace Typewriter.Tests.CodeModel
             delegateInfo.Type.IsNullable.ShouldBeFalse("IsNullable");
             delegateInfo.Type.IsTask.ShouldBeTrue("IsTask");
             delegateInfo.Type.IsPrimitive.ShouldBeTrue("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeFalse("IsDictionary");
         }
 
         [Fact]
@@ -200,6 +203,43 @@ namespace Typewriter.Tests.CodeModel
             delegateInfo.Type.IsNullable.ShouldBeTrue("IsNullable");
             delegateInfo.Type.IsTask.ShouldBeTrue("IsTask");
             delegateInfo.Type.IsPrimitive.ShouldBeTrue("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeFalse("IsDictionary");
+        }
+
+        [Fact]
+        public void Expect_task_Dictionary_delegates_to_return_dictionary()
+        {
+            var classInfo = _fileInfo.Classes.First();
+            var delegateInfo = classInfo.Delegates.First(p => string.Equals(p.Name, "TaskDictionary", System.StringComparison.OrdinalIgnoreCase));
+
+            delegateInfo.Type.FullName.ShouldEqual("System.Collections.Generic.Dictionary<System.String, System.String>");
+            delegateInfo.Type.Name.ShouldEqual("Record<string, string>");
+            delegateInfo.Type.OriginalName.ShouldEqual("Dictionary");
+            delegateInfo.Type.IsEnum.ShouldBeFalse("IsEnum");
+            delegateInfo.Type.IsEnumerable.ShouldBeTrue("IsEnumerable");
+            delegateInfo.Type.IsGeneric.ShouldBeTrue("IsGeneric");
+            delegateInfo.Type.IsNullable.ShouldBeFalse("IsNullable");
+            delegateInfo.Type.IsTask.ShouldBeTrue("IsTask");
+            delegateInfo.Type.IsPrimitive.ShouldBeTrue("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeTrue("IsDictionary");
+        }
+
+        [Fact]
+        public void Expect_task_IDictionary_delegates_to_return_idictionary()
+        {
+            var classInfo = _fileInfo.Classes.First();
+            var delegateInfo = classInfo.Delegates.First(p => string.Equals(p.Name, "TaskIDictionary", System.StringComparison.OrdinalIgnoreCase));
+
+            delegateInfo.Type.FullName.ShouldEqual("System.Collections.Generic.IDictionary<System.String, System.String>");
+            delegateInfo.Type.Name.ShouldEqual("Record<string, string>");
+            delegateInfo.Type.OriginalName.ShouldEqual("IDictionary");
+            delegateInfo.Type.IsEnum.ShouldBeFalse("IsEnum");
+            delegateInfo.Type.IsEnumerable.ShouldBeTrue("IsEnumerable");
+            delegateInfo.Type.IsGeneric.ShouldBeTrue("IsGeneric");
+            delegateInfo.Type.IsNullable.ShouldBeFalse("IsNullable");
+            delegateInfo.Type.IsTask.ShouldBeTrue("IsTask");
+            delegateInfo.Type.IsPrimitive.ShouldBeTrue("IsPrimitive");
+            delegateInfo.Type.IsDictionary.ShouldBeTrue("IsDictionary");
         }
     }
 }

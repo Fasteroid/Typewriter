@@ -35,6 +35,10 @@ namespace Typewriter.CodeModel.Implementation
 
         public override string Namespace => _metadata.Namespace;
 
+        public override bool IsDictionary => _metadata.IsDictionary;
+
+        public override bool IsDynamic => _metadata.IsDynamic;
+
         public override bool IsGeneric => _metadata.IsGeneric;
 
         public override bool IsEnum => _metadata.IsEnum;

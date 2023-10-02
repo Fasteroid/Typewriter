@@ -4,6 +4,10 @@ namespace Typewriter.Metadata.Interfaces
 {
     public interface ITypeMetadata : IClassMetadata
     {
+        bool IsDictionary { get; }
+
+        bool IsDynamic { get; }
+
         bool IsEnum { get; }
 
         bool IsEnumerable { get; }

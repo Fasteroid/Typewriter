@@ -70,6 +70,20 @@ namespace Typewriter.CodeModel
                 return "any";
             }
 
+            if (metadata.IsDictionary)
+            {
+                var typeArguments = metadata.TypeArguments.ToList();
+                var key = GetTypeScriptName(typeArguments[0], settings);
+                var value = GetTypeScriptName(typeArguments[1], settings);
+
+                return $"Record<{key}, {value}>";
+            }
+
+            if (metadata.IsDynamic)
+            {
+                return "any";
+            }
+
             if (metadata.IsEnumerable)
             {
                 var typeArguments = metadata.TypeArguments.ToList();
@@ -111,7 +125,7 @@ namespace Typewriter.CodeModel
                     var key = GetTypeScriptName(typeArguments[0], settings);
                     var value = GetTypeScriptName(typeArguments[1], settings);
 
-                    return string.Concat("{ [key: ", key, "]: ", value, "; }");
+                    return $"Record<{key}, {value}>";
                 }
 
                 return "any[]";

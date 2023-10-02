@@ -36,13 +36,14 @@ namespace Typewriter.Extensions.Types
                 return "null";
             }
 
-#pragma warning disable S125
-
-            // Dictionary = { [key: type]: type; }
-#pragma warning restore S125
-            if (type.Name.StartsWith("{", StringComparison.OrdinalIgnoreCase) && !type.IsValueTuple)
+            if (type.IsDictionary)
             {
                 return "{}";
+            }
+
+            if (type.IsDynamic)
+            {
+                return "null";
             }
 
             if (type.IsEnumerable)
