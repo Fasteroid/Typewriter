@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Constants"), Collection(nameof(RoslynFixture))]
     public class RoslynConstantTests : ConstantTests
     {
-        public RoslynConstantTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynConstantTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected ConstantTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected ConstantTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\ConstantInfo.cs");
         }

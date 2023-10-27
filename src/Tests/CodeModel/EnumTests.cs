@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Enums"), Collection(nameof(RoslynFixture))]
     public class RoslynEnumTests : EnumTests
     {
-        public RoslynEnumTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynEnumTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected EnumTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected EnumTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\EnumInfo.cs");
         }

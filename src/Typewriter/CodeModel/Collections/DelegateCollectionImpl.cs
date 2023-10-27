@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class DelegateCollectionImpl : ItemCollectionImpl<Delegate>, IDelegateCollection
     {
-        public DelegateCollectionImpl(IEnumerable<Delegate> values) : base(values)
+        public DelegateCollectionImpl(IEnumerable<Delegate> values)
+            : base(values)
         {
         }
 

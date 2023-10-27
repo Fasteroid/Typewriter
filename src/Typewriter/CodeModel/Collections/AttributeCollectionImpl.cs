@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class AttributeCollectionImpl : ItemCollectionImpl<Attribute>, IAttributeCollection
     {
-        public AttributeCollectionImpl(IEnumerable<Attribute> values) : base(values)
+        public AttributeCollectionImpl(IEnumerable<Attribute> values)
+            : base(values)
         {
         }
 

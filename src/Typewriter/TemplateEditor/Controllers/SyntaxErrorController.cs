@@ -12,7 +12,8 @@ namespace Typewriter.TemplateEditor.Controllers
     [ContentType(Constants.ContentType), TagType(typeof(ErrorTag))]
     internal class SyntaxErrorControllerProvider : ITaggerProvider
     {
-        public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
+        public ITagger<T> CreateTagger<T>(ITextBuffer buffer)
+            where T : ITag
         {
             return buffer.Properties.GetOrCreateSingletonProperty(() => new SyntaxErrorController(buffer) as ITagger<T>);
         }

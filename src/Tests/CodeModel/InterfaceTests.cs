@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Interfaces"), Collection(nameof(RoslynFixture))]
     public class RoslynInterfaceTests : InterfaceTests
     {
-        public RoslynInterfaceTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynInterfaceTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected InterfaceTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected InterfaceTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\IInterfaceInfo.cs");
         }

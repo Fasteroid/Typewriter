@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class ParameterCollectionImpl : ItemCollectionImpl<Parameter>, IParameterCollection
     {
-        public ParameterCollectionImpl(IEnumerable<Parameter> values) : base(values)
+        public ParameterCollectionImpl(IEnumerable<Parameter> values)
+            : base(values)
         {
         }
 

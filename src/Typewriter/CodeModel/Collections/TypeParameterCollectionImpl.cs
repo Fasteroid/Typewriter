@@ -5,7 +5,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class TypeParameterCollectionImpl : ItemCollectionImpl<TypeParameter>, ITypeParameterCollection
     {
-        public TypeParameterCollectionImpl(IEnumerable<TypeParameter> values) : base(values)
+        public TypeParameterCollectionImpl(IEnumerable<TypeParameter> values)
+            : base(values)
         {
         }
 

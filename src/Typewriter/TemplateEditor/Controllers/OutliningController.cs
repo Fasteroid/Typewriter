@@ -12,7 +12,8 @@ namespace Typewriter.TemplateEditor.Controllers
     [ContentType(Constants.ContentType), TagType(typeof(IOutliningRegionTag))]
     internal sealed class OutliningControllerProvider : ITaggerProvider
     {
-        public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
+        public ITagger<T> CreateTagger<T>(ITextBuffer buffer)
+            where T : ITag
         {
             return buffer.Properties.GetOrCreateSingletonProperty(() => new OutliningController(buffer) as ITagger<T>);
         }

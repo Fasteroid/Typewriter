@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class EventCollectionImpl : ItemCollectionImpl<Event>, IEventCollection
     {
-        public EventCollectionImpl(IEnumerable<Event> values) : base(values)
+        public EventCollectionImpl(IEnumerable<Event> values)
+            : base(values)
         {
         }
 

@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Methods"), Collection(nameof(RoslynFixture))]
     public class RoslynMethodTests : MethodTests
     {
-        public RoslynMethodTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynMethodTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected MethodTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected MethodTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\MethodInfo.cs");
         }

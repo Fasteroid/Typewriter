@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Events"), Collection(nameof(RoslynFixture))]
     public class RoslynEventTests : EventTests
     {
-        public RoslynEventTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynEventTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected EventTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected EventTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\EventInfo.cs");
         }

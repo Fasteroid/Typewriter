@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class InterfaceCollectionImpl : ItemCollectionImpl<Interface>, IInterfaceCollection
     {
-        public InterfaceCollectionImpl(IEnumerable<Interface> values) : base(values)
+        public InterfaceCollectionImpl(IEnumerable<Interface> values)
+            : base(values)
         {
         }
 

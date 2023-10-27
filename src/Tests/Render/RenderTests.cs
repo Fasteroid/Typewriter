@@ -12,14 +12,16 @@ namespace Typewriter.Tests.Render
     [Trait(nameof(Render), "Roslyn"), Collection(nameof(RoslynFixture))]
     public class RoslynRenderTests : RenderTests
     {
-        public RoslynRenderTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynRenderTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
 
     public abstract class RenderTests : TestInfrastructure.TestBase
     {
-        protected RenderTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected RenderTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
 

@@ -11,7 +11,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "AttributeArguments"), Collection(nameof(RoslynFixture))]
     public class RoslynAttributeArgumentTests : AttributeArgumentTests
     {
-        public RoslynAttributeArgumentTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynAttributeArgumentTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -20,7 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly Class _classInfo;
 
-        protected AttributeArgumentTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected AttributeArgumentTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             var fileInfo = GetFile(@"Tests\CodeModel\Support\AttributeTestClass.cs");
             _classInfo = fileInfo.Classes.First(c => string.Equals(c.Name, nameof(AttributeTestClass), System.StringComparison.OrdinalIgnoreCase));

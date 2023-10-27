@@ -36,7 +36,8 @@ namespace Typewriter.TemplateEditor.Lexing.Roslyn
 
         private List<MetadataReference> defaultMetadataReferences;
 
-        public ShadowWorkspace() : base(MefHostServices.DefaultHost, WorkspaceKind.Host)
+        public ShadowWorkspace()
+            : base(MefHostServices.DefaultHost, WorkspaceKind.Host)
         {
         }
 

@@ -165,7 +165,7 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            System.IO.File.WriteAllText(outputPath, outputContent, new UTF8Encoding(true));
+            System.IO.File.WriteAllText(outputPath, outputContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         }
 
         protected virtual void SaveFile(File file, string output, ref bool success)

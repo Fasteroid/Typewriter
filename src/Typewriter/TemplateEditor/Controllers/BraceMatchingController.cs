@@ -12,7 +12,8 @@ namespace Typewriter.TemplateEditor.Controllers
     [ContentType(Constants.ContentType), TagType(typeof(TextMarkerTag))]
     internal class BraceMatchingControllerProvider : IViewTaggerProvider
     {
-        public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
+        public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer)
+            where T : ITag
         {
             if (textView == null || textView.TextBuffer != buffer)
             {

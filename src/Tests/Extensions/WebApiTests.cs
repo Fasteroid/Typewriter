@@ -11,7 +11,8 @@ namespace Typewriter.Tests.Extensions
     [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
     public class RoslynWebApiExtensionsTests : WebApiExtensionsTests
     {
-        public RoslynWebApiExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynWebApiExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -20,7 +21,8 @@ namespace Typewriter.Tests.Extensions
     {
         private readonly File _fileInfo;
 
-        protected WebApiExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected WebApiExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\Extensions\Support\HttpMethodController.cs");
         }

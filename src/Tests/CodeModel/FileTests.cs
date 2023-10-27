@@ -11,7 +11,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Files"), Collection(nameof(RoslynFixture))]
     public class RoslynFileTests : FileTests
     {
-        public RoslynFileTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynFileTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -20,7 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected FileTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected FileTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\FileInfo.cs");
         }

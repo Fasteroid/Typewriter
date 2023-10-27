@@ -10,7 +10,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "Delegates"), Collection(nameof(RoslynFixture))]
     public class RoslynDelegateTests : DelegateTests
     {
-        public RoslynDelegateTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynDelegateTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
     }
@@ -19,7 +20,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected DelegateTests(ITestFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        protected DelegateTests(ITestFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\DelegateInfo.cs");
         }

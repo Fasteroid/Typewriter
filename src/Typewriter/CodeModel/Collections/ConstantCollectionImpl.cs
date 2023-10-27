@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class ConstantCollectionImpl : ItemCollectionImpl<Constant>, IConstantCollection
     {
-        public ConstantCollectionImpl(IEnumerable<Constant> values) : base(values)
+        public ConstantCollectionImpl(IEnumerable<Constant> values)
+            : base(values)
         {
         }
 

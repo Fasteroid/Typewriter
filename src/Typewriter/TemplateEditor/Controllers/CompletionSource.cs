@@ -64,7 +64,8 @@ namespace Typewriter.TemplateEditor.Controllers
 
         class StringCompletionSet : CompletionSet
         {
-            public StringCompletionSet(string moniker, ITrackingSpan span, IEnumerable<Completion> completions) : base(moniker, nameof(Typewriter), span, completions, null) { }
+            public StringCompletionSet(string moniker, ITrackingSpan span, IEnumerable<Completion> completions)
+                : base(moniker, nameof(Typewriter), span, completions, null) { }
 
             public override void SelectBestMatch()
             {

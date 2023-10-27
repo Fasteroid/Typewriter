@@ -12,7 +12,8 @@ namespace Typewriter.Tests.CodeModel
     [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
     public class RoslynPartialClassTests : TestInfrastructure.TestBase
     {
-        public RoslynPartialClassTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynPartialClassTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
 

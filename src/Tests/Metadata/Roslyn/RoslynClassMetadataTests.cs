@@ -14,7 +14,8 @@ namespace Typewriter.Tests.Metadata.Roslyn
     [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
     public class RoslynClassMetadataTests : TestInfrastructure.TestBase
     {
-        public RoslynClassMetadataTests(RoslynFixture fixture, GlobalServiceProvider sp) : base(fixture, sp)
+        public RoslynClassMetadataTests(RoslynFixture fixture, GlobalServiceProvider sp)
+            : base(fixture, sp)
         {
         }
 

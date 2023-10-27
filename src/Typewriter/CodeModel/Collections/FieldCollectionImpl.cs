@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class FieldCollectionImpl : ItemCollectionImpl<Field>, IFieldCollection
     {
-        public FieldCollectionImpl(IEnumerable<Field> values) : base(values)
+        public FieldCollectionImpl(IEnumerable<Field> values)
+            : base(values)
         {
         }
 

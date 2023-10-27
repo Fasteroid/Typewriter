@@ -4,7 +4,8 @@ namespace Typewriter.CodeModel.Collections
 {
     public class EnumCollectionImpl : ItemCollectionImpl<Enum>, IEnumCollection
     {
-        public EnumCollectionImpl(IEnumerable<Enum> values) : base(values)
+        public EnumCollectionImpl(IEnumerable<Enum> values)
+            : base(values)
         {
         }
 
