@@ -11,71 +11,9 @@ This allows you to create fully typed TypeScript representations of server side 
 It seems that Fredrik Hagnelius author of Typewriter is very busy and do not have enough time for supporting that extensions.
 From the other side that extensions really helps fullstack developers and work on it should be continued.
 
-## Main differences between original and this fork
+## Release
 
-## Version 2.9.2
-
-- Compatible with Visual Studio 17.3.3
-- 
-## Version 2.9.1
-
-- Compatible with Visual Studio 17.3.2
-
-## Version 2.9.0
-
-- version compatible with Visual Studio 17.3.x
-- added special fork of Buildalyzer to be able to run tests - existing
- version of Buildalyzer compatible with net 4.7.2 too old and causing problems with tests
-
-## Version 2.8.1
-
-- fixed tool manifest dependency to require VS 17.2.x
-
-## Version 2.8.0
-
-- version compatible with Visual Studio 17.2.x
-
-## Version 2.7.0
-
-- latest updates for Visual Studio 17.1.x
-
-## Version 2.6.1
-
-- fix relative paths in output directory - now relative to template location
-
-## Version 2.6.0
-
-- ability to setup different output directory in settings.OutputDirectory
-- ability to skip adding generated files in project in template by using settings.SkipAddingGeneratedFilesToProject
-
-### Version 2.5.0
-
-- file scoped namespaces C# 10 compatibility
-
-### Version 2.3.1
-
-- exposing solution path in settings
-
-### Version 2.2.6
-
-- compatible with Visual Studio 2022
-- [IsNullable support for C# 8 nullable reference types](https://github.com/AdaskoTheBeAsT/Typewriter/pull/1) [RudeySH](https://github.com/RudeySH)
-
-### Version 1.32.0
-
-- added DefaultValue
-
-### Version 1.31.0
-
-- [PR 306 fix typo](https://github.com/frhagn/Typewriter/pull/306) [Shamus03](https://github.com/Shamus03)
-- [PR 313 Ignores the Assembler if versions are equals.](https://github.com/frhagn/Typewriter/pull/313) [augustinbcu01](https://github.com/agustinbcu01)
-- [PR 328 Url parameters of type DateTime[Offset] should be urlencoded](https://github.com/frhagn/Typewriter/pull/328) [rodro75](https://github.com/rodro75)
-- [PR 329 Added IsVirtual to Property metadata](https://github.com/frhagn/Typewriter/pull/329) [Ackhuman](https://github.com/Ackhuman)
-
-### Version 1.30.0
-
-- Added support for C# 9.0 records
-- Fixed error for 'string?' type - invalid marked as IsEnumerable
+Latest version is available on [Releases section](https://github.com/AdaskoTheBeAsT/Typewriter/releases)
 
 ## Issues
 
@@ -162,3 +100,114 @@ Please see in samples:
 1. React sample .NET 7
  - use same ideas as in Angular sample - it is only limited to models due to multitude of possible creation api connecting functions [ReactWebApiSample2](https://github.com/AdaskoTheBeAsT/NetCoreTypewriterRecipes/tree/master/src/ReactWebApiSample2)
 
+## Main differences between original and this fork
+
+## Version 2.18.0
+
+- version compatible with Visual Studio 17.8.0
+
+## Version 2.17.0
+
+- removing BOM in generated files
+
+## Version 2.16.0
+
+- added IsDictionary and IsDynamic boolean value to Type
+
+## Version 2.15.0
+
+- fix in Guid empty representation in TypeScript
+
+## Version 2.14.0
+
+- added option flag DisableStrictNullGeneration to disable generation of strict null checks in TypeScript
+
+## Version 2.13.0
+
+- [Fixed IsDate property for nullable DateTime and DateTimeOffset](https://github.com/AdaskoTheBeAsT/Typewriter/pull/32) thanks to @ArtemDintecom
+
+## Version 2.12.1
+
+- fixed regression with encodeUriComponent
+
+## Version 2.12.0
+
+- [AdaskoTheBeAsT/Typewriter#22](https://github.com/AdaskoTheBeAsT/Typewriter/issues/22) closed
+
+## Version 2.11.0
+
+- Added single file mode thanks to @nfMalde [PR 20](https://github.com/AdaskoTheBeAsT/Typewriter/pull/20)
+- upgraded libs
+- upgraded obsoleted code to [IAsyncQuickInfoSourceProvider]
+
+## Version 2.10.1
+
+- version compatible with Visual Studio 17.4.0
+
+## Version 2.10.0
+
+- updated readme
+
+## Version 2.9.2
+
+- Compatible with Visual Studio 17.3.3
+
+## Version 2.9.1
+
+- Compatible with Visual Studio 17.3.2
+
+## Version 2.9.0
+
+- version compatible with Visual Studio 17.3.x
+- added special fork of Buildalyzer to be able to run tests - existing
+ version of Buildalyzer compatible with net 4.7.2 too old and causing problems with tests
+
+## Version 2.8.1
+
+- fixed tool manifest dependency to require VS 17.2.x
+
+## Version 2.8.0
+
+- version compatible with Visual Studio 17.2.x
+
+## Version 2.7.0
+
+- latest updates for Visual Studio 17.1.x
+
+## Version 2.6.1
+
+- fix relative paths in output directory - now relative to template location
+
+## Version 2.6.0
+
+- ability to setup different output directory in settings.OutputDirectory
+- ability to skip adding generated files in project in template by using settings.SkipAddingGeneratedFilesToProject
+
+### Version 2.5.0
+
+- file scoped namespaces C# 10 compatibility
+
+### Version 2.3.1
+
+- exposing solution path in settings
+
+### Version 2.2.6
+
+- compatible with Visual Studio 2022
+- [IsNullable support for C# 8 nullable reference types](https://github.com/AdaskoTheBeAsT/Typewriter/pull/1) [RudeySH](https://github.com/RudeySH)
+
+### Version 1.32.0
+
+- added DefaultValue
+
+### Version 1.31.0
+
+- [PR 306 fix typo](https://github.com/frhagn/Typewriter/pull/306) [Shamus03](https://github.com/Shamus03)
+- [PR 313 Ignores the Assembler if versions are equals.](https://github.com/frhagn/Typewriter/pull/313) [augustinbcu01](https://github.com/agustinbcu01)
+- [PR 328 Url parameters of type DateTime[Offset] should be urlencoded](https://github.com/frhagn/Typewriter/pull/328) [rodro75](https://github.com/rodro75)
+- [PR 329 Added IsVirtual to Property metadata](https://github.com/frhagn/Typewriter/pull/329) [Ackhuman](https://github.com/Ackhuman)
+
+### Version 1.30.0
+
+- Added support for C# 9.0 records
+- Fixed error for 'string?' type - invalid marked as IsEnumerable
