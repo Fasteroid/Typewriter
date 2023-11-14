@@ -4,16 +4,12 @@ Typewriter is a Visual Studio extensions that generates TypeScript files from c#
 This allows you to create fully typed TypeScript representations of server side API, models, controllers, SignalR hubs etc. that automatically updates when you make changes to your c# code.
 
 [Original Documentation](http://frhagn.github.io/Typewriter)  
-[Download from Visual Studio Gallery old version 1.22.0](https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6)
+[Download Last Unofficial Version](https://github.com/AdaskoTheBeAsT/Typewriter/releases)
 
 ## Why new fork?
 
 It seems that Fredrik Hagnelius author of Typewriter is very busy and do not have enough time for supporting that extensions.
 From the other side that extensions really helps fullstack developers and work on it should be continued.
-
-## Release
-
-Latest version is available on [Releases section](https://github.com/AdaskoTheBeAsT/Typewriter/releases)
 
 ## Issues
 
