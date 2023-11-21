@@ -22,6 +22,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.ToDisplayString();
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public bool HasDefaultValue => _symbol.HasExplicitDefaultValue;
 
         public string DefaultValue => GetDefaultValue();

@@ -28,6 +28,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override string FullName => _metadata.FullName;
 
+        public override string AssemblyName => _metadata.AssemblyName;
+
         private IAttributeCollection _attributes;
 
         public override IAttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this, Settings));

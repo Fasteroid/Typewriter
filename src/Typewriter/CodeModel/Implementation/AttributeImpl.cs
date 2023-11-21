@@ -29,6 +29,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override string FullName => _metadata.FullName;
 
+        public override string AssemblyName => _metadata.AssemblyName;
+
         public override string Value => GetValue(_metadata.Value);
 
         private IAttributeArgumentCollection _arguments;

@@ -24,6 +24,11 @@
             The name of the attribute.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Attribute.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Attribute.Parent">
             <summary>
             The parent context of the attribute.
@@ -179,6 +184,11 @@
             The full original name of the class including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Class.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Class.Interfaces">
             <summary>
             All interfaces implemented by the class.
@@ -288,6 +298,11 @@
             The full original name of the constant including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Constant.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Constant.name">
             <summary>
             The name of the constant (camelCased).
@@ -336,6 +351,11 @@
         <member name="P:Typewriter.CodeModel.Delegate.FullName">
             <summary>
             The full original name of the delegate including namespace and containing class names.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Delegate.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Delegate.IsGeneric">
@@ -434,6 +454,11 @@
             The full original name of the enum including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Enum.AssemblyName">
+            <summary>
+            The name of the assembly containing the enum.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Enum.IsFlags">
             <summary>
             Determines if the enum is decorated with the Flags attribute.
@@ -499,6 +524,11 @@
             The full original name of the enum value including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.EnumValue.AssemblyName">
+            <summary>
+            The name of the assembly containing the enum value.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.EnumValue.name">
             <summary>
             The name of the enum value (camelCased).
@@ -542,6 +572,11 @@
         <member name="P:Typewriter.CodeModel.Event.FullName">
             <summary>
             The full original name of the event including namespace and containing class names.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Event.AssemblyName">
+            <summary>
+            The name of the assembly containing the event.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Event.name">
@@ -617,6 +652,11 @@
         <member name="P:Typewriter.CodeModel.Field.FullName">
             <summary>
             The full original name of the field including namespace and containing class names.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Field.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Field.name">
@@ -712,6 +752,11 @@
         <member name="P:Typewriter.CodeModel.Interface.FullName">
             <summary>
             The full original name of the interface including namespace and containing class names.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Interface.AssemblyName">
+            <summary>
+            The name of the assembly containing the interface.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Interface.Interfaces">
@@ -813,6 +858,11 @@
             The full original name of the method including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Method.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Method.IsAbstract">
             <summary>
             Determines if the method is abstract.
@@ -877,6 +927,11 @@
         <member name="P:Typewriter.CodeModel.Parameter.FullName">
             <summary>
             The full original name of the parameter.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Parameter.AssemblyName">
+            <summary>
+            The name of the assembly containing the parameter.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Parameter.DefaultValue">
@@ -957,6 +1012,11 @@
         <member name="T:Typewriter.CodeModel.Record">
             <summary>
             Represents a record.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Record.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Record.Attributes">
@@ -1113,6 +1173,11 @@
             The full original name of the property including namespace and containing class names.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Property.AssemblyName">
+            <summary>
+            The name of the assembly containing the property.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Property.HasGetter">
             <summary>
             Determines if the property has a getter.
@@ -1161,6 +1226,11 @@
         <member name="T:Typewriter.CodeModel.Type">
             <summary>
             Represents a type.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Type.AssemblyName">
+            <summary>
+            The name of the assembly containing the attribute.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.Attributes">

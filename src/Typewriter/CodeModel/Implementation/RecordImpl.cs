@@ -54,6 +54,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override string FullName => _metadata.FullName;
 
+        public override string AssemblyName => _metadata.AssemblyName;
+
         private IInterfaceCollection _interfaces;
 
         public override IInterfaceCollection Interfaces => _interfaces ?? (_interfaces = InterfaceImpl.FromMetadata(_metadata.Interfaces, this, Settings));
@@ -66,7 +68,7 @@ namespace Typewriter.CodeModel.Implementation
 
         public override IMethodCollection Methods => _methods ?? (_methods = MethodImpl.FromMetadata(_metadata.Methods, this, Settings));
 
-        public override string name  => CamelCase(_metadata.Name.TrimStart('@'));
+        public override string name => CamelCase(_metadata.Name.TrimStart('@'));
 
         public override string Name => _metadata.Name.TrimStart('@');
 

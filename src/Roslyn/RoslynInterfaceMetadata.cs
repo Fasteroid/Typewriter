@@ -28,6 +28,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.ToDisplayString();
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public bool IsGeneric => _symbol.TypeParameters.Any();
 
         public string Namespace => _symbol.GetNamespace();

@@ -24,6 +24,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the event.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// The name of the event (camelCased).
         /// </summary>
 #pragma warning disable SA1300 // Element should begin with upper-case letter

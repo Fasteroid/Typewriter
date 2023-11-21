@@ -30,6 +30,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override string Namespace => _metadata.Namespace;
 
+        public override string AssemblyName => _metadata.AssemblyName;
+
         public override bool IsGeneric => _metadata.IsGeneric;
 
         private Type _type;

@@ -30,6 +30,11 @@ namespace Typewriter.CodeModel
         public abstract string Name { get; }
 
         /// <summary>
+        /// The name of the assembly containing the attribute.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// The parent context of the attribute.
         /// </summary>
         public abstract Item Parent { get; }

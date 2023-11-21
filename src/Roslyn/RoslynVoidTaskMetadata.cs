@@ -13,6 +13,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => "System.Void";
 
+        public string AssemblyName => "System.Private.CoreLib";
+
         public bool IsAbstract => false;
 
         public bool IsDictionary => false;

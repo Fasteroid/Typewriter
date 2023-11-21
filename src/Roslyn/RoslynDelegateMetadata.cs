@@ -26,6 +26,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.GetFullName();
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
 
         public ITypeMetadata Type => _methodSymbol == null ? null : RoslynTypeMetadata.FromTypeSymbol(_methodSymbol.ReturnType, Settings);

@@ -24,6 +24,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the enum value.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// The name of the enum value (camelCased).
         /// </summary>
 #pragma warning disable SA1300 // Element should begin with upper-case letter

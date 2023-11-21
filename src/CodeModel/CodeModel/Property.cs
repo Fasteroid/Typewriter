@@ -24,6 +24,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the property.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// Determines if the property has a getter.
         /// </summary>
         public abstract bool HasGetter { get; }

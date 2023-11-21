@@ -19,6 +19,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the parameter.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// The default value of the parameter if it's optional.
         /// </summary>
         public abstract string DefaultValue { get; }

@@ -56,6 +56,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.ToDisplayString();
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public string Value => _value;
 
         public IEnumerable<IAttributeArgumentMetadata> Arguments { get; }

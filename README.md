@@ -98,6 +98,10 @@ Please see in samples:
 
 ## Main differences between original and this fork
 
+## Version 2.19.0
+
+- added AssemblyName to symbols to be able to use type containing assembly name in templates
+
 ## Version 2.18.0
 
 - version compatible with Visual Studio 17.8.0

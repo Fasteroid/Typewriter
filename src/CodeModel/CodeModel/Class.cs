@@ -54,6 +54,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the attribute.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// All interfaces implemented by the class.
         /// </summary>
         public abstract IInterfaceCollection Interfaces { get; }

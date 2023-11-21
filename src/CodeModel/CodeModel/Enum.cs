@@ -29,6 +29,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the enum.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// Determines if the enum is decorated with the Flags attribute.
         /// </summary>
         public abstract bool IsFlags { get; }

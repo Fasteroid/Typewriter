@@ -5,5 +5,7 @@
         string Name { get; }
 
         string FullName { get; }
+
+        string AssemblyName { get; }
     }
 }

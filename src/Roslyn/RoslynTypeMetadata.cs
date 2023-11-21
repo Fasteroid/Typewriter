@@ -29,6 +29,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.GetFullName() + (IsNullable ? "?" : string.Empty);
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public bool IsAbstract => (_symbol as INamedTypeSymbol)?.IsAbstract ?? false;
 
         public bool IsGeneric => (_symbol as INamedTypeSymbol)?.TypeParameters.Any() ?? false;

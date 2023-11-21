@@ -9,6 +9,11 @@ namespace Typewriter.CodeModel
     public abstract class Record : Item
     {
         /// <summary>
+        /// The name of the assembly containing the attribute.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// All attributes defined on the record.
         /// </summary>
         public abstract IAttributeCollection Attributes { get; }

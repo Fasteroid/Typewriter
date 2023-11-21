@@ -27,6 +27,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string FullName => _symbol.ToDisplayString();
 
+        public string AssemblyName => _symbol.ContainingAssembly?.Name;
+
         public string DocComment => _symbol.GetDocumentationCommentXml();
 
         public bool IsAbstract => _symbol.IsAbstract;

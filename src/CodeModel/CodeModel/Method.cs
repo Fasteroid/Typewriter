@@ -24,6 +24,11 @@ namespace Typewriter.CodeModel
         public abstract string FullName { get; }
 
         /// <summary>
+        /// The name of the assembly containing the attribute.
+        /// </summary>
+        public abstract string AssemblyName { get; }
+
+        /// <summary>
         /// Determines if the method is abstract.
         /// </summary>
         public abstract bool IsAbstract { get; }
