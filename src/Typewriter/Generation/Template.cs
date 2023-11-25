@@ -8,7 +8,6 @@ using EnvDTE;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
-using Typewriter.LongPaths;
 using Typewriter.VisualStudio;
 using File = Typewriter.CodeModel.File;
 
@@ -166,7 +165,20 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            FileWriter.WriteAllText(outputPath, outputContent);
+            var modifiedPath = outputPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+            ? $@"\\?\UNC\{outputPath.Substring(2, outputPath.Length - 2)}"
+                : $@"\\?\{outputPath}";
+
+            var dir = System.IO.Path.GetDirectoryName(modifiedPath);
+            if (!System.IO.Directory.Exists(dir) && dir != null)
+            {
+                System.IO.Directory.CreateDirectory(dir);
+            }
+
+            System.IO.File.WriteAllText(
+                modifiedPath,
+                outputContent,
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         }
 
         protected virtual void SaveFile(File file, string output, ref bool success)

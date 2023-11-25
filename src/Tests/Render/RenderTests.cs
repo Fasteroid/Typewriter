@@ -1,9 +1,8 @@
-﻿using Microsoft.IO;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
-using System.Linq;
 using Typewriter.Generation;
-using Typewriter.Tests.Render.WebApiControllerTests;
 using Typewriter.Tests.TestInfrastructure;
 using Xunit;
 

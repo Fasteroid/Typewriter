@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using EnvDTE;
 using Typewriter.CodeModel;
 using Typewriter.TemplateEditor.Lexing;
@@ -37,23 +38,23 @@ namespace Typewriter.Generation
                 return null;
             }
 
-            var output = string.Empty;
+            var output = new StringBuilder();
             var stream = new Stream(template);
 
             while (stream.Advance())
             {
-                if (ParseDollar(projectItem, template, files, stream, context, ref output))
+                if (ParseDollar(projectItem, template, files, stream, context, output))
                 {
                     continue;
                 }
 
-                output += stream.Current;
+                output.Append(stream.Current);
             }
 
-            return output;
+            return output.ToString();
         }
 
-        private bool ParseDollar(ProjectItem projectItem, string template, File[] files, Stream stream, object context, ref string output)
+        private bool ParseDollar(ProjectItem projectItem, string template, File[] files, Stream stream, object context, StringBuilder output)
         {
             if (stream.Current == '$')
             {
@@ -86,18 +87,19 @@ namespace Typewriter.Generation
 
                                 if (!string.Equals(stringValue, value.GetType().FullName, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    output += stringValue;
+                                    output.Append(stringValue);
                                 }
                                 else
                                 {
-                                    output += "$" + identifier;
+                                    output.Append("$").Append(identifier);
                                 }
                             }
                             else
                             {
                                 var items = ApplyFilter(collection, filter, projectItem, identifier, sourcePath);
 
-                                output += string.Join(ParseTemplate(projectItem, sourcePath, separator, context), items.Select(item => ParseTemplate(projectItem, sourcePath, block, item)));
+                                output.Append(string.Join(ParseTemplate(projectItem, sourcePath, separator, context),
+                                    items.Select(item => ParseTemplate(projectItem, sourcePath, block, item))));
                                 // In this case we mus check if  we get items of the next element too
                                 for (var i= index+1; i<files.Length; i++)
                                 {
@@ -113,7 +115,7 @@ namespace Typewriter.Generation
 
                                                 if (colnext.Any())
                                                 {
-                                                    output += ParseTemplate(projectItem, sourcePath, separator, context);
+                                                    output.Append(ParseTemplate(projectItem, sourcePath, separator, context));
 
                                                     break;
                                                 }
@@ -128,7 +130,7 @@ namespace Typewriter.Generation
                             var trueBlock = ParseBlock(innerStream, '[', ']');
                             var falseBlock = ParseBlock(innerStream, '[', ']');
 
-                            output += ParseTemplate(projectItem, sourcePath, (bool)value ? trueBlock : falseBlock, context);
+                            output.Append(ParseTemplate(projectItem, sourcePath, (bool)value ? trueBlock : falseBlock, context));
                         }
                         else
                         {
@@ -137,11 +139,11 @@ namespace Typewriter.Generation
                             {
                                 if (block != null)
                                 {
-                                    output += ParseTemplate(projectItem, sourcePath, block, value);
+                                    output.Append(ParseTemplate(projectItem, sourcePath, block, value));
                                 }
                                 else
                                 {
-                                    output += value.ToString();
+                                    output.Append(value.ToString());
                                 }
                             }
                         }
@@ -282,23 +284,23 @@ namespace Typewriter.Generation
                 return null;
             }
 
-            var output = string.Empty;
+            var output = new StringBuilder();
             var stream = new Stream(template);
 
             while (stream.Advance())
             {
-                if (ParseDollar(projectItem, sourcePath, stream, context, ref output))
+                if (ParseDollar(projectItem, sourcePath, stream, context, output))
                 {
                     continue;
                 }
 
-                output += stream.Current;
+                output.Append(stream.Current);
             }
 
-            return output;
+            return output.ToString();
         }
 
-        private bool ParseDollar(ProjectItem projectItem, string sourcePath, Stream stream, object context, ref string output)
+        private bool ParseDollar(ProjectItem projectItem, string sourcePath, Stream stream, object context, StringBuilder output)
         {
             if (stream.Current == '$')
             {
@@ -320,11 +322,11 @@ namespace Typewriter.Generation
 
                             if (!string.Equals(stringValue, value.GetType().FullName, StringComparison.OrdinalIgnoreCase))
                             {
-                                output += stringValue;
+                                output.Append(stringValue);
                             }
                             else
                             {
-                                output += "$" + identifier;
+                                output.Append("$").Append(identifier);
                             }
                         }
                         else
@@ -368,7 +370,8 @@ namespace Typewriter.Generation
                                 items = ItemFilter.Apply(collection, filter, ref matchFound);
                             }
 
-                            output += string.Join(ParseTemplate(projectItem, sourcePath, separator, context), items.Select(item => ParseTemplate(projectItem, sourcePath, block, item)));
+                            output.Append(string.Join(ParseTemplate(projectItem, sourcePath, separator, context),
+                                items.Select(item => ParseTemplate(projectItem, sourcePath, block, item))));
                         }
                     }
                     else if (value is bool)
@@ -376,7 +379,7 @@ namespace Typewriter.Generation
                         var trueBlock = ParseBlock(stream, '[', ']');
                         var falseBlock = ParseBlock(stream, '[', ']');
 
-                        output += ParseTemplate(projectItem, sourcePath, (bool)value ? trueBlock : falseBlock, context);
+                        output.Append(ParseTemplate(projectItem, sourcePath, (bool)value ? trueBlock : falseBlock, context));
                     }
                     else
                     {
@@ -385,11 +388,11 @@ namespace Typewriter.Generation
                         {
                             if (block != null)
                             {
-                                output += ParseTemplate(projectItem, sourcePath, block, value);
+                                output.Append(ParseTemplate(projectItem, sourcePath, block, value));
                             }
                             else
                             {
-                                output += value.ToString();
+                                output.Append(value.ToString());
                             }
                         }
                     }

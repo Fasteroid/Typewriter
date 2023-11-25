@@ -74,12 +74,6 @@
     <Compile Include="Generation\Controllers\BlockingQueue.cs" />
     <Compile Include="Generation\SingleFileParser.cs" />
     <Compile Include="Generation\SolutionFilesHelper.cs" />
-    <Compile Include="LongPaths\CreationDisposition.cs" />
-    <Compile Include="LongPaths\FileAccess.cs" />
-    <Compile Include="LongPaths\FileAttributes.cs" />
-    <Compile Include="LongPaths\FileShare.cs" />
-    <Compile Include="LongPaths\FileWriter.cs" />
-    <Compile Include="LongPaths\NativeMethods.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="CodeModel\Collections\AttributeCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\ClassCollectionImpl.cs" />
