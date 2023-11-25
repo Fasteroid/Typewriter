@@ -249,6 +249,11 @@
             All properties defined in the class.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Class.StaticReadOnlyFields">
+            <summary>
+            All static readonly fields defined in the class.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Class.TypeArguments">
             <summary>
             All generic type arguments of the class.
@@ -627,6 +632,11 @@
         <member name="T:Typewriter.CodeModel.IInterfaceCollection">
             <summary>
             Represents a collection of interfaces.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.IStaticReadOnlyFieldCollection">
+            <summary>
+            Represents a collection of static readonly fields.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.IStringConvertible">
@@ -1109,6 +1119,11 @@
             All properties defined in the record.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Record.StaticReadOnlyFields">
+            <summary>
+            All static readonly fields defined in the record.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Record.TypeArguments">
             <summary>
             All generic type arguments of the record.
@@ -1151,6 +1166,61 @@
         <member name="T:Typewriter.CodeModel.IRecordCollection">
             <summary>
             Represents a collection of records.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.StaticReadOnlyField">
+            <summary>
+            Represents a static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.Attributes">
+            <summary>
+            All attributes defined on the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.DocComment">
+            <summary>
+            The XML documentation comment of the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.FullName">
+            <summary>
+            The full original name of the static readonly field including namespace and containing class names.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.AssemblyName">
+            <summary>
+            The name of the assembly containing the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.name">
+            <summary>
+            The name of the static readonly field (camelCased).
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.Name">
+            <summary>
+            The name of the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.Parent">
+            <summary>
+            The parent context of the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.Type">
+            <summary>
+            The type of the static readonly field.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.StaticReadOnlyField.Value">
+            <summary>
+            The value of the static readonly field.
+            </summary>
+        </member>
+        <member name="M:Typewriter.CodeModel.StaticReadOnlyField.op_Implicit(Typewriter.CodeModel.StaticReadOnlyField)~System.String">
+            <summary>
+            Converts the current instance to string.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Property">
@@ -1393,6 +1463,11 @@
         <member name="P:Typewriter.CodeModel.Type.Properties">
             <summary>
             All properties defined in the type.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.Type.StaticReadOnlyFields">
+            <summary>
+            All static readonly fields defined in the type.
             </summary>
         </member>
         <member name="P:Typewriter.CodeModel.Type.TypeArguments">

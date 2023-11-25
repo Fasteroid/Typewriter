@@ -125,6 +125,11 @@ namespace Typewriter.CodeModel
         public abstract IPropertyCollection Properties { get; }
 
         /// <summary>
+        /// All static readonly fields defined in the class.
+        /// </summary>
+        public abstract IStaticReadOnlyFieldCollection StaticReadOnlyFields { get; }
+
+        /// <summary>
         /// All generic type arguments of the class.
         /// TypeArguments are the specified arguments for the TypeParameters on a generic class e.g. &lt;string&gt;.
         /// (In Visual Studio 2013 TypeParameters and TypeArguments are the same).

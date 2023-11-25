@@ -117,6 +117,10 @@ namespace Typewriter.CodeModel.Implementation
 
         public override IPropertyCollection Properties => _properties ?? (_properties = PropertyImpl.FromMetadata(_metadata.Properties, this, Settings));
 
+        private IStaticReadOnlyFieldCollection _staticReadOnlyFields;
+
+        public override IStaticReadOnlyFieldCollection StaticReadOnlyFields => _staticReadOnlyFields ?? (_staticReadOnlyFields = StaticReadOnlyFieldImpl.FromMetadata(_metadata.StaticReadOnlyFields, this, Settings));
+
         private ITypeCollection _typeArguments;
 
         public override ITypeCollection TypeArguments => _typeArguments ?? (_typeArguments = FromMetadata(_metadata.TypeArguments, this, Settings));

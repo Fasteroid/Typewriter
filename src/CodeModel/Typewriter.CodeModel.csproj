@@ -62,6 +62,7 @@
     <Compile Include="CodeModel\Event.cs" />
     <Compile Include="CodeModel\IFilterable.cs" />
     <Compile Include="CodeModel\IInterfaceCollection.cs" />
+    <Compile Include="CodeModel\IStaticReadOnlyFieldCollection.cs" />
     <Compile Include="CodeModel\IStringConvertible.cs" />
     <Compile Include="CodeModel\Field.cs" />
     <Compile Include="CodeModel\File.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="CodeModel\ITypeParameterCollection.cs" />
     <Compile Include="CodeModel\ITypeCollection.cs" />
     <Compile Include="CodeModel\IRecordCollection.cs" />
+    <Compile Include="CodeModel\StaticReadOnlyField.cs" />
     <Compile Include="Configuration\PartialRenderingMode.cs" />
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Extensions\Types\TypeExtensions.cs" />

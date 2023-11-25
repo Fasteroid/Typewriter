@@ -67,6 +67,9 @@ namespace Typewriter.Metadata.Roslyn
 
         public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(_symbol.GetMembers().OfType<IPropertySymbol>(), Settings);
 
+        public IEnumerable<IStaticReadOnlyFieldMetadata> StaticReadOnlyFields =>
+            RoslynStaticReadOnlyFieldMetadata.FromFieldSymbols(_symbol.GetMembers().OfType<IFieldSymbol>(), Settings);
+
         public IEnumerable<IClassMetadata> NestedClasses => RoslynClassMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Class), null, Settings);
 
         public IEnumerable<IEnumMetadata> NestedEnums => RoslynEnumMetadata.FromNamedTypeSymbols(_symbol.GetMembers().OfType<INamedTypeSymbol>().Where(s => s.TypeKind == TypeKind.Enum), Settings);

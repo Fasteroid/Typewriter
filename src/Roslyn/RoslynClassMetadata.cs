@@ -58,6 +58,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public IEnumerable<IPropertyMetadata> Properties => RoslynPropertyMetadata.FromPropertySymbol(Members.OfType<IPropertySymbol>(), Settings);
 
+        public IEnumerable<IStaticReadOnlyFieldMetadata> StaticReadOnlyFields => RoslynStaticReadOnlyFieldMetadata.FromFieldSymbols(Members.OfType<IFieldSymbol>(), Settings);
+
         public IEnumerable<ITypeParameterMetadata> TypeParameters => RoslynTypeParameterMetadata.FromTypeParameterSymbols(_symbol.TypeParameters);
 
         public IEnumerable<ITypeMetadata> TypeArguments => RoslynTypeMetadata.FromTypeSymbols(_symbol.TypeArguments, Settings);

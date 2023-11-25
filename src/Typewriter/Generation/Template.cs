@@ -8,6 +8,7 @@ using EnvDTE;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
+using Typewriter.LongPaths;
 using Typewriter.VisualStudio;
 using File = Typewriter.CodeModel.File;
 
@@ -165,7 +166,7 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            System.IO.File.WriteAllText(outputPath, outputContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            FileWriter.WriteAllText(outputPath, outputContent);
         }
 
         protected virtual void SaveFile(File file, string output, ref bool success)

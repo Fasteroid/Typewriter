@@ -34,6 +34,8 @@ namespace Typewriter.Metadata.Interfaces
 
         IEnumerable<IPropertyMetadata> Properties { get; }
 
+        IEnumerable<IStaticReadOnlyFieldMetadata> StaticReadOnlyFields { get; }
+
         IEnumerable<ITypeParameterMetadata> TypeParameters { get; }
 
         IEnumerable<ITypeMetadata> TypeArguments { get; }

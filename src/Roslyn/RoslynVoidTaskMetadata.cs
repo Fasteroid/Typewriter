@@ -67,6 +67,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public IEnumerable<IInterfaceMetadata> NestedInterfaces => Array.Empty<IInterfaceMetadata>();
 
+        public IEnumerable<IStaticReadOnlyFieldMetadata> StaticReadOnlyFields => Array.Empty<IStaticReadOnlyFieldMetadata>();
+
         public IEnumerable<ITypeMetadata> TypeArguments => Array.Empty<ITypeMetadata>();
 
         public IEnumerable<ITypeParameterMetadata> TypeParameters => Array.Empty<ITypeParameterMetadata>();
