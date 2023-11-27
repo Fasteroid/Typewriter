@@ -10,6 +10,7 @@ using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
 using Typewriter.VisualStudio;
 using File = Typewriter.CodeModel.File;
+using Path = System.IO.Path;
 
 namespace Typewriter.Generation
 {
@@ -165,18 +166,19 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            var modifiedPath = outputPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
-            ? $@"\\?\UNC\{outputPath.Substring(2, outputPath.Length - 2)}"
-                : $@"\\?\{outputPath}";
+            var normalizedPath = Path.GetFullPath(outputPath);
+            var longPath = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+                ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
+                : $@"\\?\{normalizedPath}";
 
-            var dir = System.IO.Path.GetDirectoryName(modifiedPath);
-            if (!System.IO.Directory.Exists(dir) && dir != null)
+            var dir = Path.GetDirectoryName(longPath);
+            if (!Directory.Exists(dir) && dir != null)
             {
-                System.IO.Directory.CreateDirectory(dir);
+                Directory.CreateDirectory(dir);
             }
 
             System.IO.File.WriteAllText(
-                modifiedPath,
+                longPath,
                 outputContent,
                 new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         }
