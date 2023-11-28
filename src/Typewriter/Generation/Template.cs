@@ -180,7 +180,7 @@ namespace Typewriter.Generation
             System.IO.File.WriteAllText(
                 longPath,
                 outputContent,
-                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: Settings.Utf8BomGeneration));
         }
 
         protected virtual void SaveFile(File file, string output, ref bool success)

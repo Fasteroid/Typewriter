@@ -73,6 +73,11 @@ namespace Typewriter.Configuration
         public abstract bool StrictNullGeneration { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to generate UTF8 BOM in output files.
+        /// </summary>
+        public abstract bool Utf8BomGeneration { get; }
+
+        /// <summary>
         /// Includes files in the specified project when rendering the template.
         /// </summary>
         /// <param name="projectName">Project name.</param>
@@ -118,5 +123,11 @@ namespace Typewriter.Configuration
         /// </summary>
         /// <returns><see cref="Settings"/> implementation.</returns>
         public abstract Settings DisableStrictNullGeneration();
+
+        /// <summary>
+        /// Disable UTF8 BOM generation in generated files.
+        /// </summary>
+        /// <returns><see cref="Settings"/> implementation.</returns>
+        public abstract Settings DisableUtf8BomGeneration();
     }
 }

@@ -1611,6 +1611,11 @@
              When false only `type` is generated.
              </summary>
         </member>
+        <member name="P:Typewriter.Configuration.Settings.Utf8BomGeneration">
+            <summary>
+            Gets or sets a value indicating whether to generate UTF8 BOM in output files.
+            </summary>
+        </member>
         <member name="M:Typewriter.Configuration.Settings.IncludeProject(System.String)">
             <summary>
             Includes files in the specified project when rendering the template.
@@ -1657,6 +1662,12 @@
              Using this method falls back to previous method of generating type name when only `type` is generated.
              </summary>
              <returns><see cref="T:Typewriter.Configuration.Settings"/> implementation.</returns>
+        </member>
+        <member name="M:Typewriter.Configuration.Settings.DisableUtf8BomGeneration">
+            <summary>
+            Disable UTF8 BOM generation in generated files.
+            </summary>
+            <returns><see cref="T:Typewriter.Configuration.Settings"/> implementation.</returns>
         </member>
         <member name="T:Typewriter.Extensions.Types.TypeExtensions">
             <summary>

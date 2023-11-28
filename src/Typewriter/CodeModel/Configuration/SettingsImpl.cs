@@ -14,67 +14,11 @@ namespace Typewriter.CodeModel.Configuration
         private char _stringLiteralCharacter = '"';
         private List<string> _includedProjects;
         private bool _strictNullGeneration = true;
+        private bool _utf8BomGeneration = true;
 
         public SettingsImpl(ProjectItem projectItem)
         {
             _projectItem = projectItem;
-        }
-
-        public override Settings IncludeProject(string projectName)
-        {
-            if (_includedProjects == null)
-            {
-                _includedProjects = new List<string>();
-            }
-
-            ProjectHelpers.AddProject(_projectItem, _includedProjects, projectName);
-            return this;
-        }
-
-        public override Settings SingleFileMode(string singleFilename)
-        {
-            _isSingleFileMode = true;
-            _singleFileName = singleFilename;
-
-            return this;
-        }
-
-        public override Settings IncludeReferencedProjects()
-        {
-            if (_includedProjects == null)
-            {
-                _includedProjects = new List<string>();
-            }
-
-            ProjectHelpers.AddReferencedProjects(_includedProjects, _projectItem);
-            return this;
-        }
-
-        public override Settings IncludeCurrentProject()
-        {
-            if (_includedProjects == null)
-            {
-                _includedProjects = new List<string>();
-            }
-
-            ProjectHelpers.AddCurrentProject(_includedProjects, _projectItem);
-            return this;
-        }
-
-        public override Settings IncludeAllProjects()
-        {
-            if (_includedProjects == null)
-            {
-                _includedProjects = new List<string>();
-            }
-
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                ProjectHelpers.AddAllProjects(_projectItem.DTE, _includedProjects);
-            });
-            return this;
         }
 
         public ICollection<string> IncludedProjects
@@ -139,6 +83,68 @@ namespace Typewriter.CodeModel.Configuration
         public override bool StrictNullGeneration => _strictNullGeneration;
 
         /// <summary>
+        /// Gets or sets a value indicating whether to generate UTF8 BOM in output files.
+        /// </summary>
+        public override bool Utf8BomGeneration => _utf8BomGeneration;
+
+        public override Settings IncludeProject(string projectName)
+        {
+            if (_includedProjects == null)
+            {
+                _includedProjects = new List<string>();
+            }
+
+            ProjectHelpers.AddProject(_projectItem, _includedProjects, projectName);
+            return this;
+        }
+
+        public override Settings SingleFileMode(string singleFilename)
+        {
+            _isSingleFileMode = true;
+            _singleFileName = singleFilename;
+
+            return this;
+        }
+
+        public override Settings IncludeReferencedProjects()
+        {
+            if (_includedProjects == null)
+            {
+                _includedProjects = new List<string>();
+            }
+
+            ProjectHelpers.AddReferencedProjects(_includedProjects, _projectItem);
+            return this;
+        }
+
+        public override Settings IncludeCurrentProject()
+        {
+            if (_includedProjects == null)
+            {
+                _includedProjects = new List<string>();
+            }
+
+            ProjectHelpers.AddCurrentProject(_includedProjects, _projectItem);
+            return this;
+        }
+
+        public override Settings IncludeAllProjects()
+        {
+            if (_includedProjects == null)
+            {
+                _includedProjects = new List<string>();
+            }
+
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                ProjectHelpers.AddAllProjects(_projectItem.DTE, _includedProjects);
+            });
+            return this;
+        }
+
+        /// <summary>
         /// Use given string literal character in TypeScript.
         /// </summary>
         /// <param name="ch">Character used as string literal start finish mark.</param>
@@ -160,6 +166,16 @@ namespace Typewriter.CodeModel.Configuration
         public override Settings DisableStrictNullGeneration()
         {
             _strictNullGeneration = false;
+            return this;
+        }
+
+        /// <summary>
+        /// Disable UTF8 BOM generation in generated files.
+        /// </summary>
+        /// <returns><see cref="Settings"/> implementation.</returns>
+        public override Settings DisableUtf8BomGeneration()
+        {
+            _utf8BomGeneration = false;
             return this;
         }
     }
