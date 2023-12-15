@@ -49,5 +49,27 @@ namespace Typewriter.Tests.LongPaths
 
             action.Should().NotThrow();
         }
+
+        [Fact]
+        public void ShouldSaveOnDesktop()
+        {
+            var path = "C:\\Users\\Adam_\\Desktop\\DoctorsOfficeGit\\AngularTest\\src\\models\\a.tst";
+            var normalizedPath = Path.GetFullPath(path);
+            var longPath = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+                ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
+                : $@"\\?\{normalizedPath}";
+            Action action = () =>
+            {
+                var dir = Path.GetDirectoryName(longPath);
+                if (!Directory.Exists(dir) && dir != null)
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                File.WriteAllText(longPath, "ok");
+            };
+
+            action.Should().NotThrow();
+        }
     }
 }
