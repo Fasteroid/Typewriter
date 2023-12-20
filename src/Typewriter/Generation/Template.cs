@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using EnvDTE;
+using Microsoft.Win32;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
@@ -166,19 +167,23 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            var normalizedPath = Path.GetFullPath(outputPath);
-            var longPath = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
-                ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
-                : $@"\\?\{normalizedPath}";
+            var path = outputPath;
+            if (IsLongPathEnabled())
+            {
+                var normalizedPath = Path.GetFullPath(outputPath);
+                path = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+                    ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
+                    : $@"\\?\{normalizedPath}";
+            }
 
-            var dir = Path.GetDirectoryName(longPath);
+            var dir = Path.GetDirectoryName(path);
             if (!Directory.Exists(dir) && dir != null)
             {
                 Directory.CreateDirectory(dir);
             }
 
             System.IO.File.WriteAllText(
-                longPath,
+                path,
                 outputContent,
                 new UTF8Encoding(encoderShouldEmitUTF8Identifier: Settings.Utf8BomGeneration));
         }
@@ -538,6 +543,26 @@ namespace Typewriter.Generation
         {
             _template = LazyTemplate();
             _configuration = LazyConfiguration();
+        }
+
+        private bool IsLongPathEnabled()
+        {
+            const string keyName = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem";
+            const string valueName = "LongPathsEnabled";
+            try
+            {
+                var value = Registry.GetValue(keyName, valueName, null);
+                if (value is int intValue)
+                {
+                    return intValue == 1;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
