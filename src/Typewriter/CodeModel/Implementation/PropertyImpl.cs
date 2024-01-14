@@ -11,6 +11,12 @@ namespace Typewriter.CodeModel.Implementation
     {
         private readonly IPropertyMetadata _metadata;
 
+        private IAttributeCollection _attributes;
+
+        private DocComment _docComment;
+
+        private Type _type;
+
         private PropertyImpl(IPropertyMetadata metadata, Item parent, Settings settings)
         {
             _metadata = metadata;
@@ -38,26 +44,20 @@ namespace Typewriter.CodeModel.Implementation
 
         public override bool IsVirtual => _metadata.IsVirtual;
 
-        private IAttributeCollection _attributes;
-
         public override IAttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this, Settings));
-
-        private DocComment _docComment;
 
         public override DocComment DocComment => _docComment ?? (_docComment = DocCommentImpl.FromXml(_metadata.DocComment, this));
 
-        private Type _type;
-
         public override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, this, Settings));
-
-        public override string ToString()
-        {
-            return Name;
-        }
 
         public static IPropertyCollection FromMetadata(IEnumerable<IPropertyMetadata> metadata, Item parent, Settings settings)
         {
             return new PropertyCollectionImpl(metadata.Select(p => new PropertyImpl(p, parent, settings)));
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

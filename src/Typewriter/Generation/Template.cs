@@ -167,25 +167,32 @@ namespace Typewriter.Generation
 
         protected virtual void WriteFile(string outputPath, string outputContent)
         {
-            var path = outputPath;
-            if (IsLongPathEnabled())
+            try
             {
-                var normalizedPath = Path.GetFullPath(outputPath);
-                path = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
-                    ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
-                    : $@"\\?\{normalizedPath}";
-            }
+                var path = outputPath;
+                if (IsLongPathEnabled())
+                {
+                    var normalizedPath = Path.GetFullPath(outputPath);
+                    path = normalizedPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+                        ? $@"\\?\UNC\{normalizedPath.Substring(2, normalizedPath.Length - 2)}"
+                        : $@"\\?\{normalizedPath}";
+                }
 
-            var dir = Path.GetDirectoryName(path);
-            if (!Directory.Exists(dir) && dir != null)
+                var dir = Path.GetDirectoryName(path);
+                if (!Directory.Exists(dir) && dir != null)
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                System.IO.File.WriteAllText(
+                    path,
+                    outputContent,
+                    new UTF8Encoding(encoderShouldEmitUTF8Identifier: Settings.Utf8BomGeneration));
+            }
+            catch (Exception exception)
             {
-                Directory.CreateDirectory(dir);
+                Log.Error($"Unable to write file '{outputPath}'.{Environment.NewLine}{exception.Message}{Environment.NewLine}{exception.StackTrace}");
             }
-
-            System.IO.File.WriteAllText(
-                path,
-                outputContent,
-                new UTF8Encoding(encoderShouldEmitUTF8Identifier: Settings.Utf8BomGeneration));
         }
 
         protected virtual void SaveFile(File file, string output, ref bool success)
