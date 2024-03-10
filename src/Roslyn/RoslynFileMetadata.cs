@@ -54,10 +54,12 @@ namespace Typewriter.Metadata.Roslyn
         private IEnumerable<INamedTypeSymbol> GetNamespaceChildNodes<T>()
             where T : SyntaxNode
         {
+#pragma warning disable RS1039 // This call to 'SemanticModel.GetDeclaredSymbol()' will always return 'null'
             var symbols = _root.ChildNodes().OfType<T>().Concat(
                 _root.ChildNodes().OfType<NamespaceDeclarationSyntax>().SelectMany(n => n.ChildNodes().OfType<T>())).Concat(
                     _root.ChildNodes().OfType<FileScopedNamespaceDeclarationSyntax>().SelectMany(n => n.ChildNodes().OfType<T>()))
                 .Select(c => _semanticModel.GetDeclaredSymbol(c) as INamedTypeSymbol);
+#pragma warning restore RS1039 // This call to 'SemanticModel.GetDeclaredSymbol()' will always return 'null'
 
             if (Settings.PartialRenderingMode == PartialRenderingMode.Combined)
             {
