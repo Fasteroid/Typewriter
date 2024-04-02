@@ -18,7 +18,7 @@
     <PackageReference Include="AdaskoTheBeAsT.SecurityCodeScan.VS2022" Version="5.6.7.19" PrivateAssets="all" ExcludeAssets="runtime" />
     <!--<PackageReference Include="Meziantou.Analyzer" Version="2.0.141" PrivateAssets="all" ExcludeAssets="runtime" />-->
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24072.1" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24122.1" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.9.2" PrivateAssets="all" ExcludeAssets="runtime" />
@@ -29,7 +29,7 @@
 	<!--<PackageReference Include="Roslynator.Analyzers" Version="4.11.0" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.11.0" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.11.0" PrivateAssets="all" ExcludeAssets="runtime" />-->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.23.0.88079" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 

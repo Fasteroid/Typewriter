@@ -120,9 +120,6 @@
     <Compile Include="TestInfrastructure\RoslynMetadataProviderStub.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Render\RoutedApiController\BooksController.result" />
     <None Include="Render\RoutedApiController\BooksController.tstemplate" />
     <None Include="Render\WebApiControllerTests\SingleFile.result" />
@@ -166,6 +163,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Build">
       <Version>17.9.5</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common">
+      <Version>4.9.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild">
       <Version>4.9.2</Version>
