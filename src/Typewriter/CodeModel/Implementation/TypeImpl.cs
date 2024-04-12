@@ -145,6 +145,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override IInterfaceCollection NestedInterfaces => _nestedInterfaces ?? (_nestedInterfaces = InterfaceImpl.FromMetadata(_metadata.NestedInterfaces, this, Settings));
 
+        public override IEnumerable<string> FileLocations => _metadata.FileLocations;
+
         public override Settings Settings { get; }
 
         public override string ToString()

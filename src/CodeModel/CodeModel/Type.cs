@@ -16,6 +16,11 @@ namespace Typewriter.CodeModel
         public abstract string AssemblyName { get; }
 
         /// <summary>
+        /// The file paths this type is defined in.  There may be more than one if the type is a partial class.
+        /// </summary>
+        public abstract IEnumerable<string> FileLocations { get; }
+
+        /// <summary>
         /// All attributes defined on the type.
         /// </summary>
         public abstract IAttributeCollection Attributes { get; }

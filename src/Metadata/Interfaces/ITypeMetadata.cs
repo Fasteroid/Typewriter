@@ -22,6 +22,8 @@ namespace Typewriter.Metadata.Interfaces
 
         IEnumerable<IFieldMetadata> TupleElements { get; }
 
+        IEnumerable<string> FileLocations { get; }
+
         string DefaultValue { get; }
     }
 }

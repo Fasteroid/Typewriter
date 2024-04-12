@@ -74,5 +74,7 @@ namespace Typewriter.Metadata.Roslyn
         public IEnumerable<ITypeParameterMetadata> TypeParameters => Array.Empty<ITypeParameterMetadata>();
 
         public IEnumerable<IFieldMetadata> TupleElements => Array.Empty<IFieldMetadata>();
+
+        public IEnumerable<string> FileLocations => Type.FileLocations;
     }
 }
