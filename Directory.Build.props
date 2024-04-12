@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <!-- Common StyleCop configuration -->
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)SecurityCodeScan.config.yml" />
   </ItemGroup>
 
