@@ -47,6 +47,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public string DefaultValue { get; set; }
 
+        public IEnumerable<string> FileLocations => _symbol.Locations.Select(l => l.SourceTree.FilePath);
+
         public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes(), Settings);
 
         public IClassMetadata BaseClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.BaseType, Settings);
