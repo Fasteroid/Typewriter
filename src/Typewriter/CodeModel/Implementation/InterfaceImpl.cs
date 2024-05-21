@@ -36,7 +36,7 @@ namespace Typewriter.CodeModel.Implementation
 
         private Type _type;
 
-        protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent, Settings));
+        public override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent, Settings));
 
         private IAttributeCollection _attributes;
 

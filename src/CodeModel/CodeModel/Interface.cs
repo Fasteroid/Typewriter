@@ -101,7 +101,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// Represents a <see cref="Typewriter.CodeModel.Type"/>.
         /// </summary>
-        protected abstract Type Type { get; }
+        public abstract Type Type { get; }
 
         /// <summary>
         /// Converts the current instance to string.
