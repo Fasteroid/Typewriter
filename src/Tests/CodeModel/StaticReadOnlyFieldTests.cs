@@ -7,11 +7,12 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "StaticReadOnlyFields"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "StaticReadOnlyFields")]
+    [Collection(MockedVS.Collection)]
     public class RoslynStaticReadOnlyFieldTests : StaticReadOnlyFieldTests
     {
-        public RoslynStaticReadOnlyFieldTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynStaticReadOnlyFieldTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -20,8 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected StaticReadOnlyFieldTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected StaticReadOnlyFieldTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\StaticReadOnlyFieldInfo.cs");
         }

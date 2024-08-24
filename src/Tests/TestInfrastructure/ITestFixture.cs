@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using EnvDTE;
 using Typewriter.Metadata.Providers;
 
@@ -11,3 +11,4 @@ namespace Typewriter.Tests.TestInfrastructure
         IMetadataProvider Provider { get; }
     }
 }
+*/

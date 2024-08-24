@@ -157,6 +157,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\ItemTemplates\Angular\**\*" Link="Templates\Angular\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ItemTemplates\Empty\**\*" Link="Templates\Empty\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ItemTemplates\Models\**\*" Link="Templates\Models\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
@@ -208,16 +219,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Buildalyzer\src\Buildalyzer\Buildalyzer.csproj">
+      <Project>{47D9EE24-BC5F-49E9-B3D5-5E36D93D0715}</Project>
+      <Name>Buildalyzer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeModel\Typewriter.CodeModel.csproj">
       <Project>{4ec6c920-d234-49f1-b17b-98a4de24ff87}</Project>
       <Name>Typewriter.CodeModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\Typewriter.ItemTemplates.csproj">
-      <Project>{417568AF-7B73-4C93-9261-025D69AC89A5}</Project>
-      <Name>Typewriter.ItemTemplates</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
     <ProjectReference Include="..\Metadata\Typewriter.Metadata.csproj">
       <Project>{511e50cc-6073-43ee-9e8b-dd6f584c81a8}</Project>
@@ -230,11 +238,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Debugger.Contracts" Version="17.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.9.2" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.9.37000" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.11.0" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.11.40288" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.9.3174">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.11.435">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

@@ -9,22 +9,30 @@ namespace Typewriter.VisualStudio
     [Guid(Constants.LanguageServiceId)]
     internal class LanguageService : IVsLanguageInfo, IVsLanguageTextOps
     {
-        [Export, Name(Constants.ContentType), BaseDefinition(Constants.BaseDefinition)]
+        [Export]
+        [Name(Constants.ContentType)]
+        [BaseDefinition(Constants.BaseDefinition)]
         internal static ContentTypeDefinition TstContentTypeDefinition { get; set; }
 
-        [Export, ContentType(Constants.ContentType), FileExtension(Constants.TemplateExtension)]
+        [Export]
+        [ContentType(Constants.ContentType)]
+        [FileExtension(Constants.TemplateExtension)]
         internal static FileExtensionToContentTypeDefinition TstFileExtensionDefinition { get; set; }
 
-        [Export, Name(Classifications.Property)]
+        [Export]
+        [Name(Classifications.Property)]
         internal static ClassificationTypeDefinition PropertyClassificationType { get; set; }
 
-        [Export, Name(Classifications.AlternateProperty)]
+        [Export]
+        [Name(Classifications.AlternateProperty)]
         internal static ClassificationTypeDefinition AlternatePropertyClassificationType { get; set; }
 
-        [Export, Name(Classifications.ClassSymbol)]
+        [Export]
+        [Name(Classifications.ClassSymbol)]
         internal static ClassificationTypeDefinition ClassSymbolClassificationType { get; set; }
 
-        [Export, Name(Classifications.InterfaceSymbol)]
+        [Export]
+        [Name(Classifications.InterfaceSymbol)]
         internal static ClassificationTypeDefinition InterfaceSymbolClassificationType { get; set; }
 
         private const int failed = 2147467263;

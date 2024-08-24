@@ -7,11 +7,12 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "Constants"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Constants")]
+    [Collection(MockedVS.Collection)]
     public class RoslynConstantTests : ConstantTests
     {
-        public RoslynConstantTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynConstantTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -20,8 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected ConstantTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected ConstantTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\ConstantInfo.cs");
         }

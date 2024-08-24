@@ -9,7 +9,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace Typewriter.TemplateEditor.Controllers
 {
     [Export(typeof(ITaggerProvider))]
-    [ContentType(Constants.ContentType), TagType(typeof(ErrorTag))]
+    [ContentType(Constants.ContentType)]
+    [TagType(typeof(ErrorTag))]
     internal class SyntaxErrorControllerProvider : ITaggerProvider
     {
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer)

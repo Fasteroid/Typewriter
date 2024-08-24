@@ -1626,6 +1626,11 @@
             Gets or sets a value indicating whether to generate UTF8 BOM in output files.
             </summary>
         </member>
+        <member name="P:Typewriter.Configuration.Settings.TemplatePath">
+            <summary>
+            Gets full path to the template file.
+            </summary>
+        </member>
         <member name="M:Typewriter.Configuration.Settings.IncludeProject(System.String)">
             <summary>
             Includes files in the specified project when rendering the template.

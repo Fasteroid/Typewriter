@@ -6,7 +6,8 @@ using Typewriter.VisualStudio;
 
 namespace Typewriter.TemplateEditor.FormatDefinitions
 {
-    [Export(typeof(EditorFormatDefinition)), Name("TypeScript Template Property")]
+    [Export(typeof(EditorFormatDefinition))]
+    [Name("TypeScript Template Property")]
     [ClassificationType(ClassificationTypeNames = Classifications.Property)]
     internal sealed class PropertyFormatDefinition : ClassificationFormatDefinition
     {

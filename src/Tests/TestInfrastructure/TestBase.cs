@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.Sdk.TestFramework;
+using Microsoft.VisualStudio.Shell;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.CodeModel.Implementation;
 using Typewriter.Configuration;
@@ -9,32 +11,66 @@ using Typewriter.Metadata.Providers;
 using Xunit;
 using File = Typewriter.CodeModel.File;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
-
 namespace Typewriter.Tests.TestInfrastructure
 {
-    public abstract class TestBase
+    [Collection(MockedVS.Collection)]
+    public class TestBase
+        : IAsyncLifetime
     {
-        protected readonly DTE Dte;
-        protected readonly IMetadataProvider MetadataProvider;
-
-        protected readonly bool IsRoslyn;
-        protected readonly bool IsCodeDom;
-
-        protected TestBase(ITestFixture fixture, GlobalServiceProvider sp)
+        public TestBase(MefHostingFixture mefHostingFixture)
         {
-            //sp.Reset();
-            Dte = fixture.Dte;
-            MetadataProvider = fixture.Provider;
-
-            IsRoslyn = fixture is RoslynFixture;
-            IsCodeDom = false;
+            MefHostingFixture = mefHostingFixture;
         }
 
-        protected string SolutionDirectory => Path.Combine(new FileInfo(Dte.Solution.FileName).Directory?.FullName, "src");
+        protected MefHostingFixture MefHostingFixture { get; }
+
+        protected IAsyncServiceProvider AsyncServiceProvider { get; set; }
+
+        protected DTE Dte { get; set; }
+
+        protected IMetadataProvider MetadataProvider { get; set; }
+
+        protected bool IsRoslyn => true;
+
+        protected bool IsCodeDom => false;
+
+        public async Task InitializeAsync()
+        {
+            // Create the ExportProvider asynchronously
+            var exportProvider = await MefHostingFixture.CreateExportProviderAsync();
+
+            // Retrieve the IAsyncServiceProvider from the ExportProvider
+            AsyncServiceProvider = exportProvider.GetExportedValue<IAsyncServiceProvider>();
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            // Retrieve the DTE service asynchronously
+            Dte = await AsyncServiceProvider.GetServiceAsync(typeof(DTE)) as DTE;
+
+            MetadataProvider = new RoslynMetadataProviderStub(Dte);
+
+            MessageFilter.Register();
+        }
+
+        public Task DisposeAsync()
+        {
+            MessageFilter.Revoke();
+            return Task.CompletedTask;
+        }
+
+        protected string SolutionDirectory
+        {
+            get
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                var fileName = Dte.Solution.FileName;
+                return Path.Combine(new FileInfo(fileName).Directory!.FullName, "src");
+            }
+        }
 
         protected ProjectItem GetProjectItem(string path)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             return Dte.Solution.FindProjectItem(Path.Combine(SolutionDirectory, path));
         }
 
@@ -47,7 +83,7 @@ namespace Typewriter.Tests.TestInfrastructure
         {
             if (settings == null)
             {
-                settings = new SettingsImpl(null);
+                settings = new SettingsImpl(null, string.Empty);
             }
 
             var metadata = MetadataProvider.GetFile(Path.Combine(SolutionDirectory, path), settings, requestRender);

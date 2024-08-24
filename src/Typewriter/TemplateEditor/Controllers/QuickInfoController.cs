@@ -11,7 +11,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(IAsyncQuickInfoSourceProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IAsyncQuickInfoSourceProvider))]
+    [ContentType(Constants.ContentType)]
     [Name("Tooltip Source Provider")]
     internal class QuickInfoSourceProvider : IAsyncQuickInfoSourceProvider
     {
@@ -135,7 +136,8 @@ namespace Typewriter.TemplateEditor.Controllers
         }
     }
 
-    [Export(typeof(IIntellisenseControllerProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IIntellisenseControllerProvider))]
+    [ContentType(Constants.ContentType)]
     [Name("Intellisense Controller Provider")]
     internal class QuickInfoControllerProvider : IIntellisenseControllerProvider
     {

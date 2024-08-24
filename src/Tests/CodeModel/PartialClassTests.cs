@@ -9,17 +9,18 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "PartialClasses")]
+    [Collection(MockedVS.Collection)]
     public class RoslynPartialClassTests : TestInfrastructure.TestBase
     {
-        public RoslynPartialClassTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynPartialClassTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
 
         private File GetFile(PartialRenderingMode partialRenderingMode)
         {
-            var settings = new SettingsImpl(null) { PartialRenderingMode = partialRenderingMode };
+            var settings = new SettingsImpl(null, string.Empty) { PartialRenderingMode = partialRenderingMode };
             return GetFile(@"Tests\CodeModel\Support\PartialClassInfo.cs", settings);
         }
 

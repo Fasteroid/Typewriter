@@ -8,7 +8,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(IClassifierProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IClassifierProvider))]
+    [ContentType(Constants.ContentType)]
     internal class ClassificationControllerProvider : IClassifierProvider
     {
         [Import]

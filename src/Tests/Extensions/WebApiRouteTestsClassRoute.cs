@@ -8,11 +8,12 @@ using Xunit;
 
 namespace Typewriter.Tests.Extensions
 {
-    [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Extensions), "WebApi")]
+    [Collection(MockedVS.Collection)]
     public class RoslynWebApiRouteClassRouteExtensionsTests : WebApiRouteClassRouteExtensionsTests
     {
-        public RoslynWebApiRouteClassRouteExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynWebApiRouteClassRouteExtensionsTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -22,8 +23,8 @@ namespace Typewriter.Tests.Extensions
         private readonly File _fileInfo;
         private readonly File _inheritedFileInfo;
 
-        protected WebApiRouteClassRouteExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected WebApiRouteClassRouteExtensionsTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\Extensions\Support\RouteControllerWithDefaultRoute.cs");
             _inheritedFileInfo = GetFile(@"Tests\Extensions\Support\InheritedController.cs");

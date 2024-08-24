@@ -8,11 +8,12 @@ using Xunit;
 
 namespace Typewriter.Tests.Extensions
 {
-    [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Extensions), "WebApi")]
+    [Collection(MockedVS.Collection)]
     public class RoslynWebApiExtensionsTests : WebApiExtensionsTests
     {
-        public RoslynWebApiExtensionsTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynWebApiExtensionsTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -21,8 +22,8 @@ namespace Typewriter.Tests.Extensions
     {
         private readonly File _fileInfo;
 
-        protected WebApiExtensionsTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected WebApiExtensionsTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\Extensions\Support\HttpMethodController.cs");
         }

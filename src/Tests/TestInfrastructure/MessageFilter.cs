@@ -42,7 +42,9 @@ namespace Typewriter.Tests.TestInfrastructure
         private static extern int CoRegisterMessageFilter(IOleMessageFilter newFilter, out IOleMessageFilter oldFilter);
     }
 
-    [ComImport(), Guid("00000016-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid("00000016-0000-0000-C000-000000000046")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IOleMessageFilter
     {
         [PreserveSig]

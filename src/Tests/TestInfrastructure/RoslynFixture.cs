@@ -1,4 +1,4 @@
-﻿using EnvDTE;
+﻿/*using EnvDTE;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Typewriter.Metadata.Providers;
 using Xunit;
@@ -33,4 +33,4 @@ namespace Typewriter.Tests.TestInfrastructure
             ICollectionFixture<MefHostingFixture>
     {
     }
-}
+}*/

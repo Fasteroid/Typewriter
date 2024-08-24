@@ -50,7 +50,7 @@ namespace Typewriter.Generation
         {
             return new Lazy<SettingsImpl>(() =>
            {
-               var settings = new SettingsImpl(_projectItem);
+               var settings = new SettingsImpl(_projectItem, Path.GetFullPath(_templatePath));
 
                if (!_template.IsValueCreated)
                {

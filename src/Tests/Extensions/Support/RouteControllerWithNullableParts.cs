@@ -9,7 +9,7 @@ namespace Typewriter.Tests.Extensions.Support
         [HttpGet("{name}?filter={filter}")]
         public string? RouteInHttpAttributeWithNullableAndNonNullableString(string name, string? filter)
         {
-            return null;
+            return $"{name}{filter}";
         }
     }
 }

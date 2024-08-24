@@ -7,11 +7,12 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "Enums"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Enums")]
+    [Collection(MockedVS.Collection)]
     public class RoslynEnumTests : EnumTests
     {
-        public RoslynEnumTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynEnumTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -20,8 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected EnumTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected EnumTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\EnumInfo.cs");
         }

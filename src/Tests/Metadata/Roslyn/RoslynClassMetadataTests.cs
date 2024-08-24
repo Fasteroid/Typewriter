@@ -11,17 +11,18 @@ using Xunit;
 
 namespace Typewriter.Tests.Metadata.Roslyn
 {
-    [Trait(nameof(CodeModel), "PartialClasses"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "PartialClasses")]
+    [Collection(MockedVS.Collection)]
     public class RoslynClassMetadataTests : TestInfrastructure.TestBase
     {
-        public RoslynClassMetadataTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynClassMetadataTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
 
         private File GetFile(PartialRenderingMode partialRenderingMode)
         {
-            var settings = new SettingsImpl(null) { PartialRenderingMode = partialRenderingMode };
+            var settings = new SettingsImpl(null, string.Empty) { PartialRenderingMode = partialRenderingMode };
             return GetFile(@"Tests\Metadata\Support\GeneratedClass.cs", settings);
         }
 

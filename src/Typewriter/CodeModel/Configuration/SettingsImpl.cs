@@ -15,10 +15,12 @@ namespace Typewriter.CodeModel.Configuration
         private List<string> _includedProjects;
         private bool _strictNullGeneration = true;
         private bool _utf8BomGeneration = true;
+        private string _templatePath;
 
-        public SettingsImpl(ProjectItem projectItem)
+        public SettingsImpl(ProjectItem projectItem, string templatePath)
         {
             _projectItem = projectItem;
+            _templatePath = templatePath;
         }
 
         public ICollection<string> IncludedProjects
@@ -86,6 +88,11 @@ namespace Typewriter.CodeModel.Configuration
         /// Gets or sets a value indicating whether to generate UTF8 BOM in output files.
         /// </summary>
         public override bool Utf8BomGeneration => _utf8BomGeneration;
+
+        /// <summary>
+        /// Gets full path to the template file.
+        /// </summary>
+        public override string TemplatePath => _templatePath;
 
         public override Settings IncludeProject(string projectName)
         {

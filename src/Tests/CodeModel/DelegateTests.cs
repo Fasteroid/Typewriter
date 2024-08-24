@@ -7,11 +7,12 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "Delegates"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Delegates")]
+    [Collection(MockedVS.Collection)]
     public class RoslynDelegateTests : DelegateTests
     {
-        public RoslynDelegateTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynDelegateTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -20,8 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected DelegateTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected DelegateTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\DelegateInfo.cs");
         }

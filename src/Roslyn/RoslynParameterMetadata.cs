@@ -54,9 +54,9 @@ namespace Typewriter.Metadata.Roslyn
                 return $"\"{stringValue.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
             }
 
-            if (_symbol.ExplicitDefaultValue is bool)
+            if (_symbol.ExplicitDefaultValue is bool v)
             {
-                return (bool)_symbol.ExplicitDefaultValue ? "true" : "false";
+                return v ? "true" : "false";
             }
 
             return _symbol.ExplicitDefaultValue.ToString();

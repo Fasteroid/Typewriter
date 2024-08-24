@@ -7,11 +7,12 @@ using Xunit;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "Methods"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Methods")]
+    [Collection(MockedVS.Collection)]
     public class RoslynMethodTests : MethodTests
     {
-        public RoslynMethodTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynMethodTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -20,8 +21,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected MethodTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected MethodTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\MethodInfo.cs");
         }

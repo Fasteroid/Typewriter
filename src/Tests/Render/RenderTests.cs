@@ -8,19 +8,20 @@ using Xunit;
 
 namespace Typewriter.Tests.Render
 {
-    [Trait(nameof(Render), "Roslyn"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Render), "Roslyn")]
+    [Collection(MockedVS.Collection)]
     public class RoslynRenderTests : RenderTests
     {
-        public RoslynRenderTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynRenderTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
 
     public abstract class RenderTests : TestInfrastructure.TestBase
     {
-        protected RenderTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected RenderTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
 

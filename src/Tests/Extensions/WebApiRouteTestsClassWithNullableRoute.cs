@@ -8,11 +8,12 @@ using Xunit;
 
 namespace Typewriter.Tests.Extensions
 {
-    [Trait(nameof(Extensions), "WebApi"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(Extensions), "WebApi")]
+    [Collection(MockedVS.Collection)]
     public class WebApiRouteTestsClassWithNullableRouteTests : WebApiRouteTestsClassWithNullableRoute
     {
-        public WebApiRouteTestsClassWithNullableRouteTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public WebApiRouteTestsClassWithNullableRouteTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -21,8 +22,8 @@ namespace Typewriter.Tests.Extensions
     {
         private readonly File _fileInfo;
 
-        protected WebApiRouteTestsClassWithNullableRoute(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected WebApiRouteTestsClassWithNullableRoute(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\Extensions\Support\RouteControllerWithNullableParts.cs");
         }

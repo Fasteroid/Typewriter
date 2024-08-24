@@ -8,11 +8,12 @@ using File = Typewriter.CodeModel.File;
 
 namespace Typewriter.Tests.CodeModel
 {
-    [Trait(nameof(CodeModel), "Files"), Collection(nameof(RoslynFixture))]
+    [Trait(nameof(CodeModel), "Files")]
+    [Collection(MockedVS.Collection)]
     public class RoslynFileTests : FileTests
     {
-        public RoslynFileTests(RoslynFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        public RoslynFileTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
         }
     }
@@ -21,8 +22,8 @@ namespace Typewriter.Tests.CodeModel
     {
         private readonly File _fileInfo;
 
-        protected FileTests(ITestFixture fixture, GlobalServiceProvider sp)
-            : base(fixture, sp)
+        protected FileTests(MefHostingFixture mefHostingFixture)
+            : base(mefHostingFixture)
         {
             _fileInfo = GetFile(@"Tests\CodeModel\Support\FileInfo.cs");
         }

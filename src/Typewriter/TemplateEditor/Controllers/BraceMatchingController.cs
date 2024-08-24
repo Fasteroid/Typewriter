@@ -9,7 +9,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace Typewriter.TemplateEditor.Controllers
 {
     [Export(typeof(IViewTaggerProvider))]
-    [ContentType(Constants.ContentType), TagType(typeof(TextMarkerTag))]
+    [ContentType(Constants.ContentType)]
+    [TagType(typeof(TextMarkerTag))]
     internal class BraceMatchingControllerProvider : IViewTaggerProvider
     {
         public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer)

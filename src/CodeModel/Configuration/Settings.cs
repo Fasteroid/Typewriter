@@ -78,6 +78,11 @@ namespace Typewriter.Configuration
         public abstract bool Utf8BomGeneration { get; }
 
         /// <summary>
+        /// Gets full path to the template file.
+        /// </summary>
+        public abstract string TemplatePath { get; }
+
+        /// <summary>
         /// Includes files in the specified project when rendering the template.
         /// </summary>
         /// <param name="projectName">Project name.</param>
