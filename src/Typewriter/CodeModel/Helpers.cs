@@ -75,8 +75,10 @@ namespace Typewriter.CodeModel
                 var typeArguments = metadata.TypeArguments.ToList();
                 var key = GetTypeScriptName(typeArguments[0], settings);
                 var value = GetTypeScriptName(typeArguments[1], settings);
-
-                return $"Record<{key}, {value}>";
+                
+                return metadata.IsNullable && settings.StrictNullGeneration
+                    ? $"Record<{key}, {value}> | null"
+                    : $"Record<{key}, {value}>";
             }
 
             if (metadata.IsDynamic)
@@ -103,7 +105,7 @@ namespace Typewriter.CodeModel
                         }
                     }
 
-                    if (typeArguments.Exists(t => string.Equals(t.FullName, metadata.FullName, System.StringComparison.OrdinalIgnoreCase)))
+                    if (typeArguments.Exists(t => string.Equals(t.FullName, metadata.FullName, StringComparison.OrdinalIgnoreCase)))
                     {
                         return "any[]";
                     }
@@ -117,7 +119,9 @@ namespace Typewriter.CodeModel
                         typeName = $"({typeName})";
                     }
 
-                    return $"{typeName}[]";
+                    return metadata.IsNullable && settings.StrictNullGeneration
+                        ? $"{typeName}[] | null"
+                        : $"{typeName}[]";
                 }
 
                 if (typeArguments.Count == 2)
@@ -125,7 +129,9 @@ namespace Typewriter.CodeModel
                     var key = GetTypeScriptName(typeArguments[0], settings);
                     var value = GetTypeScriptName(typeArguments[1], settings);
 
-                    return $"Record<{key}, {value}>";
+                    return metadata.IsNullable && settings.StrictNullGeneration
+                        ? $"Record<{key}, {value}> | null"
+                        : $"Record<{key}, {value}>";
                 }
 
                 return "any[]";
@@ -221,7 +227,11 @@ namespace Typewriter.CodeModel
                     return "any";
             }
 
-            return metadata.IsNullable ? metadata.Name.TrimEnd('?') : metadata.Name;
+            return metadata.IsNullable ?
+                settings.StrictNullGeneration
+                    ? $"{metadata.Name.TrimEnd('?')} | null"
+                    : $"{metadata.Name.TrimEnd('?')}"
+                : metadata.Name;
         }
     }
 }
