@@ -8,6 +8,7 @@ using Typewriter.CodeModel.Configuration;
 using Typewriter.CodeModel.Implementation;
 using Typewriter.Configuration;
 using Typewriter.Metadata.Providers;
+using Typewriter.VisualStudio;
 using Xunit;
 using File = Typewriter.CodeModel.File;
 
@@ -83,7 +84,7 @@ namespace Typewriter.Tests.TestInfrastructure
         {
             if (settings == null)
             {
-                settings = new SettingsImpl(null, string.Empty);
+                settings = new SettingsImpl(Log.Instance, null, string.Empty);
             }
 
             var metadata = MetadataProvider.GetFile(Path.Combine(SolutionDirectory, path), settings, requestRender);

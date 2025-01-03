@@ -2,6 +2,7 @@
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Typewriter.Configuration;
+using Typewriter.VisualStudio;
 
 namespace Typewriter.CodeModel.Configuration
 {
@@ -17,8 +18,12 @@ namespace Typewriter.CodeModel.Configuration
         private bool _utf8BomGeneration = true;
         private string _templatePath;
 
-        public SettingsImpl(ProjectItem projectItem, string templatePath)
+        public SettingsImpl(
+            ILog log,
+            ProjectItem projectItem,
+            string templatePath)
         {
+            Log = log;
             _projectItem = projectItem;
             _templatePath = templatePath;
         }
@@ -93,6 +98,11 @@ namespace Typewriter.CodeModel.Configuration
         /// Gets full path to the template file.
         /// </summary>
         public override string TemplatePath => _templatePath;
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        public override ILog Log { get; }
 
         public override Settings IncludeProject(string projectName)
         {

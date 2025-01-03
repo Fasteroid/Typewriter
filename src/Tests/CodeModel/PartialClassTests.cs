@@ -4,7 +4,7 @@ using Should;
 using Typewriter.CodeModel;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
-using Typewriter.Tests.TestInfrastructure;
+using Typewriter.VisualStudio;
 using Xunit;
 
 namespace Typewriter.Tests.CodeModel
@@ -20,7 +20,7 @@ namespace Typewriter.Tests.CodeModel
 
         private File GetFile(PartialRenderingMode partialRenderingMode)
         {
-            var settings = new SettingsImpl(null, string.Empty) { PartialRenderingMode = partialRenderingMode };
+            var settings = new SettingsImpl(Log.Instance, null, string.Empty) { PartialRenderingMode = partialRenderingMode };
             return GetFile(@"Tests\CodeModel\Support\PartialClassInfo.cs", settings);
         }
 

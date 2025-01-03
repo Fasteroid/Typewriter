@@ -7,17 +7,20 @@ using Microsoft.VisualStudio.Shell;
 namespace Typewriter.VisualStudio
 {
     public class Log
+        : ILog
     {
-        private static Log instance;
+        private static Log _instance;
 
-        private readonly DTE dte;
-        private OutputWindowPane outputWindowPane;
+        private readonly DTE _dte;
+        private OutputWindowPane _outputWindowPane;
 
         internal Log(DTE dte)
         {
-            this.dte = dte;
-            instance = this;
+            _dte = dte;
+            _instance = this;
         }
+
+        public static ILog Instance => _instance;
 
         public static void Debug(string message, params object[] parameters)
         {
@@ -28,18 +31,38 @@ namespace Typewriter.VisualStudio
 
         public static void Info(string message, params object[] parameters)
         {
-            instance?.Write("INFO", message, parameters);
+            _instance?.Write("INFO", message, parameters);
         }
 
         public static void Warn(string message, params object[] parameters)
         {
-            instance?.Write("WARNING", message, parameters);
+            _instance?.Write("WARNING", message, parameters);
         }
 
         public static void Error(string message, params object[] parameters)
         {
-            instance?.Write("ERROR", message, parameters);
+            _instance?.Write("ERROR", message, parameters);
         }
+
+        public void LogDebug(
+            string message,
+            params object[] parameters) =>
+            Write("DEBUG", message, parameters);
+
+        public void LogInfo(
+            string message,
+            params object[] parameters) =>
+            Write("INFO", message, parameters);
+
+        public void LogWarning(
+            string message,
+            params object[] parameters) =>
+            Write("WARNING", message, parameters);
+
+        public void LogError(
+            string message,
+            params object[] parameters) =>
+            Write("ERROR", message, parameters);
 
         private void Write(string type, string message, object[] parameters)
         {
@@ -73,12 +96,12 @@ namespace Typewriter.VisualStudio
                 return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    if (outputWindowPane != null)
+                    if (_outputWindowPane != null)
                     {
-                        return outputWindowPane;
+                        return _outputWindowPane;
                     }
 
-                    var window = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+                    var window = _dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
                     var outputWindow = (OutputWindow) window.Object;
 
                     for (uint i = 1; i <= outputWindow.OutputWindowPanes.Count; i++)
@@ -86,12 +109,12 @@ namespace Typewriter.VisualStudio
                         if (outputWindow.OutputWindowPanes.Item(i).Name
                             .Equals(nameof(Typewriter), StringComparison.CurrentCultureIgnoreCase))
                         {
-                            outputWindowPane = outputWindow.OutputWindowPanes.Item(i);
+                            _outputWindowPane = outputWindow.OutputWindowPanes.Item(i);
                             break;
                         }
                     }
 
-                    return outputWindowPane ?? (outputWindowPane = outputWindow.OutputWindowPanes.Add(nameof(Typewriter)));
+                    return _outputWindowPane ?? (_outputWindowPane = outputWindow.OutputWindowPanes.Add(nameof(Typewriter)));
                 });
             }
         }

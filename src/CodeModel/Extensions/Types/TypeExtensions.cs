@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Type = Typewriter.CodeModel.Type;
 
 namespace Typewriter.Extensions.Types

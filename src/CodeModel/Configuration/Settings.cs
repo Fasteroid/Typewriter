@@ -1,5 +1,6 @@
 ﻿using System;
 using Typewriter.CodeModel;
+using Typewriter.VisualStudio;
 
 namespace Typewriter.Configuration
 {
@@ -81,6 +82,11 @@ namespace Typewriter.Configuration
         /// Gets full path to the template file.
         /// </summary>
         public abstract string TemplatePath { get; }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        public abstract ILog Log { get; }
 
         /// <summary>
         /// Includes files in the specified project when rendering the template.

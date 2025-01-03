@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
-using Typewriter.Tests.TestInfrastructure;
 using Xunit;
 using File = Typewriter.CodeModel.File;
 

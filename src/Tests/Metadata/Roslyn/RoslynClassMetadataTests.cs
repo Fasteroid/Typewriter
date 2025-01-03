@@ -6,7 +6,7 @@ using Typewriter.CodeModel;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Tests.Metadata.Support;
-using Typewriter.Tests.TestInfrastructure;
+using Typewriter.VisualStudio;
 using Xunit;
 
 namespace Typewriter.Tests.Metadata.Roslyn
@@ -22,7 +22,7 @@ namespace Typewriter.Tests.Metadata.Roslyn
 
         private File GetFile(PartialRenderingMode partialRenderingMode)
         {
-            var settings = new SettingsImpl(null, string.Empty) { PartialRenderingMode = partialRenderingMode };
+            var settings = new SettingsImpl(Log.Instance, null, string.Empty) { PartialRenderingMode = partialRenderingMode };
             return GetFile(@"Tests\Metadata\Support\GeneratedClass.cs", settings);
         }
 

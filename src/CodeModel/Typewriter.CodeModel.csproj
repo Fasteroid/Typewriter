@@ -81,6 +81,7 @@
     <Compile Include="CodeModel\ITypeCollection.cs" />
     <Compile Include="CodeModel\IRecordCollection.cs" />
     <Compile Include="CodeModel\StaticReadOnlyField.cs" />
+    <Compile Include="VisualStudio\ILog.cs" />
     <Compile Include="Configuration\PartialRenderingMode.cs" />
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Extensions\Types\TypeExtensions.cs" />

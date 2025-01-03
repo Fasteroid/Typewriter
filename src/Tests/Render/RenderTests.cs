@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
 using Typewriter.Generation;
-using Typewriter.Tests.TestInfrastructure;
 using Xunit;
 
 namespace Typewriter.Tests.Render

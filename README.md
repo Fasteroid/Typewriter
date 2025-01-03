@@ -96,7 +96,147 @@ Please see in samples:
 1. React sample .NET 7
  - use same ideas as in Angular sample - it is only limited to models due to multitude of possible creation api connecting functions [ReactWebApiSample2](https://github.com/AdaskoTheBeAsT/NetCoreTypewriterRecipes/tree/master/src/ReactWebApiSample2)
 
+### Code generation logging
+
+In order to log code generation process you can use following code in your template
+
+Define static ILog field;
+
+```csharp
+static ILog log;
+```
+
+In constructor initialize it;
+
+```csharp
+Template(Settings settings)
+{
+    log = settings.Log;
+}
+```
+
+use it within template in methods
+
+```csharp
+bool IncludeClass(Class c){
+    if(!c.Namespace.StartsWith("AngularWebApiSample"))
+    {
+        return false;
+    }
+
+    var attr = c.Attributes.FirstOrDefault(p => p.Name == "GenerateFrontendType");
+    if(attr == null){
+        return false;
+    }
+
+    var parent = c.BaseClass;
+    if(parent != null){
+        if(parent.Name.EndsWith("Controller")
+      || parent.Name.EndsWith("ControllerBase"))
+      {
+        return false;
+      }
+    }
+
+    log.LogInfo($"Processing class {c.Name}");
+
+    return true;
+}
+```
+
+this is output from log:
+
+![Logging From Template](./images/LoggingFromTemplate.png)
+
 ## Main differences between original and this fork
+
+## Version 2.34.0
+
+- added posibility to log from template as described in `Code generation logging` section. Closes #21
+
+## Version 2.33.0
+
+- version compatible with VS 17.12.3
+- fixed #47 - nullable types not correctly represented in ts files
+
+## Version 2.32.0
+
+version compatible with VS 2022 17.11.1
+added ability to obtain full path of the current template ([#50](https://github.com/AdaskoTheBeAsT/Typewriter/issues/50) thanks @tcables for raising issue)
+usage:
+
+```csharp
+static string templatePath;
+
+Template(Settings settings)
+{
+    settings
+        .IncludeCurrentProject()
+        .IncludeReferencedProjects()
+        .UseStringLiteralCharacter('\'')
+        .DisableUtf8BomGeneration()
+        ;
+    ......
+    templatePath = settings.TemplatePath;
+}
+```
+
+## Version 2.31.0
+
+- expose Interface.Type [#46](https://github.com/AdaskoTheBeAsT/Typewriter/pull/46) thanks to @Fasteroid
+
+## Version 2.30.0
+
+- add 'Type' property to Attribute class [#45](https://github.com/AdaskoTheBeAsT/Typewriter/pull/45) thanks to @Fasteroid
+
+## Version 2.29.0
+
+- thanks to @Fasteroid Add FileLocation property to Type class - This will allow users to generate accurate import paths, even for files containing multiple classes. [PR 44](https://github.com/AdaskoTheBeAsT/Typewriter/pull/44)
+- updated libs
+
+## Version 2.28.0
+
+- version compatible with VS 2022 17.9.5
+
+## Version 2.27.0
+
+- upgraded dependencies
+- compatible with VS 2022 v17.9.2
+
+## Version 2.26.0
+
+- version compatible with VS 17.8.4
+- added error logging when generating file
+
+## Version 2.25.0
+
+- using long path processing only in situation when key ```HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem\LongPathsEnabled``` is set to 1
+
+## Version 2.24.0
+
+- experimental release for arm64
+- compatible with VS 17.8.3
+
+## Version 2.23.0
+
+- default BOM generation to true - add possibility to disable in settings. Closes #40
+- version compatible with VS 17.8.2
+
+## Version 2.22.0
+
+- fix for non normalized long paths
+
+## Version 2.21.0
+
+- optimized output generation
+- create directory for output if it does not exists
+- simplified logic for long paths
+
+## Version 2.20.0
+
+- #37 sorted out long paths
+- #38 ability to get simple values from static readonly fields
+- version compatible with VS 17.8.1
 
 ## Version 2.19.0
 
