@@ -150,6 +150,10 @@ this is output from log:
 
 ## Main differences between original and this fork
 
+## Version 2.35.0
+
+- fixed ClassName Type extension method to return correct name for nullable types
+
 ## Version 2.34.0
 
 - added posibility to log from template as described in `Code generation logging` section. Closes #21

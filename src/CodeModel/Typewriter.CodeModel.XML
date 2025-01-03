@@ -1696,7 +1696,7 @@
         </member>
         <member name="M:Typewriter.Extensions.Types.TypeExtensions.ClassName(Typewriter.CodeModel.Type)">
             <summary>
-            Returns the name of the type without [].
+            Returns the name of the type without [] and " | null" and closed in bracers ().
             </summary>
             <param name="type"><see cref="T:Typewriter.CodeModel.Type"/>.</param>
         </member>

@@ -10,12 +10,16 @@ namespace Typewriter.Extensions.Types
     public static class TypeExtensions
     {
         /// <summary>
-        /// Returns the name of the type without [].
+        /// Returns the name of the type without [] and " | null" and closed in bracers ().
         /// </summary>
         /// <param name="type"><see cref="Type"/>.</param>
         public static string ClassName(this Type type)
         {
-            return type.Name.TrimEnd('[', ']');
+            return type.Name
+                .Replace(" | null", string.Empty)
+                .Replace("(", string.Empty)
+                .Replace(")", string.Empty)
+                .TrimEnd('[', ']');
         }
 
         /// <summary>
