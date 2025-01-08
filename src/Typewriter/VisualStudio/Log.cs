@@ -25,7 +25,7 @@ namespace Typewriter.VisualStudio
         public static void Debug(string message, params object[] parameters)
         {
 #if DEBUG
-            instance?.Write("DEBUG", message, parameters);
+            _instance?.Write("DEBUG", message, parameters);
 #endif
         }
 

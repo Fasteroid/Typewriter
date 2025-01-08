@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Should;
 using Typewriter.CodeModel;
@@ -18,11 +19,16 @@ namespace Typewriter.Tests.CodeModel
 
     public abstract class ClassTests : TestInfrastructure.TestBase
     {
-        private readonly File _fileInfo;
+        private File _fileInfo;
 
         protected ClassTests(MefHostingFixture mefHostingFixture)
             : base(mefHostingFixture)
         {
+        }
+
+        public override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
             _fileInfo = GetFile(@"Tests\CodeModel\Support\ClassInfo.cs");
         }
 

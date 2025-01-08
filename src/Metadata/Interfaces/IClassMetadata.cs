@@ -10,6 +10,8 @@ namespace Typewriter.Metadata.Interfaces
 
         bool IsGeneric { get; }
 
+        bool IsStatic { get; }
+
         string Namespace { get; }
 
         ITypeMetadata Type { get; }

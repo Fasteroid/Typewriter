@@ -209,6 +209,11 @@
             Determines if the class is generic.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Class.IsStatic">
+            <summary>
+            Determines if the class is static.
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Class.Methods">
             <summary>
             All methods defined in the class.

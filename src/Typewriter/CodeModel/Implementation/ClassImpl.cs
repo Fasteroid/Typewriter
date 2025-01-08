@@ -36,6 +36,8 @@ namespace Typewriter.CodeModel.Implementation
 
         public override bool IsGeneric => _metadata.IsGeneric;
 
+        public override bool IsStatic => _metadata.IsStatic;
+
         private Type _type;
 
         protected override Type Type => _type ?? (_type = TypeImpl.FromMetadata(_metadata.Type, Parent, Settings));

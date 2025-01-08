@@ -35,7 +35,7 @@ namespace Typewriter.Tests.TestInfrastructure
 
         protected bool IsCodeDom => false;
 
-        public async Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
             // Create the ExportProvider asynchronously
             var exportProvider = await MefHostingFixture.CreateExportProviderAsync();
@@ -53,7 +53,7 @@ namespace Typewriter.Tests.TestInfrastructure
             MessageFilter.Register();
         }
 
-        public Task DisposeAsync()
+        public virtual Task DisposeAsync()
         {
             MessageFilter.Revoke();
             return Task.CompletedTask;

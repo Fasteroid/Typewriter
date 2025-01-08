@@ -35,6 +35,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public bool IsGeneric => (_symbol as INamedTypeSymbol)?.TypeParameters.Any() ?? false;
 
+        public bool IsStatic => (_symbol as INamedTypeSymbol)?.IsStatic ?? false;
+
         public bool IsDefined => _symbol.Locations.Any(l => l.IsInSource);
 
         public bool IsValueTuple => _symbol.Name.Equals(string.Empty, StringComparison.OrdinalIgnoreCase) &&

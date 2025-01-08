@@ -6,8 +6,8 @@
     <IsTestProject>true</IsTestProject>
     <OutputPath1>bin\$(Configuration)\$(TargetFramework)\</OutputPath1>
 	<DefineConstants>NETFRAMEWORK</DefineConstants>
-    <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>-->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,6 @@
     <PackageReference Include="NSubstitute" Version="5.3.0" />
     <PackageReference Include="Should" Version="1.1.20" />
     <PackageReference Include="StreamJsonRpc" Version="2.21.10" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Memory" Version="4.6.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.6.0" />
@@ -45,6 +44,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+   
+  </ItemGroup>
+
+  <ItemGroup>
+	<Reference Include="System.Collections">
+	  <HintPath>$(MSBuildToolsPath)\ReferenceAssemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Collections.dll</HintPath>
+	</Reference>
   </ItemGroup>
 
   <ItemGroup>

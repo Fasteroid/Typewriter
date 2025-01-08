@@ -27,6 +27,8 @@ namespace Typewriter.Metadata.Roslyn
 
         public bool IsGeneric => false;
 
+        public bool IsStatic => false;
+
         public bool IsNullable => false;
 
         public bool IsTask => true;

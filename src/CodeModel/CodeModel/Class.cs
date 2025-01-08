@@ -74,6 +74,11 @@ namespace Typewriter.CodeModel
         public abstract bool IsGeneric { get; }
 
         /// <summary>
+        /// Determines if the class is static.
+        /// </summary>
+        public abstract bool IsStatic { get; }
+
+        /// <summary>
         /// All methods defined in the class.
         /// </summary>
         public abstract IMethodCollection Methods { get; }
