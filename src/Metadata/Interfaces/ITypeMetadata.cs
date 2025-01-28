@@ -20,6 +20,8 @@ namespace Typewriter.Metadata.Interfaces
 
         bool IsValueTuple { get; }
 
+        ITypeMetadata ElementType { get; }
+
         IEnumerable<IFieldMetadata> TupleElements { get; }
 
         IEnumerable<string> FileLocations { get; }
