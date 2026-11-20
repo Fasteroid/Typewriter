@@ -77,7 +77,7 @@ public sealed partial class CSharpProjectMetadataProvider
             }
 
             metadata = null!;
-            if (symbol.DeclaredAccessibility is not (Accessibility.Public)
+            if (symbol.DeclaredAccessibility is not Accessibility.Public
                 || symbol.IsImplicitlyDeclared)
             {
                 return false;
@@ -151,7 +151,7 @@ public sealed partial class CSharpProjectMetadataProvider
         {
             metadata = null!;
             if (symbol.TypeKind != Microsoft.CodeAnalysis.TypeKind.Delegate
-                || symbol.DeclaredAccessibility is not (Accessibility.Public)
+                || symbol.DeclaredAccessibility is not Accessibility.Public
                 || symbol.IsImplicitlyDeclared)
             {
                 return false;
